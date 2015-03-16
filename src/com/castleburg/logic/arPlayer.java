@@ -25,8 +25,10 @@ public class arPlayer implements Serializable {
 	}
 	
 	//перекидывание кубиков у всех игроков
+	//отфиксить
 	public void refresh(){
-		for (int i=0;i<ar.length;i++) ar[i].tess.refresh(3);
+		for (int i=0;i<ar.length;i++) ar[i].refresh(3);
+		
 		Arrays.sort(ar);
 	}
 	
@@ -50,9 +52,9 @@ public class arPlayer implements Serializable {
 	}
 	
 	//эффекты строений
-	public void prepare(int phase){
+	public void prepare(Player player,int phase){
 		for (int i=0;i<ar.length;i++){
-			ar[i].prepare(phase);
+			ar[i].prepare(player,phase);
 		}
 	}
 	

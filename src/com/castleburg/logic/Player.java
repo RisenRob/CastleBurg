@@ -27,21 +27,23 @@ public class Player implements Serializable,Comparable<Object>{
 		plus=mplus;
 		tess=new Tessera();
 		build=new Build();
+		count();
 	}
 	
 	//борьа с монстром
 	public void fight(Monstr monstr){
 		//здесь будет что-то типо пригтовиться к бою и будет накидываться эффеткы строений как то так :)
-		if (war>=monstr.war) win(monstr);
+		if (war>monstr.war) win(monstr);
 		if (war<monstr.war) lose(monstr);
+		if (build.po[2][3]==true && war==monstr.war) win(monstr); 
 	}
-	
 	//игрок выиграл
 	private void win(Monstr monstr){
 		gold+=monstr.wgold;
 		win+=monstr.wwin;
 		wood+=monstr.wwood;
 		stone+=monstr.wstone;
+		if (build.po[3][3]==true) win++;
 	}
 	
 	//игрок проиграл
@@ -51,6 +53,41 @@ public class Player implements Serializable,Comparable<Object>{
 		wood-=monstr.wwood;
 		stone-=monstr.wstone;
 	}
+	
+	//сортировка по возрастанию чисел на кубиках
+	public int compareTo(Object arg0) {
+		Player two=(Player)arg0;
+		if (this.tess.toStringSum()>two.tess.toStringSum()) return -1;
+		if (this.tess.toStringSum()<two.tess.toStringSum()) return 1;
+		return 0;
+	}
+	
+	
+	//подсчёт комбинаций игрока
+	public void count(){
+		if (plus>0) tess.plus=true;
+		tess.count();
+	}
+	//удалние комбинации
+	public void del(int sum,int n){
+		tess.del(sum, n);
+		if (tess.plus==false && plus>0) {
+			plus--;
+			tess.plus=true;
+		}
+		count();
+	}
+	
+	//перекидывание кубиков
+	public void refresh(int n){
+		tess.refresh(n);
+		if (build.po[1][1]==true) tess.market=true;
+		count();
+	}
+	//эффекты строений
+		public void prepare(Player player,int phase){
+			build.prepare(player,phase);
+		}
 
 	//сериализация
 	private void writeObject(java.io.ObjectOutputStream out)
@@ -61,16 +98,12 @@ public class Player implements Serializable,Comparable<Object>{
 		out.writeInt(gold);
 		out.writeInt(stone);
 		out.writeInt(num);
+		out.writeInt(plus);
 		out.writeUTF(tess.toString());
 		out.writeObject(build);
 	}
 
-	
-	//эффекты строений
-	public void prepare(int phase){
-		build.prepare(phase);
-	}
-	
+		
 	//десериализация
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
@@ -80,16 +113,13 @@ public class Player implements Serializable,Comparable<Object>{
 		gold=in.readInt();
 		stone=in.readInt();
 		num=in.readInt();
+		plus=in.readInt();
 		tess=new Tessera(in.readUTF());
 		build=(Build)in.readObject();
+		//Непонятная ситуация поменять тайм срочно!!
+		if (build.po[1][1]==true) tess.market=true;
+		count();
 	}
 	
-	//сортировка по возрастанию чисел на кубиках
-	public int compareTo(Object arg0) {
-		Player two=(Player)arg0;
-		if (this.tess.toStringSum()>two.tess.toStringSum()) return -1;
-		if (this.tess.toStringSum()<two.tess.toStringSum()) return 1;
-		return 0;
-	}
 	
 }

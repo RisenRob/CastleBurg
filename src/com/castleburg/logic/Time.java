@@ -24,9 +24,9 @@ public class Time implements Serializable{
 	}
 	
 	//следующая фаза
-	public void next(arPlayer ar){
+	public void next(Player player,arPlayer ar){
 		//эффекты строений
-		ar.prepare(phase);
+		ar.prepare(player,phase);
 		phase++;
 		if (phase>8) {year++;phase=1;}
         ar.refresh();

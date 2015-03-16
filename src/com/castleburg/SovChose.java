@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.castleburg.logic.Build;
 import com.castleburg.logic.Player;
 
 public class SovChose extends Activity {
@@ -16,6 +17,7 @@ public class SovChose extends Activity {
 	private Intent intent;
 	private Player player;
 	private int cur_count;
+	private Build build;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class SovChose extends Activity {
 				break;
 			case 5:
 				player.war++;
+				if (build.po[1][3]==true) player.war++;
 				break;
 			case 6:
 				player.wood--;
@@ -81,6 +84,8 @@ public class SovChose extends Activity {
 				//res[1]++;res[3]++;
 			case 10:
 				player.war+=2;
+				
+				if (build.po[1][3]==true) player.war++;
 				break;
 				//Ещё монстра подглядеть
 			case 11:
@@ -119,6 +124,7 @@ public class SovChose extends Activity {
 				player.gold++;
 				player.stone++;
 				player.war++;
+				if (build.po[1][3]==true) player.war++;
 				break;
 			}
 			intent.putExtra("player", player);

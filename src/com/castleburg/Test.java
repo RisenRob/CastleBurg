@@ -105,7 +105,7 @@ public class Test extends Activity {
 			refresh();
 			break;
 			case 2:
-			time.next(arplayer);
+			time.next(player,arplayer);
 			arplayer=(arPlayer)data.getSerializableExtra("arplayer");
 			refsovchose();
 			refresh();
@@ -118,7 +118,6 @@ public class Test extends Activity {
 	//пасс(игрок не может ходить)
 	public void pass(View v){
 		player.tess.refresh(0);
-		player=arplayer.next();
 		if (!arplayer.empty()) next();
 		refresh();
 	}
@@ -127,7 +126,7 @@ public class Test extends Activity {
 	//следующа€ фаза игры
 	public void next(){
 		Intent intent;
-		time.next(arplayer);
+		time.next(player,arplayer);
 		if (time.phase==8) {
 			Toast.makeText(this, "ћонстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);
@@ -192,7 +191,8 @@ public class Test extends Activity {
 	
 	
 	//функци€ возращаающа€ номер советника по ImgeView
-	public int id(View v){
+
+public int id(View v){
 		 switch (v.getId()) {
 	     case R.id.sov1:
 	       return 1;
@@ -349,7 +349,7 @@ public class Test extends Activity {
 		return lin;
 	}
 	
-	//сортируем игроков впор€дка возрастани€ чисел на кубках
+	//сортируем игроков впор€дка возрастани€ номера
 	public void linrefresh(Player[] ar){
 		Arrays.sort(ar, new Comparator<Player>() {
             @Override
@@ -400,7 +400,7 @@ public class Test extends Activity {
 
 		public void onClick(DialogInterface dialog, int position) {
 			//Toast.makeText(Test.this, player.tess.count[position].kol+"", Toast.LENGTH_SHORT).show();
-			player.tess.del(num, position);
+			player.del(num, position);
 			switch (num){
 			case 1 :
 				player.win++;

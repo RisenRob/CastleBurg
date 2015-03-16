@@ -15,20 +15,15 @@ public class Tessera extends ArrayList<Character>{
 	//конструктор
 	public Tessera(){
 		new ArrayList<Character>();
-		market=true;
-		plus=true;
 		for (int i=0;i<4;i++) add((char)(Math.random()*6+49));
 		sort();
-		count();
 	}
 	
 	//конструктор через строку
 	public Tessera(String s){
 		new ArrayList<Character>();
 		for (int i=0;i<s.length();i++) add(s.charAt(i));
-		market=false;
 		sort();
-		count();
 	}
 	
 	//перекидывание кубиков
@@ -36,7 +31,6 @@ public class Tessera extends ArrayList<Character>{
 		clear();
 		for (int i=0;i<n;i++) add((char)(Math.random()*6+49));
 		sort();
-		count();
 	}
 	
 	//сортиврока
@@ -53,7 +47,7 @@ public class Tessera extends ArrayList<Character>{
 	}
 	
 	//подсчёт вариантов
-	private void count(){
+	public void count(){
 		steps=Steps.arSteps(40);
 		for (int i=0;i<size();i++){
 			count_rec(i,0,new StringBuilder());
@@ -117,14 +111,15 @@ public class Tessera extends ArrayList<Character>{
 		}
 		removeAll(test);
 		sort();
-		count();
 	}
-	//исправить ранок
-	//подсчёт суммы чисел ну кубиках
+	//исправить рынок(Сделано, вроде)
+	//подсчёт суммы чисел на кубиках
 	public int toStringSum(){
 		int sum=0;
+		char c;
 		for (int i=0;i<size();i++){
-			sum+=(int)get(i)-'0';
+			c=get(i);
+			if (c!='p' && c!='l') sum+=(int)get(i)-'0';
 		}
 		return sum;
 	}
