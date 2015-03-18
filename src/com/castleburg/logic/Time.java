@@ -29,7 +29,8 @@ public class Time implements Serializable{
 		ar.prepare(player,phase);
 		phase++;
 		if (phase>8) {year++;phase=1;}
-        ar.refresh();
+		//Очень выжная чать я искал эту оишбку очень долго
+		if (phase%2==1 && phase!=8) ar.refresh();
 	}
 	
 	//преобразовние времени в строку

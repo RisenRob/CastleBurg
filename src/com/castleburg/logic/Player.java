@@ -116,8 +116,6 @@ public class Player implements Serializable,Comparable<Object>{
 		plus=in.readInt();
 		tess=new Tessera(in.readUTF());
 		build=(Build)in.readObject();
-		//Непонятная ситуация поменять тайм срочно!!
-		if (build.po[1][1]==true) tess.market=true;
 		count();
 	}
 	

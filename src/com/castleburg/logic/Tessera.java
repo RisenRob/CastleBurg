@@ -64,13 +64,22 @@ public class Tessera extends ArrayList<Character>{
 				StringBuilder sbmarket=new StringBuilder(step);
 				sbmarket.append('p');
 				steps[sum+1].add(sbmarket,toComb(sbmarket));
-				steps[sum+1].add(sbmarket,toComb(sbmarket));
+				steps[sum-1].add(sbmarket,toComb(sbmarket));
 			}
 			if (plus) {
 				StringBuilder sbplus=new StringBuilder(step);
 				sbplus.append('l');
-				steps[sum+2].add(sbplus,toComb(sbplus));
+				sum+=2;
+				steps[sum].add(sbplus,toComb(sbplus));
+				if (market){
+					StringBuilder sbmarket=new StringBuilder(sbplus);
+					sbmarket.append('p');
+					steps[sum+1].add(sbmarket,toComb(sbmarket));
+					steps[sum-1].add(sbmarket,toComb(sbmarket));
+				}
 			}
+			
+			
 		}
 		
 	}

@@ -68,7 +68,6 @@ public class TBuildActivity extends Activity {
 
 	public void goMain(){
 		intent =new Intent();
-		time.next(player,arplayer);
 		intent.putExtra("arplayer", arplayer);
 		intent.putExtra("time", time);
 		setResult(RESULT_OK, intent);

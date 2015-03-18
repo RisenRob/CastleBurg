@@ -101,6 +101,8 @@ public class Test extends Activity {
 			case 1:
 			arplayer=(arPlayer)data.getSerializableExtra("arplayer");
 			time=(Time)data.getSerializableExtra("time");
+			time.next(player,arplayer);
+			arplayer.cur=7;
 			refsovchose();
 			refresh();
 			break;
@@ -117,7 +119,7 @@ public class Test extends Activity {
 	
 	//пасс(игрок не может ходить)
 	public void pass(View v){
-		player.tess.refresh(0);
+		player.refresh(0);
 		if (!arplayer.empty()) next();
 		refresh();
 	}
@@ -132,6 +134,7 @@ public class Test extends Activity {
 			intent=new Intent(this,MonstrActivity.class);
 			intent.putExtra("arplayer", arplayer);
 			intent.putExtra("year", time.year);
+			time.next(player, arplayer);
 			startActivityForResult(intent,2);
 		}
 		if (time.phase%2==0 && time.phase!=8) {
