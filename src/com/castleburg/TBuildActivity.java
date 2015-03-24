@@ -375,6 +375,7 @@ public class TBuildActivity extends Activity {
 	}
 	
 	public void onCli (View v){
+		//Когда будет вызываться функция проверять на постройку первого столба
 		int[] ii=new int[4];
 		int[] jj=new int[5];
 		for (int i=0;i<4;i++)
