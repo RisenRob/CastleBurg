@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.castleburg.logic.Build;
+import com.castleburg.logic.Monstr;
 import com.castleburg.logic.Player;
 import com.castleburg.logic.Time;
 import com.castleburg.logic.arPlayer;
@@ -20,6 +21,7 @@ public class TBuildActivity extends Activity {
 	public Build build;
 	public arPlayer arplayer;
 	public Player player;
+	Monstr monstr;
 	Intent intent;
 
 	@Override
@@ -49,6 +51,7 @@ public class TBuildActivity extends Activity {
 		intent=getIntent();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		time=(Time)intent.getSerializableExtra("time");
+		monstr=new Monstr(time.year,this);
 		arplayer.sort();
 		player=arplayer.ar[0];
 		build=player.build;

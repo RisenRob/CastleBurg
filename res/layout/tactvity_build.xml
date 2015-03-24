@@ -57,7 +57,7 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/Button01"
+                android:id="@+id/tessera"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

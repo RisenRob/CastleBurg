@@ -17,18 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.castleburg.logic.Monstr;
 import com.castleburg.logic.Player;
 import com.castleburg.logic.Time;
 import com.castleburg.logic.arPlayer;
 
 public class Test extends Activity {
-	
+
 	//советники
 	private ImageView[] sov=new ImageView[19];
 	//маркеры сосветников
 	private LinearLayout[] lsov=new LinearLayout[19];
-	//кубики текущего игрока
-	private LinearLayout lin_comb;
 	//текущий игрок
 	private Player player;
 	//состояние советника
@@ -43,6 +42,9 @@ public class Test extends Activity {
 	int num;
 	//Очередь
 	LinearLayout queue;
+	//Монстр
+	Monstr monstr;
+    
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,47 +86,48 @@ public class Test extends Activity {
 		lsov[16]=(LinearLayout)findViewById(R.id.linsov_16);
 		lsov[17]=(LinearLayout)findViewById(R.id.linsov_17);
 		lsov[18]=(LinearLayout)findViewById(R.id.linsov_18);
-		lin_comb=(LinearLayout)findViewById(R.id.lin_comb);
 		refsovchose();
 		list_player=(ListView)findViewById(R.id.list_player);
 		queue=(LinearLayout)findViewById(R.id.queue);
 		refresh();
+		monstr=new Monstr(time.year,this);
 	}
-	
-	
-	
+
+
+
 	//Действия после сражения с монстрами или постройки строений
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode){
 			case 1:
-			arplayer=(arPlayer)data.getSerializableExtra("arplayer");
-			time=(Time)data.getSerializableExtra("time");
-			time.next(player,arplayer);
-			arplayer.cur=7;
-			refsovchose();
-			refresh();
-			break;
+				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
+				time=(Time)data.getSerializableExtra("time");
+				time.next(player,arplayer);
+				arplayer.cur=7;
+				refsovchose();
+				refresh();
+				break;
 			case 2:
-			time.next(player,arplayer);
-			arplayer=(arPlayer)data.getSerializableExtra("arplayer");
-			refsovchose();
-			refresh();
-			break;
+				time.next(player,arplayer);
+				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
+				refsovchose();
+				refresh();
+				monstr=new Monstr(time.year,this);
+				break;
 			}
 		}
 		else Toast.makeText(this, "Произошла ошибка", Toast.LENGTH_SHORT).show();
 	}
-	
+
 	//пасс(игрок не может ходить)
 	public void pass(View v){
 		player.refresh(0);
 		if (!arplayer.empty()) next();
 		refresh();
 	}
-	
-	
+
+
 	//следующая фаза игры
 	public void next(){
 		Intent intent;
@@ -145,21 +148,25 @@ public class Test extends Activity {
 		}
 		refresh();
 	}
-	
-	
+
+
 	//перезагрузить поле
 	private void refresh(){
 		player=arplayer.next();
-		reftess();
-		QueueAdapter adapter=new QueueAdapter(this,arplayer.queue());
-		refplayer();
+		//обновление списка игроков
+		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone());
+		list_player.setAdapter(adapter_player);
+		//обновлние очереди
+		QueueAdapter adapter_queue=new QueueAdapter(this,arplayer.queue());
 		queue.removeAllViews();
-		adapter.SetView(queue);
+		adapter_queue.SetView(queue);
+		//обновление маркеров
 		linrefresh(arplayer.ar.clone());
+		//обработака картинок
 		prepare();
 	}
-	
-	
+
+
 	//подготоваить поле(работа с картинками)
 	public void prepare(){
 		for (int i=1;i<19;i++){
@@ -172,73 +179,247 @@ public class Test extends Activity {
 				sov[i].setImageResource(idim(i,sov_chose[i]));
 			}
 		}
-		
+
 	}
-	
-	
-	//обновление списка игроков
-	public void refplayer(){
-		PlayerAdapter adapter=new PlayerAdapter(this,arplayer.ar.clone());
-		list_player.setAdapter(adapter);
-		
+
+	//создание linearlayuot для маркера
+	public LinearLayout lin(int c){
+		LayoutParams linLayoutParam = new LayoutParams(10, 10);
+		LinearLayout lin=new LinearLayout(this);
+		lin.setLayoutParams(linLayoutParam);
+		lin.setBackgroundColor(getColor(c));
+		return lin;
 	}
-	
+
+	//Обновляем маркеры над советниками
+	public void linrefresh(Player[] ar){
+		//сортируем игроков впорядка возрастания номера
+		Arrays.sort(ar, new Comparator<Player>() {
+			@Override
+			public int compare(Player a,Player b) {
+				if (a.num>b.num) return 1;
+				if (a.num<b.num) return -1;
+				return 0;
+			}
+		});
+
+
+		//забиваем маркеры
+		for (int i=1;i<19;i++){
+			lsov[i].removeAllViews();
+			for (int j=0;j<ar.length;j++){
+				//проверка может ли на этого совтника ходить игрок
+				if (!ar[j].tess.steps[i].isEmpty()){
+					lsov[i].addView(lin(ar[j].num));
+				}
+			}
+		}
+	}
+
+	//получаем цвет
+	private int getColor(int a){
+		if (a==0) return Color.BLUE;
+		if (a==1) return Color.YELLOW;
+		if (a==2) return Color.GREEN;
+		if (a==3) return Color.RED;
+		return 0;
+
+	}
+
+	/*
+	  Обрабатываем советников и комбинации
+	 */
 	//обрабочтик нажатий на советника
 	View.OnClickListener make = new View.OnClickListener() {
 		@Override
-	       public void onClick(View v) {
-	    	   num=id(v);
-	    	   onCreateDialog(num).show();
-	       }
+		public void onClick(View v) {
+			num=id(v);
+			onCreateDialog(num).show();
+		}
 	};
+
+	//создание диалога с комбинациями
+	protected Dialog onCreateDialog(int num) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setTitle("Выбор комбинации");
+		TessAdapter adapter=new TessAdapter(this,player.tess,num);
+		adb.setAdapter(adapter, dialclick);
+		return adb.create();
+	}
+
+	//обрабочтик выбора комбинации
+	DialogInterface.OnClickListener dialclick=new DialogInterface.OnClickListener(){
+
+		public void onClick(DialogInterface dialog, int position) {
+			//Toast.makeText(Test.this, player.tess.count[position].kol+"", Toast.LENGTH_SHORT).show();
+			player.del(num, position);
+			switch (num){
+			case 1 :
+				player.win++;
+				sov_chose[1]=player.num;
+				break;
+			case 2:
+				player.gold++;
+				sov_chose[2]=player.num;
+				break;
+			case 3:
+				player.stone++;
+				sov_chose[3]=player.num;
+				break;
+			case 4:
+				//Дерево или золото
+				player.wood++;
+				player.gold++;
+				sov_chose[4]=player.num;
+				break;
+			case 5:
+				player.war++;
+				sov_chose[5]=player.num;
+				break;
+			case 6:
+				player.wood--;
+				player.gold++;
+				player.stone++;
+				sov_chose[6]=player.num;
+				//Вот когда расскажешь как варианты выбирать тогда и сделаю а так то
+				//res[1]--;res[2]++;res[3]++;
+				//||
+				//res[2]--;res[1]++;res[3]++;
+				//||
+				//res[3]--;res[2]++;res[1]++;
+				break;
+			case 7:
+				//Ресурс на ВЫБОР
+				//plus2++;
+				sov_chose[7]=player.num;
+				break;
+			case 8:
+				player.gold+=2;
+				sov_chose[8]=player.num;
+				break;
+			case 9:
+				//Выбор
+				player.wood++;
+				player.gold++;
+				sov_chose[9]=player.num;
+				break;
+				//||
+				//res[1]++;res[3]++;
+
+			case 10:
+				player.war+=2;
+				sov_chose[10]=player.num;
+				break;
+				//Ещё монстра подглядеть
+			case 11:
+				//Выбор
+				sov_chose[11]=player.num;
+				player.gold++;
+				player.stone++;
+				break;
+				//||
+				//res[1]++;res[3]++;
+			case 12:
+				//2 Ресурса на ВЫБОР
+				//plus2++;
+				sov_chose[12]=player.num;
+				break;
+			case 13:
+				player.stone+=3;
+				sov_chose[12]=player.num;
+				break;
+			case 14:
+				player.win--;
+				sov_chose[14]=player.num;
+				break;
+				//3 Ресурса на ВЫБОР
+			case 15:
+				player.wood++;
+				player.gold++;
+				player.stone++;
+				sov_chose[15]=player.num;
+				break;
+			case 16:
+				player.gold+=4;
+				sov_chose[16]=player.num;
+				break;
+			case 17:
+				player.win+=3;
+				sov_chose[17]=player.num;
+				break;
+				//2 Ресурса на ВЫБОР
+				//подглядеть монстра
+			case 18:
+				sov_chose[18]=player.num;
+				player.wood++;
+				player.gold++;
+				player.stone++;
+				player.war++;
+				break;
+			}
+			if (!arplayer.empty()) next();
+			refresh();
+		}
+
+	};
+
+
+	//обновление(обнуление) советнкиов
+	public void refsovchose(){
+		for (int i=1;i<19;i++) sov_chose[i]=-1;
+	}
+
 	
 	
+	/*
+	полчуаем всякие всякие id
+	 */
 	//функция возращаающая номер советника по ImgeView
 
-public int id(View v){
-		 switch (v.getId()) {
-	     case R.id.sov1:
-	       return 1;
-	     case R.id.sov2:
-		   return 2;
-        case R.id.sov3:
-	       return 3;
-        case R.id.sov4:
- 	       return 4;
-        case R.id.sov5:
-   	   return 5;
-        case R.id.sov6:
-     	   return 6;
-        case R.id.sov7:
-     	   return 7;
-        case R.id.sov8:
-     	   return 8;
-        case R.id.sov9:
-     	   return 9;
-        case R.id.sov10:
-     	   return 10;
-        case R.id.sov11:
-     	   return 11;
-        case R.id.sov12:
-     	   return 12;
-        case R.id.sov13:
-     	   return 13;
-        case R.id.sov14:
-     	   return 14;
-        case R.id.sov15:
-     	   return 15;
-        case R.id.sov16:
-     	   return 16;
-        case R.id.sov17:
-     	   return 17;
-        case R.id.sov18:
-     	   return 18;
-		 }
+	public int id(View v){
+		switch (v.getId()) {
+		case R.id.sov1:
+			return 1;
+		case R.id.sov2:
+			return 2;
+		case R.id.sov3:
+			return 3;
+		case R.id.sov4:
+			return 4;
+		case R.id.sov5:
+			return 5;
+		case R.id.sov6:
+			return 6;
+		case R.id.sov7:
+			return 7;
+		case R.id.sov8:
+			return 8;
+		case R.id.sov9:
+			return 9;
+		case R.id.sov10:
+			return 10;
+		case R.id.sov11:
+			return 11;
+		case R.id.sov12:
+			return 12;
+		case R.id.sov13:
+			return 13;
+		case R.id.sov14:
+			return 14;
+		case R.id.sov15:
+			return 15;
+		case R.id.sov16:
+			return 16;
+		case R.id.sov17:
+			return 17;
+		case R.id.sov18:
+			return 18;
+		}
 		return 0;
-   }
-	
-	
-	//возращаем кратнку для imgeView
+	}
+
+
+	//возращаем кратнку для imageView
 	public int idim(int i,int f){
 		if (f==-2) switch (i){
 		case 1: return R.drawable.sov_1;
@@ -342,213 +523,6 @@ public int id(View v){
 		}
 		return 0;
 	}
-	
-	//создание linearlayuot для маркера
-	public LinearLayout lin(int c){
-		LayoutParams linLayoutParam = new LayoutParams(10, 10);
-		LinearLayout lin=new LinearLayout(this);
-		lin.setLayoutParams(linLayoutParam);
-		lin.setBackgroundColor(getColor(c));
-		return lin;
-	}
-	
-	//сортируем игроков впорядка возрастания номера
-	public void linrefresh(Player[] ar){
-		Arrays.sort(ar, new Comparator<Player>() {
-            @Override
-            public int compare(Player a,Player b) {
-                if (a.num>b.num) return 1;
-                if (a.num<b.num) return -1;
-                return 0;
-            }
-        });
-		
-		
-		//забиваем маркеры
-		for (int i=1;i<19;i++){
-			lsov[i].removeAllViews();
-			for (int j=0;j<ar.length;j++){
-				//проверка может ли на этого совтника ходить игрок
-				if (!ar[j].tess.steps[i].isEmpty()){
-					lsov[i].addView(lin(ar[j].num));
-				}
-			}
-		}
-	}
-	
-	//получаем цвет
-	private int getColor(int a){
-		if (a==0) return Color.BLUE;
-		if (a==1) return Color.YELLOW;
-		if (a==2) return Color.GREEN;
-		if (a==3) return Color.RED;
-		return 0;
-		
-	}
-	
-	
-	//создание диалога с комбинациями
-	protected Dialog onCreateDialog(int num) {
-	    AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	      adb.setTitle("Выбор комбинации");
-	      TessAdapter adapter=new TessAdapter(this,player.tess,num);
-	      adb.setAdapter(adapter, dialclick);
-	    return adb.create();
-	  }
-	
-	  
-	
-	//обрабочтик выбора комбинации
-	DialogInterface.OnClickListener dialclick=new DialogInterface.OnClickListener(){
 
-		public void onClick(DialogInterface dialog, int position) {
-			//Toast.makeText(Test.this, player.tess.count[position].kol+"", Toast.LENGTH_SHORT).show();
-			player.del(num, position);
-			switch (num){
-			case 1 :
-				player.win++;
-				sov_chose[1]=player.num;
-				break;
-			case 2:
-				player.gold++;
-				sov_chose[2]=player.num;
-				break;
-			case 3:
-				player.stone++;
-				sov_chose[3]=player.num;
-				break;
-			case 4:
-				//Дерево или золото
-				player.wood++;
-				player.gold++;
-				sov_chose[4]=player.num;
-				break;
-			case 5:
-				player.war++;
-				sov_chose[5]=player.num;
-				break;
-			case 6:
-				player.wood--;
-				player.gold++;
-				player.stone++;
-				sov_chose[6]=player.num;
-				//Вот когда расскажешь как варианты выбирать тогда и сделаю а так то
-				//res[1]--;res[2]++;res[3]++;
-				//||
-				//res[2]--;res[1]++;res[3]++;
-				//||
-				//res[3]--;res[2]++;res[1]++;
-				break;
-			case 7:
-				//Ресурс на ВЫБОР
-				//plus2++;
-				sov_chose[7]=player.num;
-				break;
-			case 8:
-				player.gold+=2;
-				sov_chose[8]=player.num;
-				break;
-			case 9:
-				//Выбор
-				player.wood++;
-				player.gold++;
-				sov_chose[9]=player.num;
-			break;
-				//||
-				//res[1]++;res[3]++;
-			
-			case 10:
-				player.war+=2;
-				sov_chose[10]=player.num;
-				break;
-				//Ещё монстра подглядеть
-			case 11:
-				//Выбор
-				sov_chose[11]=player.num;
-				player.gold++;
-				player.stone++;
-				break;
-					//||
-					//res[1]++;res[3]++;
-			case 12:
-				//2 Ресурса на ВЫБОР
-				//plus2++;
-				sov_chose[12]=player.num;
-				break;
-			case 13:
-				player.stone+=3;
-				sov_chose[12]=player.num;
-				break;
-			case 14:
-				player.win--;
-				sov_chose[14]=player.num;
-				break;
-				//3 Ресурса на ВЫБОР
-			case 15:
-				player.wood++;
-				player.gold++;
-				player.stone++;
-				sov_chose[15]=player.num;
-				break;
-			case 16:
-				player.gold+=4;
-				sov_chose[16]=player.num;
-				break;
-			case 17:
-				player.win+=3;
-				sov_chose[17]=player.num;
-				break;
-				//2 Ресурса на ВЫБОР
-				//подглядеть монстра
-			case 18:
-				sov_chose[18]=player.num;
-				player.wood++;
-				player.gold++;
-				player.stone++;
-				player.war++;
-				break;
-			}
-			if (!arplayer.empty()) next();
-			refresh();
-		}
-		
-	};
-	
-	
-	//обновление советнкиов
-	public void refsovchose(){
-		for (int i=1;i<19;i++) sov_chose[i]=-1;
-	}
-	
-	//обновлние кубиков игрока
-	public void reftess(){
-		String tess=player.tess.toString();
-		lin_comb.removeAllViews();
-	    	for (int j=0;j<tess.length();j++){
-	    		lin_comb.addView(getImage(tess.charAt(j)));
-	    	}
-	}
-	
-	//создание картнки какого-то кубика
-	private ImageView getImage(char c){
-		LayoutParams linLayoutParam = new LayoutParams(LayoutParams.WRAP_CONTENT,  LayoutParams.WRAP_CONTENT);
-		ImageView image=new ImageView(this);
-		image.setLayoutParams(linLayoutParam);
-		switch (c){
-		case '1':image.setImageResource(R.drawable.tess1);
-		break;
-		case '2':image.setImageResource(R.drawable.tess2);
-		break;
-		case '3':image.setImageResource(R.drawable.tess3);
-		break;
-		case '4':image.setImageResource(R.drawable.tess4);
-		break;
-		case '5':image.setImageResource(R.drawable.tess5);
-		break;
-		case '6':image.setImageResource(R.drawable.tess6);
-		break;
-		}
-		return image;
-	}
-	
+
 }

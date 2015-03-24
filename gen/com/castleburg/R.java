@@ -157,7 +157,6 @@ public final class R {
         public static final int wood=0x7f02008f;
     }
     public static final class id {
-        public static final int Button01=0x7f060029;
         public static final int Button02=0x7f06002a;
         public static final int Button03=0x7f06002b;
         public static final int Button04=0x7f06002c;
@@ -172,13 +171,13 @@ public final class R {
         public static final int Button13=0x7f060037;
         public static final int Button14=0x7f060038;
         public static final int Button15=0x7f060039;
-        public static final int LinearLayout01=0x7f060028;
+        public static final int LinearLayout01=0x7f060029;
         public static final int LinearLayout02=0x7f06002e;
         public static final int LinearLayout03=0x7f060034;
         public static final int button1=0x7f060016;
         public static final int button2=0x7f060018;
-        public static final int button4=0x7f060026;
-        public static final int button5=0x7f060027;
+        public static final int button4=0x7f060027;
+        public static final int button5=0x7f060028;
         public static final int button6=0x7f06003a;
         public static final int button7=0x7f06003b;
         public static final int horizontalScrollView1=0x7f060001;
@@ -203,11 +202,10 @@ public final class R {
         public static final int imageView8=0x7f060009;
         public static final int imageView9=0x7f06000a;
         public static final int lin=0x7f06001a;
-        public static final int lin1=0x7f060021;
-        public static final int lin2=0x7f060022;
-        public static final int lin3=0x7f060023;
-        public static final int lin_comb=0x7f060066;
-        public static final int linearLayout1=0x7f060024;
+        public static final int lin1=0x7f060022;
+        public static final int lin2=0x7f060023;
+        public static final int lin3=0x7f060024;
+        public static final int linearLayout1=0x7f060025;
         public static final int linsov1=0x7f06003d;
         public static final int linsov2=0x7f06004a;
         public static final int linsov3=0x7f060057;
@@ -231,7 +229,7 @@ public final class R {
         public static final int linsov_9=0x7f06004f;
         public static final int listView1=0x7f060019;
         public static final int list_player=0x7f060064;
-        public static final int next=0x7f060025;
+        public static final int next=0x7f060026;
         public static final int pas=0x7f060065;
         public static final int queue=0x7f06003c;
         public static final int scrollView1=0x7f060000;
@@ -255,6 +253,7 @@ public final class R {
         public static final int sov9=0x7f060050;
         public static final int start=0x7f060017;
         public static final int tess=0x7f06001b;
+        public static final int tessera=0x7f060021;
         public static final int textView2=0x7f06001c;
         public static final int textView3=0x7f06001d;
         public static final int textView4=0x7f06001e;

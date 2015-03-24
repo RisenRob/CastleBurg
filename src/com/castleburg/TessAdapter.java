@@ -27,6 +27,7 @@ public class TessAdapter extends BaseAdapter {
 		
 	}
 	
+
 	@Override
 	public int getCount() {
 		return tess.steps[num].size();
