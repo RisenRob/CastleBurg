@@ -23,7 +23,7 @@ public class MonstrActivity extends Activity {
 		intent=getIntent();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		year=intent.getIntExtra("year", -1);
-		monstr=new Monstr(year,this);
+		monstr=new Monstr(year,intent.getIntExtra("id_monstr", -1),this);
 		list_player=(ListView)findViewById(R.id.listView1);
 		refplayer();
 	}

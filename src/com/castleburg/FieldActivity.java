@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -22,7 +23,7 @@ import com.castleburg.logic.Player;
 import com.castleburg.logic.Time;
 import com.castleburg.logic.arPlayer;
 
-public class Test extends Activity {
+public class FieldActivity extends Activity {
 
 	//советники
 	private ImageView[] sov=new ImageView[19];
@@ -44,7 +45,7 @@ public class Test extends Activity {
 	LinearLayout queue;
 	//Монстр
 	Monstr monstr;
-    
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +110,9 @@ public class Test extends Activity {
 				refresh();
 				break;
 			case 2:
-				time.next(player,arplayer);
 				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
+				time.next(player,arplayer);
+				arplayer.cur=7;
 				refsovchose();
 				refresh();
 				monstr=new Monstr(time.year,this);
@@ -135,13 +137,14 @@ public class Test extends Activity {
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);
+			intent.putExtra("id_monstr", monstr.id);
 			intent.putExtra("arplayer", arplayer);
 			intent.putExtra("year", time.year);
-			time.next(player, arplayer);
 			startActivityForResult(intent,2);
 		}
 		if (time.phase%2==0 && time.phase!=8) {
-			intent=new Intent(this, TBuildActivity.class);
+			intent=new Intent(this, BuildActivity.class);
+			intent.putExtra("id_monstr", monstr.id);
 			intent.putExtra("arplayer", arplayer);
 			intent.putExtra("time", time);
 			startActivityForResult(intent,1);			
@@ -157,9 +160,7 @@ public class Test extends Activity {
 		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone());
 		list_player.setAdapter(adapter_player);
 		//обновлние очереди
-		QueueAdapter adapter_queue=new QueueAdapter(this,arplayer.queue());
-		queue.removeAllViews();
-		adapter_queue.SetView(queue);
+		refqueue();
 		//обновление маркеров
 		linrefresh(arplayer.ar.clone());
 		//обработака картинок
@@ -216,7 +217,7 @@ public class Test extends Activity {
 		}
 	}
 
-	//получаем цвет
+	//получаем цвет по номеру
 	private int getColor(int a){
 		if (a==0) return Color.BLUE;
 		if (a==1) return Color.YELLOW;
@@ -225,6 +226,20 @@ public class Test extends Activity {
 		return 0;
 
 	}
+
+	/*
+	 * Обновление очереди
+	 */
+	private void refqueue(){
+		LayoutInflater inflater = getLayoutInflater();
+		String queue=arplayer.queue();
+		this.queue.removeAllViews();
+		View item = inflater.inflate(R.layout.spisok, this.queue, true);
+		((LinearLayout) item.findViewById(R.id.lin1)).setBackgroundColor(getColor((int)(queue.charAt(0)-'0')));
+		((LinearLayout) item.findViewById(R.id.lin2)).setBackgroundColor(getColor((int)(queue.charAt(1)-'0')));
+		((LinearLayout) item.findViewById(R.id.lin3)).setBackgroundColor(getColor((int)(queue.charAt(2)-'0')));
+	}
+	
 
 	/*
 	  Обрабатываем советников и комбинации
@@ -369,8 +384,8 @@ public class Test extends Activity {
 		for (int i=1;i<19;i++) sov_chose[i]=-1;
 	}
 
-	
-	
+
+
 	/*
 	полчуаем всякие всякие id
 	 */

@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void start(View v){
-		Intent intent=new Intent(this, Test.class);
+		Intent intent=new Intent(this, FieldActivity.class);
 		startActivity(intent);
 	}
 	

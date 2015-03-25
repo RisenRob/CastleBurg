@@ -23,9 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name="BuildActivity"></activity>
-        <activity android:name="Test"></activity>
-        <activity android:name="TBuildActivity"></activity>
-        <activity android:name="SovChose"></activity>
+        <activity android:name="FieldActivity"></activity>
         <activity android:name="MonstrActivity"></activity>
     </application>
 

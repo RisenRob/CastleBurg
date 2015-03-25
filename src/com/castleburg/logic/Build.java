@@ -4,8 +4,6 @@ package com.castleburg.logic;
 import java.io.IOException;
 import java.io.Serializable;
 
-import android.util.Log;
-
 
 public class Build implements Serializable{
 
@@ -284,7 +282,8 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 		
 		
 		
-		Log.d("LOG",phase+"");
+		//Мешались :)
+		//Log.d("LOG",phase+"");
 	}
 
 }

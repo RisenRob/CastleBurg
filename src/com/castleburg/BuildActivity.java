@@ -12,7 +12,7 @@ import com.castleburg.logic.Player;
 import com.castleburg.logic.Time;
 import com.castleburg.logic.arPlayer;
 
-public class TBuildActivity extends Activity {
+public class BuildActivity extends Activity {
 	final String TAG="Build";
 	Time time;
 	private ImageView image[][]=new ImageView[5][6];
@@ -51,7 +51,7 @@ public class TBuildActivity extends Activity {
 		intent=getIntent();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		time=(Time)intent.getSerializableExtra("time");
-		monstr=new Monstr(time.year,this);
+		monstr=new Monstr(time.year,intent.getIntExtra("id_monstr", -1),this);
 		arplayer.sort();
 		player=arplayer.ar[0];
 		build=player.build;
