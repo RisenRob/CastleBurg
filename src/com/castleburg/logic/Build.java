@@ -43,12 +43,12 @@ public class Build implements Serializable{
 		if(pos[0][3]==true && player.wood>=2 && po[0][3]==false){
 			 player.wood-=2;
 			 player.war++;
-			 po[0][3]=true;//Палисад +1 в битве (+ 2 если зомби)
+			 po[0][3]=true;//Палисад +1 в битве (+ 2 если зомби)+
 		}
 		if(pos[0][4]==true && player.wood>=1 && po[0][4]==false){
 			player.wood--;
 			po[0][4]=true;
-			//частокол +1 в битве против гоблинов
+			//частокол +1 в битве против гоблинов+
 		}
 		if (pos[1][0]==true && player.gold>=3 && player.stone>=1 && po[1][0]==false){
 			player.gold-=3;
@@ -90,14 +90,14 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 					player.wood--;
 					player.stone-=2;
 					player.win+=7;
-					po[2][0]=true;//Церковь при битве против демонов +1 в битве
+					po[2][0]=true;//Церковь при битве против демонов +1 в битве+
 				} else
 		if (pos[2][0]==true && player.gold>=3 && player.wood>=1 && player.stone>=2 &&po[2][0]==false){
 			player.gold-=3;
 			player.wood--;
 			player.stone-=2;
 			player.win+=7;
-			po[2][0]=true;//Церковь при битве против демонов +1 в битве
+			po[2][0]=true;//Церковь при битве против демонов +1 в битве+
 		}
 				if (pos[2][1]==true && player.gold>=1 && player.wood>=3 && player.stone>=1 &&po[2][1]==false && po[1][4]==true){
 					player.gold-=1;
