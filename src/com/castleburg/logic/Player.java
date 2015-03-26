@@ -2,8 +2,6 @@ package com.castleburg.logic;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.castleburg.BuildActivity;
-
 public class Player implements Serializable,Comparable<Object>{
 
 	private static final long serialVersionUID = 1L;
@@ -33,7 +31,7 @@ public class Player implements Serializable,Comparable<Object>{
 	}
 	
 	//борьа с монстром
-	public void fight(BuildActivity buildActivity,Monstr monstr){
+	public void fight(Monstr monstr){
 		//здесь будет что-то типо пригтовиться к бою и будет накидываться эффеткы строений как то так :)
 		if (monstr.name=="Зомби" && build.po[0][3]==true) war++;
 		if (monstr.name=="Гоблины" && build.po[0][4]==true) war++;
