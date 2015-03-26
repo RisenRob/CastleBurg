@@ -104,14 +104,14 @@ public class FieldActivity extends Activity {
 			case 1:
 				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
 				time=(Time)data.getSerializableExtra("time");
-				time.next(player,arplayer);
+				time.next(arplayer);
 				arplayer.cur=7;
 				refsovchose();
 				refresh();
 				break;
 			case 2:
 				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
-				time.next(player,arplayer);
+				time.next(arplayer);
 				arplayer.cur=7;
 				refsovchose();
 				refresh();
@@ -133,7 +133,7 @@ public class FieldActivity extends Activity {
 	//следующая фаза игры
 	public void next(){
 		Intent intent;
-		time.next(player,arplayer);
+		time.next(arplayer);
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);

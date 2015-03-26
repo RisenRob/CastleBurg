@@ -88,8 +88,11 @@ public class Player implements Serializable,Comparable<Object>{
 		count();
 	}
 	//эффекты строений
-		public void prepare(Player player,int phase){
-			build.prepare(player,phase);
+		public void prepare(int phase){
+			build.prepare(phase);
+			if (phase==5 && build.po[0][1]==true) plus++;
+			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
+			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
 		}
 
 	//сериализация

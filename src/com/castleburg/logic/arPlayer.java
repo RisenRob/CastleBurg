@@ -52,9 +52,9 @@ public class arPlayer implements Serializable {
 	}
 	
 	//эффекты строений
-	public void prepare(Player player,int phase){
+	public void prepare(int phase){
 		for (int i=0;i<ar.length;i++){
-			ar[i].prepare(player,phase);
+			ar[i].prepare(phase);
 		}
 	}
 	

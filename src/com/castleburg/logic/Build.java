@@ -275,10 +275,8 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 	}
 
 	//эффекты строений
-	public void prepare(Player player,int phase){
-		if (phase==5 && po[0][1]==true) player.plus++;
-		if ((phase==1 || phase==3 ||phase== 5) && po[3][1]==true) player.gold++;
-		if ((phase==2 || phase==4 || phase==6)&& po[3][3]==true) player.win++;
+	public void prepare(int phase){
+		
 		
 		
 		
