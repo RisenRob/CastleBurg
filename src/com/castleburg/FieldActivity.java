@@ -87,7 +87,7 @@ public class FieldActivity extends Activity {
 		lsov[16]=(LinearLayout)findViewById(R.id.linsov_16);
 		lsov[17]=(LinearLayout)findViewById(R.id.linsov_17);
 		lsov[18]=(LinearLayout)findViewById(R.id.linsov_18);
-		refsovchose();
+		for (int i=1;i<19;i++) sov_chose[i]=-1;
 		list_player=(ListView)findViewById(R.id.list_player);
 		queue=(LinearLayout)findViewById(R.id.queue);
 		refresh();
@@ -106,14 +106,12 @@ public class FieldActivity extends Activity {
 				time=(Time)data.getSerializableExtra("time");
 				time.next(arplayer);
 				arplayer.cur=7;
-				refsovchose();
 				refresh();
 				break;
 			case 2:
 				arplayer=(arPlayer)data.getSerializableExtra("arplayer");
 				time.next(arplayer);
 				arplayer.cur=7;
-				refsovchose();
 				refresh();
 				monstr=new Monstr(time.year,this);
 				break;
@@ -134,6 +132,7 @@ public class FieldActivity extends Activity {
 	public void next(){
 		Intent intent;
 		time.next(arplayer);
+		getres();
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);
@@ -152,6 +151,103 @@ public class FieldActivity extends Activity {
 		refresh();
 	}
 
+	//получение всех ресурсов с советников
+	public void getres(){
+		for (int i=1;i<19;i++){
+			int num=sov_chose[i];
+			if (num!=-1)
+				switch (i){
+				case 1 :
+					arplayer.ar[num].win++;
+					break;
+				case 2:
+					arplayer.ar[num].gold++;
+					break;
+				case 3:
+					arplayer.ar[num].wood++;
+					break;
+				case 4:
+					//Дерево или золото
+					arplayer.ar[num].wood++;
+					arplayer.ar[num].gold++;
+					break;
+				case 5:
+					arplayer.ar[num].war++;
+					break;
+				case 6:
+					arplayer.ar[num].wood--;
+					arplayer.ar[num].gold++;
+					arplayer.ar[num].stone++;
+					//Вот когда расскажешь как варианты выбирать тогда и сделаю а так то
+					//res[1]--;res[2]++;res[3]++;
+					//||
+					//res[2]--;res[1]++;res[3]++;
+					//||
+					//res[3]--;res[2]++;res[1]++;
+					break;
+				case 7:
+					//Ресурс на ВЫБОР
+					//plus2++;
+					break;
+				case 8:
+					arplayer.ar[num].gold+=2;
+					break;
+				case 9:
+					//Выбор
+					arplayer.ar[num].wood++;
+					arplayer.ar[num].gold++;
+					break;
+					//||
+					//res[1]++;res[3]++;
+
+				case 10:
+					arplayer.ar[num].war+=2;
+					break;
+					//Ещё монстра подглядеть
+				case 11:
+					//Выбор
+					arplayer.ar[num].gold++;
+					arplayer.ar[num].stone++;
+					break;
+					//||
+					//res[1]++;res[3]++;
+				case 12:
+					//2 Ресурса на ВЫБОР
+					//plus2++;
+					break;
+				case 13:
+					arplayer.ar[num].stone+=3;
+					break;
+				case 14:
+					arplayer.ar[num].win--;
+					//3 Ресурса на ВЫБОР
+					break;
+
+				case 15:
+					arplayer.ar[num].stone++;
+					arplayer.ar[num].wood++;
+					arplayer.ar[num].gold++;
+					break;
+				case 16:
+					arplayer.ar[num].gold+=4;
+					break;
+				case 17:
+					arplayer.ar[num].win+=3;
+					break;
+					//2 Ресурса на ВЫБОР
+					//подглядеть монстра
+				case 18:
+					arplayer.ar[num].stone++;
+					arplayer.ar[num].wood++;
+					arplayer.ar[num].gold++;
+					arplayer.ar[num].stone++;
+					arplayer.ar[num].wood++;
+					arplayer.ar[num].war++;
+					break;
+				}
+			sov_chose[i]=-1;
+		}
+	}
 
 	//перезагрузить поле
 	private void refresh(){
@@ -239,7 +335,7 @@ public class FieldActivity extends Activity {
 		((LinearLayout) item.findViewById(R.id.lin2)).setBackgroundColor(getColor((int)(queue.charAt(1)-'0')));
 		((LinearLayout) item.findViewById(R.id.lin3)).setBackgroundColor(getColor((int)(queue.charAt(2)-'0')));
 	}
-	
+
 
 	/*
 	  Обрабатываем советников и комбинации
@@ -266,123 +362,17 @@ public class FieldActivity extends Activity {
 	DialogInterface.OnClickListener dialclick=new DialogInterface.OnClickListener(){
 
 		public void onClick(DialogInterface dialog, int position) {
-			//Toast.makeText(Test.this, player.tess.count[position].kol+"", Toast.LENGTH_SHORT).show();
 			player.del(num, position);
-			switch (num){
-			case 1 :
-				player.win++;
-				sov_chose[1]=player.num;
-				break;
-			case 2:
-				player.gold++;
-				sov_chose[2]=player.num;
-				break;
-			case 3:
-				player.stone++;
-				sov_chose[3]=player.num;
-				break;
-			case 4:
-				//Дерево или золото
-				player.wood++;
-				player.gold++;
-				sov_chose[4]=player.num;
-				break;
-			case 5:
-				player.war++;
-				sov_chose[5]=player.num;
-				break;
-			case 6:
-				player.wood--;
-				player.gold++;
-				player.stone++;
-				sov_chose[6]=player.num;
-				//Вот когда расскажешь как варианты выбирать тогда и сделаю а так то
-				//res[1]--;res[2]++;res[3]++;
-				//||
-				//res[2]--;res[1]++;res[3]++;
-				//||
-				//res[3]--;res[2]++;res[1]++;
-				break;
-			case 7:
-				//Ресурс на ВЫБОР
-				//plus2++;
-				sov_chose[7]=player.num;
-				break;
-			case 8:
-				player.gold+=2;
-				sov_chose[8]=player.num;
-				break;
-			case 9:
-				//Выбор
-				player.wood++;
-				player.gold++;
-				sov_chose[9]=player.num;
-				break;
-				//||
-				//res[1]++;res[3]++;
-
-			case 10:
-				player.war+=2;
-				sov_chose[10]=player.num;
-				break;
-				//Ещё монстра подглядеть
-			case 11:
-				//Выбор
-				sov_chose[11]=player.num;
-				player.gold++;
-				player.stone++;
-				break;
-				//||
-				//res[1]++;res[3]++;
-			case 12:
-				//2 Ресурса на ВЫБОР
-				//plus2++;
-				sov_chose[12]=player.num;
-				break;
-			case 13:
-				player.stone+=3;
-				sov_chose[12]=player.num;
-				break;
-			case 14:
-				player.win--;
-				sov_chose[14]=player.num;
-				break;
-				//3 Ресурса на ВЫБОР
-			case 15:
-				player.wood++;
-				player.gold++;
-				player.stone++;
-				sov_chose[15]=player.num;
-				break;
-			case 16:
-				player.gold+=4;
-				sov_chose[16]=player.num;
-				break;
-			case 17:
-				player.win+=3;
-				sov_chose[17]=player.num;
-				break;
-				//2 Ресурса на ВЫБОР
-				//подглядеть монстра
-			case 18:
-				sov_chose[18]=player.num;
-				player.wood++;
-				player.gold++;
-				player.stone++;
-				player.war++;
-				break;
-			}
+			sov_chose[num]=player.num;
 			if (!arplayer.empty()) next();
+			
 			refresh();
 		}
 
 	};
 
-
 	//обновление(обнуление) советнкиов
-	public void refsovchose(){
-		for (int i=1;i<19;i++) sov_chose[i]=-1;
-	}
+
 
 
 
