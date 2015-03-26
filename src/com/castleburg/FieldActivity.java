@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -41,8 +40,6 @@ public class FieldActivity extends Activity {
 	Time time=new Time();
 	//номер выбраннвго советника, нужно ниже
 	int num;
-	//Очередь
-	LinearLayout queue;
 	//Монстр
 	Monstr monstr;
 
@@ -89,7 +86,6 @@ public class FieldActivity extends Activity {
 		lsov[18]=(LinearLayout)findViewById(R.id.linsov_18);
 		for (int i=1;i<19;i++) sov_chose[i]=-1;
 		list_player=(ListView)findViewById(R.id.list_player);
-		queue=(LinearLayout)findViewById(R.id.queue);
 		refresh();
 		monstr=new Monstr(time.year,this);
 	}
@@ -253,10 +249,8 @@ public class FieldActivity extends Activity {
 	private void refresh(){
 		player=arplayer.next();
 		//обновление списка игроков
-		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone());
+		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
 		list_player.setAdapter(adapter_player);
-		//обновлние очереди
-		refqueue();
 		//обновление маркеров
 		linrefresh(arplayer.ar.clone());
 		//обработака картинок
@@ -323,19 +317,6 @@ public class FieldActivity extends Activity {
 
 	}
 
-	/*
-	 * Обновление очереди
-	 */
-	private void refqueue(){
-		LayoutInflater inflater = getLayoutInflater();
-		String queue=arplayer.queue();
-		this.queue.removeAllViews();
-		View item = inflater.inflate(R.layout.spisok, this.queue, true);
-		((LinearLayout) item.findViewById(R.id.lin1)).setBackgroundColor(getColor((int)(queue.charAt(0)-'0')));
-		((LinearLayout) item.findViewById(R.id.lin2)).setBackgroundColor(getColor((int)(queue.charAt(1)-'0')));
-		((LinearLayout) item.findViewById(R.id.lin3)).setBackgroundColor(getColor((int)(queue.charAt(2)-'0')));
-	}
-
 
 	/*
 	  Обрабатываем советников и комбинации
@@ -370,11 +351,6 @@ public class FieldActivity extends Activity {
 		}
 
 	};
-
-	//обновление(обнуление) советнкиов
-
-
-
 
 	/*
 	полчуаем всякие всякие id

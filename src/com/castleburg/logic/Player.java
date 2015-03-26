@@ -71,6 +71,7 @@ public class Player implements Serializable,Comparable<Object>{
 		if (plus>0) tess.plus=true;
 		tess.count();
 	}
+	
 	//удалние комбинации
 	public void del(int sum,int n){
 		tess.del(sum, n);
@@ -84,7 +85,14 @@ public class Player implements Serializable,Comparable<Object>{
 	//перекидывание кубиков
 	public void refresh(int n){
 		tess.refresh(n);
+		//Часовня if (build.po[1][0]==true && tess.toStringSum()<=7) tess.refresh(n);
+	    //Статуя if (build.po[0][0]==true && tess.check() && n!=0) tess.reftess();
 		if (build.po[1][1]==true) tess.market=true;
+		if (build.po[2][1]==true && n!=0) {
+			tess.addtess();
+			win--;
+		}
+		
 		count();
 	}
 	//эффекты строений

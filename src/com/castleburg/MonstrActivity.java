@@ -47,7 +47,7 @@ public class MonstrActivity extends Activity {
 	
 	
 	public void refplayer(){
-		PlayerAdapter adapter=new PlayerAdapter(this,arplayer.ar.clone());
+		PlayerAdapter adapter=new PlayerAdapter(this,arplayer.ar.clone(),"012");
 		list_player.setAdapter(adapter);
 		
 	}

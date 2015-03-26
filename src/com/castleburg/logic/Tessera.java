@@ -61,10 +61,12 @@ public class Tessera extends ArrayList<Character>{
 			steps[sum].add(step,toComb(step));
 			for (int i=1;i<size();i++) count_rec(n+i,sum,new StringBuilder(step));
 			if (market){
-				StringBuilder sbmarket=new StringBuilder(step);
-				sbmarket.append('p');
-				steps[sum+1].add(sbmarket,toComb(sbmarket));
-				steps[sum-1].add(sbmarket,toComb(sbmarket));
+				StringBuilder sbmarketp=new StringBuilder(step);
+				sbmarketp.append('p');
+				steps[sum+1].add(sbmarketp,toComb(sbmarketp));
+				StringBuilder sbmarketo=new StringBuilder(step);
+				sbmarketo.append('o');
+				steps[sum-1].add(sbmarketo,toComb(sbmarketo));
 			}
 			if (plus) {
 				StringBuilder sbplus=new StringBuilder(step);
@@ -72,10 +74,12 @@ public class Tessera extends ArrayList<Character>{
 				sum+=2;
 				steps[sum].add(sbplus,toComb(sbplus));
 				if (market){
-					StringBuilder sbmarket=new StringBuilder(sbplus);
-					sbmarket.append('p');
-					steps[sum+1].add(sbmarket,toComb(sbmarket));
-					steps[sum-1].add(sbmarket,toComb(sbmarket));
+					StringBuilder sbmarketp=new StringBuilder(sbplus);
+					sbmarketp.append('p');
+					steps[sum+1].add(sbmarketp,toComb(sbmarketp));
+					StringBuilder sbmarketo=new StringBuilder(sbplus);
+					sbmarketo.append('o');
+					steps[sum-1].add(sbmarketo,toComb(sbmarketo));
 				}
 			}
 			
@@ -89,7 +93,7 @@ public class Tessera extends ArrayList<Character>{
 		StringBuilder comb=new StringBuilder();
 		int num;
 		for (int i=0;i<step.length();i++){
-			if (step.charAt(i)!='p' && step.charAt(i)!='l') {
+			if (step.charAt(i)!='p' && step.charAt(i)!='l' && step.charAt(i)!='o') {
 				num=Integer.parseInt(step.charAt(i)+"");
 				comb.append(get(num).charValue());
 			} else comb.append(step.charAt(i));
@@ -114,9 +118,9 @@ public class Tessera extends ArrayList<Character>{
 		StringBuilder step=steps[sum].get(n);
 		ArrayList<Character> test=new ArrayList<Character>();
 		for (int i=0;i<step.length();i++) {
-			if (step.charAt(i)!='p' && step.charAt(i)!='l'){
+			if (step.charAt(i)!='p' && step.charAt(i)!='l' && step.charAt(i)!='o'){
 				test.add(get((int)step.charAt(i)-48));	
-			} else if (step.charAt(i)=='p') market=false; else plus=false;
+			} else if (step.charAt(i)=='p' || step.charAt(i)!='o') market=false; else plus=false;
 		}
 		removeAll(test);
 		sort();
@@ -128,9 +132,25 @@ public class Tessera extends ArrayList<Character>{
 		char c;
 		for (int i=0;i<size();i++){
 			c=get(i);
-			if (c!='p' && c!='l') sum+=(int)get(i)-'0';
+			if (c!='p' && c!='l' && c!='o') sum+=(int)get(i)-'0';
 		}
 		return sum;
+	}
+	
+	//добаление кубика(Ферма)
+	public void addtess(){
+		add((char)(Math.random()*6+49));
+	}
+	
+	//проверка всели кубики одинаковые
+	public boolean check(){
+		for (int i=1;i<size();i++)	if (get(i-1)!=get(i)) return false;
+		return true;
+	}
+	
+	//Перебросить один из свjих кубиков
+	public void reftess(){
+		this.set(0, (char)(Math.random()*6+49));
 	}
 
 }

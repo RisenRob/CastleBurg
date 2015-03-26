@@ -82,7 +82,6 @@ public class Monstr implements Serializable {
 		String[] arg=new String[]{year+""};
 		c = db.query("Monstr", null, selection, arg, null, null,null);
 		if  (c.moveToPosition(this.id)) toMonstr(c);
-		Log.d("LOG","Монстр:"+name);
 		
 	}
 	

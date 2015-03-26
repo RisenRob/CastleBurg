@@ -78,9 +78,11 @@ public class TessAdapter extends BaseAdapter {
 		break;
 		case '6':image.setImageResource(R.drawable.tess6);
 		break;
-		case 'p':image.setImageResource(R.drawable.market);
+		case 'p':image.setImageResource(R.drawable.marketp);
 		break;
 		case 'l':image.setImageResource(R.drawable.plus);
+		break;
+		case 'o':image.setImageResource(R.drawable.marketo);
 		break;
 		}
 		return image;

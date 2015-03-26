@@ -21,9 +21,11 @@ public class PlayerAdapter extends BaseAdapter {
 	Context ctx;
 	LayoutInflater inflater;
 	Player[] ar;
+	String queue;
 
-	public PlayerAdapter(Context context, Player[] mar){
+	public PlayerAdapter(Context context, Player[] mar,String mqueue){
 		ar=mar;
+		queue=mqueue;
 		ctx=context;
 		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		Arrays.sort(ar, new Comparator<Player>() {
@@ -59,15 +61,15 @@ public class PlayerAdapter extends BaseAdapter {
 		View view = convertView;
 		if (view == null) {
 			view = inflater.inflate(R.layout.spis_player, parent, false);
-			((TextView) view.findViewById(R.id.tess)).setText(ar[position].win+"");  
-			((TextView) view.findViewById(R.id.textView2)).setText(ar[position].war+"");
-			((TextView) view.findViewById(R.id.textView3)).setText(ar[position].wood+"");
-			((TextView) view.findViewById(R.id.textView4)).setText(ar[position].gold+"");
-			((TextView) view.findViewById(R.id.textView5)).setText(ar[position].stone+"");
-			((TextView) view.findViewById(R.id.textView6)).setText(ar[position].plus+"");
-			((LinearLayout)view.findViewById(R.id.lin)).setBackgroundColor(getColor(position));
+			((TextView) view.findViewById(R.id.tess)).setText(ar[queue.charAt(position)-'0'].win+"");  
+			((TextView) view.findViewById(R.id.textView2)).setText(ar[queue.charAt(position)-'0'].war+"");
+			((TextView) view.findViewById(R.id.textView3)).setText(ar[queue.charAt(position)-'0'].wood+"");
+			((TextView) view.findViewById(R.id.textView4)).setText(ar[queue.charAt(position)-'0'].gold+"");
+			((TextView) view.findViewById(R.id.textView5)).setText(ar[queue.charAt(position)-'0'].stone+"");
+			((TextView) view.findViewById(R.id.textView6)).setText(ar[queue.charAt(position)-'0'].plus+"");
+			((LinearLayout)view.findViewById(R.id.lin)).setBackgroundColor(getColor(queue.charAt(position)-'0'));
 			LinearLayout tessera=((LinearLayout)view.findViewById(R.id.tessera));
-			gettess(position,tessera);
+			gettess(queue.charAt(position)-'0',tessera);
 
 		}
 		//Log.d("TAG", position+"");
