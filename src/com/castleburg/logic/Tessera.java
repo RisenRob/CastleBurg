@@ -132,5 +132,5 @@ public class Tessera extends ArrayList<Character>{
 		}
 		return sum;
 	}
-	
+
 }

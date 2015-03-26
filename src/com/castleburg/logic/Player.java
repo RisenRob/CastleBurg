@@ -94,6 +94,10 @@ public class Player implements Serializable,Comparable<Object>{
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
 			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
 		}
+		//Пусть пока будет здесь
+		//public void Chasovna(){			
+	//if (tess.toStringSum()<=7) ;
+	//	}
 
 	//сериализация
 	private void writeObject(java.io.ObjectOutputStream out)

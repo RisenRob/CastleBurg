@@ -12,7 +12,7 @@ public class Build implements Serializable{
 	public boolean[][]po=new boolean [5][6];
 	public boolean[][]pos=new boolean [5][6];
 	public boolean[][]sosbut=new boolean [5][6];
-	
+	public int kbuild,pwar;
 	
 	public Build(){
 		for (int i=0;i<5;i++){
@@ -227,6 +227,25 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 		}
 
 
+	}
+	
+	public int kolbuild() {
+		kbuild=0;
+		for (int i=0;i<=3;i++)
+			for (int j=0;j<=4;j++)
+				if (po[i][j]==true) kbuild++;
+	return kbuild;	
+	}
+	
+	public int kwar(){
+	pwar=0;
+	if (po[0][2]) pwar++;
+	if (po[0][3]) pwar++;
+	if (po[1][2]) pwar++;
+	if (po[2][3]) pwar++;
+	if (po[3][2]) pwar++;
+	if (po[3][3]) pwar++;
+	return pwar;
 	}
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException,ClassNotFoundException {
