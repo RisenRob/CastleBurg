@@ -34,6 +34,7 @@ public class FieldActivity extends Activity {
 	int[] sov_chose=new int[19];
 	//очередь игроков
 	arPlayer arplayer= new arPlayer(3);
+	arPlayer next_arplayer;
 	//список игроков
 	private ListView list_player;
 	//время
@@ -42,6 +43,9 @@ public class FieldActivity extends Activity {
 	int num;
 	//Монстр
 	Monstr monstr;
+
+	String[] res;
+	int kol=0,pl;
 
 
 	@Override
@@ -90,8 +94,6 @@ public class FieldActivity extends Activity {
 		monstr=new Monstr(time.year,this);
 	}
 
-
-
 	//Действия после сражения с монстрами или постройки строений
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -126,9 +128,46 @@ public class FieldActivity extends Activity {
 
 	//следующая фаза игры
 	public void next(){
-		Intent intent;
+		next_arplayer=new arPlayer(arplayer.ar.length);
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
+			next_arplayer.ar[i].refresh(0);
+		}
 		time.next(arplayer);
 		getres();
+	}
+
+	public void next2(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
+
+		}
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
+		adb.setAdapter(adapter_player, null);
+		adb.setTitle("Результаты урожая");
+		adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				activnext();			
+			}} );
+		adb.setCancelable(false).create().show();
+		refresh();
+	}
+
+	public void activnext(){
+		Intent intent;
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);
@@ -144,94 +183,163 @@ public class FieldActivity extends Activity {
 			intent.putExtra("time", time);
 			startActivityForResult(intent,1);			
 		}
-		refresh();
+
 	}
 
+	public int sov_nul(){
+		for (int i=1;i<19;i++)
+			if (sov_chose[i]!=-1) return i;
+		return 0;
+	}
+
+	DialogInterface.OnClickListener resclick=new DialogInterface.OnClickListener(){
+
+		public void onClick(DialogInterface dialog, int position) {
+			int num=sov_nul();
+			if (num==7 && kol<=0) kol=1;
+			if (num==12 && kol<=0) kol=2;
+			if (num==14 && kol<=0) {kol=3;arplayer.ar[sov_chose[num]].win--;}
+			if (num==17 && kol<=0) {kol=2;arplayer.ar[sov_chose[num]].win+=3;
+			Toast.makeText(FieldActivity.this, "Имя монстра:"+monstr.name+" Сила:"+monstr.war, Toast.LENGTH_SHORT).show();}
+			for (int i=0;i<res[position].length();i++){
+				switch (res[position].charAt(i)){
+				case 'w':arplayer.ar[sov_chose[num]].wood++;
+				kol--;
+				break;
+				case 'e':arplayer.ar[sov_chose[num]].wood--;
+				break;
+				case 'g':arplayer.ar[sov_chose[num]].gold++;
+				kol--;
+				break;
+				case 'h':arplayer.ar[sov_chose[num]].gold--;
+				break;
+				case 's':arplayer.ar[sov_chose[num]].stone++;
+				kol--;
+				break;
+				case 'd':arplayer.ar[sov_chose[num]].stone--;
+				break;
+				case 'p':arplayer.ar[sov_chose[num]].win++;
+				break;
+				case '[':arplayer.ar[sov_chose[num]].win--;
+				break;
+				case 'q':arplayer.ar[sov_chose[num]].war++;
+				break;
+				case 'z':arplayer.ar[sov_chose[num]].war--;
+				break;
+				}
+			}
+			if (kol<=0) {sov_chose[num]=-1;	kol=0;}
+			getres();
+
+		}
+
+	};
+
+
 	//получение всех ресурсов с советников
-	public void getres(){
+	public int getres(){
+		ResAdapter adapter;
+		AlertDialog.Builder adb;
+		adb = new AlertDialog.Builder(this);
+		adb.setTitle("Выберите желаемые ресурсы");
+
 		for (int i=1;i<19;i++){
 			int num=sov_chose[i];
 			if (num!=-1)
 				switch (i){
 				case 1 :
 					arplayer.ar[num].win++;
+					sov_chose[i]=-1;
 					break;
 				case 2:
 					arplayer.ar[num].gold++;
+					sov_chose[i]=-1;
 					break;
 				case 3:
 					arplayer.ar[num].wood++;
+					sov_chose[i]=-1;
 					break;
 				case 4:
 					//Дерево или золото
-					arplayer.ar[num].wood++;
-					arplayer.ar[num].gold++;
-					break;
+					res=new String[]{"w","g"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					Toast.makeText(this, "Привет дурак", Toast.LENGTH_SHORT);
+					return 1;
 				case 5:
 					arplayer.ar[num].war++;
+					sov_chose[i]=-1;
 					break;
 				case 6:
-					arplayer.ar[num].wood--;
-					arplayer.ar[num].gold++;
-					arplayer.ar[num].stone++;
-					//Вот когда расскажешь как варианты выбирать тогда и сделаю а так то
-					//res[1]--;res[2]++;res[3]++;
-					//||
-					//res[2]--;res[1]++;res[3]++;
-					//||
-					//res[3]--;res[2]++;res[1]++;
-					break;
+					res=new String[]{"dawg","easg","haws"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 7:
-					//Ресурс на ВЫБОР
-					//plus2++;
-					break;
+					arplayer.ar[num].plus++;
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 8:
 					arplayer.ar[num].gold+=2;
+					sov_chose[i]=-1;
 					break;
 				case 9:
-					//Выбор
-					arplayer.ar[num].wood++;
-					arplayer.ar[num].gold++;
-					break;
-					//||
-					//res[1]++;res[3]++;
-
+					res=new String[]{"gw","sw"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 10:
 					arplayer.ar[num].war+=2;
+					Toast.makeText(FieldActivity.this, "Имя монстра:"+monstr.name+" Сила:"+monstr.war, Toast.LENGTH_SHORT).show();
+					sov_chose[i]=-1;
 					break;
 					//Ещё монстра подглядеть
 				case 11:
-					//Выбор
-					arplayer.ar[num].gold++;
-					arplayer.ar[num].stone++;
-					break;
-					//||
-					//res[1]++;res[3]++;
+					res=new String[]{"gs","ws"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 12:
-					//2 Ресурса на ВЫБОР
-					//plus2++;
-					break;
+					arplayer.ar[num].plus++;
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 13:
 					arplayer.ar[num].stone+=3;
+					sov_chose[i]=-1;
 					break;
 				case 14:
-					arplayer.ar[num].win--;
-					//3 Ресурса на ВЫБОР
-					break;
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 
 				case 15:
 					arplayer.ar[num].stone++;
 					arplayer.ar[num].wood++;
 					arplayer.ar[num].gold++;
+					sov_chose[i]=-1;
 					break;
 				case 16:
 					arplayer.ar[num].gold+=4;
+					sov_chose[i]=-1;
 					break;
 				case 17:
-					arplayer.ar[num].win+=3;
-					break;
-					//2 Ресурса на ВЫБОР
-					//подглядеть монстра
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,this);
+					adb.setAdapter(adapter, resclick);
+					adb.setCancelable(false).create().show();
+					return 1;
 				case 18:
 					arplayer.ar[num].stone++;
 					arplayer.ar[num].wood++;
@@ -239,15 +347,18 @@ public class FieldActivity extends Activity {
 					arplayer.ar[num].stone++;
 					arplayer.ar[num].wood++;
 					arplayer.ar[num].war++;
+					sov_chose[i]=-1;
 					break;
 				}
-			sov_chose[i]=-1;
 		}
+		next2();
+		return 0;
 	}
 
 	//перезагрузить поле
 	private void refresh(){
 		player=arplayer.next();
+		checkplayers();
 		//обновление списка игроков
 		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
 		list_player.setAdapter(adapter_player);
@@ -257,7 +368,45 @@ public class FieldActivity extends Activity {
 		prepare();
 	}
 
+	public void checkplayers(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			AlertDialog.Builder adb;
+			pl=i;
+			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
+				adb = new AlertDialog.Builder(this);
+				adb.setTitle("Вы хотите использовать Часовню?");
+				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						plef(1);
+					}});
+				adb.setNegativeButton("Нет", null);
+				adb.create().show();
+			}
+			/*if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
+				adb = new AlertDialog.Builder(this);
+				adb.setTitle("Вы хотите использовать Статую?");
+				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						plef(2);
+					}});
+				adb.setNegativeButton("Нет", null);
+				adb.create().show();
+			}*/
+			//Часовня if (build.po[1][0]==true && tess.toStringSum()<=7) tess.refresh(n);
+			//Статуя if (build.po[0][0]==true && tess.check() && n!=0) tess.reftess();
+		}
+	}
+	
+	public void plef(int n){
+		int i=pl;
+		//if (n==1) arplayer.ar[i].tess.refresh(arplayer.ar[i].tess.toString().length());
+		//if (n==2) arplayer.ar[i].tess.reftess();
+	}
+	
 	//подготоваить поле(работа с картинками)
 	public void prepare(){
 		for (int i=1;i<19;i++){
@@ -346,7 +495,7 @@ public class FieldActivity extends Activity {
 			player.del(num, position);
 			sov_chose[num]=player.num;
 			if (!arplayer.empty()) next();
-			
+
 			refresh();
 		}
 
