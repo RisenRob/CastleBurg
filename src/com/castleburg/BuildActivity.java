@@ -1,10 +1,16 @@
 package com.castleburg;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.castleburg.logic.Build;
 import com.castleburg.logic.Monstr;
@@ -23,6 +29,10 @@ public class BuildActivity extends Activity {
 	public Player player;
 	Monstr monstr;
 	Intent intent;
+	Button button1,button2,button3;
+	   AlertDialog.Builder ad;
+	    Context context;
+	    private final int IDD_THREE_BUTTONS = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,9 @@ public class BuildActivity extends Activity {
 		image[3][2] = (ImageView)findViewById(R.id.imageView12);
 		image[3][3] = (ImageView)findViewById(R.id.imageView16);
 		image[3][4] = (ImageView)findViewById(R.id.imageView20);
+		button1=(Button)findViewById(R.id.button2);
+		button2=(Button)findViewById(R.id.button4);
+		button3=(Button)findViewById(R.id.button3);
 		intent=getIntent();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		time=(Time)intent.getSerializableExtra("time");
@@ -57,6 +70,8 @@ public class BuildActivity extends Activity {
 		build=player.build;
 		pos=build.pos;
 		sosbutt=build.sosbut;
+		
+		
 
 		///[Столбец][Строка]	
 
@@ -68,6 +83,24 @@ public class BuildActivity extends Activity {
 			}
 
 	}
+public Player perecl (View v){	
+	switch (v.getId()) {
+	case R.id.button2:
+		return	arplayer.ar[0];
+	case R.id.button4:
+		return	arplayer.ar[1];
+	case R.id.button3:
+		return	arplayer.ar[2];
+};
+return player;
+}
+	
+public void pere(View v){	
+	player=perecl(v);
+	refresh();
+	
+	
+}
 
 	public void goMain(){
 		intent =new Intent();
@@ -89,9 +122,10 @@ public class BuildActivity extends Activity {
 	}
 
 	public void pass(View v){
-		arplayer.next();
+	    arplayer.next();
 		if (arplayer.cur==0) goMain();
 		refresh();
+	
 	}
 	
 	View.OnClickListener click=new View.OnClickListener(){
@@ -416,8 +450,41 @@ public class BuildActivity extends Activity {
 				pass(v);
 	
 	}
+	//if (build.po[2][4]) 
+	   protected Dialog onCreateDialog(int id) {
+	        switch (id) {
+	        case IDD_THREE_BUTTONS:
+		
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Хотите использовать ратушу")
+					.setCancelable(false)
+					.setPositiveButton("Да,сжечь +2 к кубику",new 
+							DialogInterface.OnClickListener() {						
+								
+								public void onClick(DialogInterface dialog,int id) {
+									if (player.plus>0) {player.plus--;player.win++; dialog.cancel();} else Toast.makeText(
+		                                    getApplicationContext(),
+		                                    "Нехватет ресурса",		                                            
+		                                    Toast.LENGTH_SHORT).show();
+									
+								}
+					})
+						.setNeutralButton("Нет",
+								new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                    int id) {
+                                dialog.cancel();
+                            }
+                        });
+			 return builder.create();	
+	        default:
+	            return null;
+	        }
 	
-}			
+		}
+	}
+	
+			
 
 
 

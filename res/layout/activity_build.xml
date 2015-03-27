@@ -189,10 +189,31 @@
         </ScrollView>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="116dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="pere"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="pere"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="pere"
+                android:text="3" />
 
             <Button
                 android:id="@+id/button1"
@@ -201,6 +222,7 @@
                 android:onClick="pass"
                 android:text="Пасс" />
         </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>
