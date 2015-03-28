@@ -117,9 +117,10 @@ public class Tessera extends ArrayList<Character>{
 	public void del(int sum,int n){
 		StringBuilder step=steps[sum].get(n);
 		ArrayList<Character> test=new ArrayList<Character>();
+		test.add('0');
 		for (int i=0;i<step.length();i++) {
 			if (step.charAt(i)!='p' && step.charAt(i)!='l' && step.charAt(i)!='o'){
-				test.add(get((int)step.charAt(i)-48));	
+				this.set(((int)step.charAt(i)-48), '0');
 			} else if (step.charAt(i)=='p' || step.charAt(i)!='o') market=false; else plus=false;
 		}
 		removeAll(test);

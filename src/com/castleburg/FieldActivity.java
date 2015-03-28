@@ -46,6 +46,7 @@ public class FieldActivity extends Activity {
 
 	String[] res;
 	int kol=0,pl;
+	boolean[][] hbuild=new boolean[2][3];
 
 
 	@Override
@@ -122,7 +123,8 @@ public class FieldActivity extends Activity {
 	public void pass(View v){
 		player.refresh(0);
 		if (!arplayer.empty()) next();
-		refresh();
+		player=arplayer.next();
+		field_refresh();
 	}
 
 
@@ -163,7 +165,7 @@ public class FieldActivity extends Activity {
 				activnext();			
 			}} );
 		adb.setCancelable(false).create().show();
-		refresh();
+		field_refresh();
 	}
 
 	public void activnext(){
@@ -359,6 +361,10 @@ public class FieldActivity extends Activity {
 	private void refresh(){
 		player=arplayer.next();
 		checkplayers();
+		field_refresh();
+	}
+
+	private void field_refresh(){
 		//обновление списка игроков
 		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
 		list_player.setAdapter(adapter_player);
@@ -368,45 +374,91 @@ public class FieldActivity extends Activity {
 		prepare();
 	}
 
-	public void checkplayers(){
-		for (int i=0;i<arplayer.ar.length;i++){
-			AlertDialog.Builder adb;
-			pl=i;
-			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
-				adb = new AlertDialog.Builder(this);
-				adb.setTitle("Вы хотите использовать Часовню?");
-				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						plef(1);
-					}});
-				adb.setNegativeButton("Нет", null);
-				adb.create().show();
-			}
-			/*if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
-				adb = new AlertDialog.Builder(this);
+	public void checkplayers2(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
+				hbuild[1][i]=true;
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
 				adb.setTitle("Вы хотите использовать Статую?");
 				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						plef(2);
+
+						plef1();
 					}});
 				adb.setNegativeButton("Нет", null);
 				adb.create().show();
-			}*/
-			//Часовня if (build.po[1][0]==true && tess.toStringSum()<=7) tess.refresh(n);
-			//Статуя if (build.po[0][0]==true && tess.check() && n!=0) tess.reftess();
+			}
 		}
 	}
-	
-	public void plef(int n){
-		int i=pl;
-		//if (n==1) arplayer.ar[i].tess.refresh(arplayer.ar[i].tess.toString().length());
-		//if (n==2) arplayer.ar[i].tess.reftess();
+	public void checkplayers(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
+				hbuild[0][i]=true;
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
+				adb.setTitle("Вы хотите использовать Часовню?");
+				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						plef();
+					}});
+				adb.setNegativeButton("Нет", null);
+				adb.create().show();
+			}
+		}
+		if (!check_build0()) checkplayers2();
+	}
+
+	public boolean check_build(){
+		int kol=0;
+		for (int i=1;i>=0;i--){
+			for (int j=2;j>=0;j--){
+				if (hbuild[i][j]==true) kol++;
+			}
+		}
+		return (kol==1);
+	}
+	public boolean check_build0(){
+			for (int j=2;j>=0;j--){
+				if (hbuild[0][j]==true) return true;
+			}
+		return false;
+	}
+	public boolean check_build1(){
+		for (int j=2;j>=0;j--){
+			if (hbuild[1][j]==true) return true;
+		}
+	return false;
+}
+
+	public int plef(){
+			for (int j=2;j>=0;j--){
+				if (hbuild[0][j]==true){
+					arplayer.ar[j].tess.refresh(arplayer.ar[j].tess.toString().length());
+					hbuild[0][j]=false;
+					if (!check_build0()) {checkplayers2();}
+					field_refresh();
+					return 0;
+				}
+			}
+		return 0;
 	}
 	
+	public int plef1(){
+		for (int j=2;j>=0;j--){
+			if (hbuild[1][j]==true){
+				arplayer.ar[j].tess.reftess();
+				hbuild[1][j]=false;
+				if (!check_build1()) Arrays.sort(arplayer.ar);
+				field_refresh();
+				return 0;
+			}
+		}
+	return 0;
+}
+
 	//подготоваить поле(работа с картинками)
 	public void prepare(){
 		for (int i=1;i<19;i++){
@@ -495,8 +547,8 @@ public class FieldActivity extends Activity {
 			player.del(num, position);
 			sov_chose[num]=player.num;
 			if (!arplayer.empty()) next();
-
-			refresh();
+			player=arplayer.next();
+			field_refresh();
 		}
 
 	};
