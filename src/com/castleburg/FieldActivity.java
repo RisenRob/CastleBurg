@@ -172,6 +172,62 @@ public class FieldActivity extends Activity {
 
 	public void activnext(){
 		Intent intent;
+		if (time.phase==7) {				
+			final String[] check={"Дерево","Золото","Камень"};
+			final boolean[] mCheckedItems = { false, false, false };
+			 AlertDialog.Builder sf = new AlertDialog.Builder(this);
+			 sf.setTitle("Выберите 2 ресурса")
+			 .setCancelable(false)
+			 .setMultiChoiceItems(check,mCheckedItems,
+					 new DialogInterface.OnMultiChoiceClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialog,
+                         int which, boolean isChecked) {
+                     mCheckedItems[which] = isChecked;
+                 
+                 }
+             })
+             .setPositiveButton("Отдать",
+            		 new DialogInterface.OnClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialog,
+                         int id) {
+                	 
+                	int ch=0,che=0;
+                	
+                	for(int i=0;i<check.length;i++)
+                		if(mCheckedItems[i]) ch++;
+                	if (ch%2==0) {
+                			if (mCheckedItems[0] && player.wood>0 ) {player.wood--;che++;}
+                			if (mCheckedItems[1] && player.gold>0) {player.gold--;che++;}
+                			if (mCheckedItems[2] && player.stone>0) {player.stone--;che++;} 
+                		if (che%2==0 && che>0)player.war++;else  {Toast.makeText(
+                                getApplicationContext(),
+                                "Нехватает ресурсов",		                                            
+                                Toast.LENGTH_SHORT).show();    
+                		che=0;
+                		}
+                		
+                	}else {Toast.makeText(
+                            getApplicationContext(),
+                            "Выберите ровно 2 ресурса",		                                            
+                            Toast.LENGTH_SHORT).show();
+                	ch=0;}
+                 }
+              
+                 }
+             )
+                 .setNegativeButton("Далее",
+                         new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog,
+                                     int id) {
+                                 dialog.cancel();
+                                 
+                             }
+                         });
+sf.create().show();
+			}
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);

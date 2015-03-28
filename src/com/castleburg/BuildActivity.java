@@ -97,7 +97,11 @@ return player;
 	
 public void pere(View v){	
 	player=perecl(v);
-	refresh();
+	if (perecl(v)==arplayer.ar[arplayer.cur])refresh();else {
+		refresh();
+		for (int i=0;i<4;i++)
+		for (int j=0;j<5;j++)
+		image[i][j].setClickable(false);}
 	
 	
 }
