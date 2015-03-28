@@ -39,6 +39,7 @@ public class FieldActivity extends Activity {
 	private ListView list_player;
 	//время
 	Time time=new Time();
+	LinearLayout ltime;
 	//номер выбраннвго советника, нужно ниже
 	int num;
 	//Монстр
@@ -89,6 +90,7 @@ public class FieldActivity extends Activity {
 		lsov[16]=(LinearLayout)findViewById(R.id.linsov_16);
 		lsov[17]=(LinearLayout)findViewById(R.id.linsov_17);
 		lsov[18]=(LinearLayout)findViewById(R.id.linsov_18);
+		ltime=(LinearLayout)findViewById(R.id.time);
 		for (int i=1;i<19;i++) sov_chose[i]=-1;
 		list_player=(ListView)findViewById(R.id.list_player);
 		refresh();
@@ -359,6 +361,7 @@ public class FieldActivity extends Activity {
 
 	//перезагрузить поле
 	private void refresh(){
+		time_refresh();
 		player=arplayer.next();
 		checkplayers();
 		field_refresh();
@@ -421,31 +424,31 @@ public class FieldActivity extends Activity {
 		return (kol==1);
 	}
 	public boolean check_build0(){
-			for (int j=2;j>=0;j--){
-				if (hbuild[0][j]==true) return true;
-			}
+		for (int j=2;j>=0;j--){
+			if (hbuild[0][j]==true) return true;
+		}
 		return false;
 	}
 	public boolean check_build1(){
 		for (int j=2;j>=0;j--){
 			if (hbuild[1][j]==true) return true;
 		}
-	return false;
-}
+		return false;
+	}
 
 	public int plef(){
-			for (int j=2;j>=0;j--){
-				if (hbuild[0][j]==true){
-					arplayer.ar[j].tess.refresh(arplayer.ar[j].tess.toString().length());
-					hbuild[0][j]=false;
-					if (!check_build0()) {checkplayers2();}
-					field_refresh();
-					return 0;
-				}
+		for (int j=2;j>=0;j--){
+			if (hbuild[0][j]==true){
+				arplayer.ar[j].tess.refresh(arplayer.ar[j].tess.toString().length());
+				hbuild[0][j]=false;
+				if (!check_build0()) {Arrays.sort(arplayer.ar);checkplayers2();}
+				field_refresh();
+				return 0;
 			}
+		}
 		return 0;
 	}
-	
+
 	public int plef1(){
 		for (int j=2;j>=0;j--){
 			if (hbuild[1][j]==true){
@@ -456,8 +459,42 @@ public class FieldActivity extends Activity {
 				return 0;
 			}
 		}
-	return 0;
-}
+		return 0;
+	}
+	//обновление времени
+	public void time_refresh(){
+		LayoutParams linLayoutParam = new LayoutParams(LayoutParams.WRAP_CONTENT,  LayoutParams.WRAP_CONTENT);
+		ImageView image=new ImageView(this);
+		image.setLayoutParams(linLayoutParam);
+		ltime.removeAllViews();
+		switch (time.phase){
+		case 1:
+			image.setImageResource(R.drawable.time1);
+			break;
+		case 2:
+			image.setImageResource(R.drawable.time2);
+			break;
+		case 3:
+			image.setImageResource(R.drawable.time3);
+			break;
+		case 4:
+			image.setImageResource(R.drawable.time4);
+			break;
+		case 5:
+			image.setImageResource(R.drawable.time5);
+			break;
+		case 6:
+			image.setImageResource(R.drawable.time6);
+			break;
+		case 7:
+			image.setImageResource(R.drawable.time7);
+			break;
+		case 8:
+			image.setImageResource(R.drawable.time8);
+			break;
+		}
+		ltime.addView(image);
+	}
 
 	//подготоваить поле(работа с картинками)
 	public void prepare(){
