@@ -27,6 +27,7 @@ public class BuildActivity extends Activity {
 	public Build build;
 	public arPlayer arplayer;
 	public Player player;
+	public FieldActivity fieldActivity;
 	Monstr monstr;
 	Intent intent;
 	Button button1,button2,button3;
@@ -270,8 +271,8 @@ public void pere(View v){
 				build.build(player,pos);
 				if (build.po[2][4]){
 					image[3][4].setClickable(true);
-					image[2][4].setClickable(false);
-					player=arplayer.next();
+					image[2][4].setClickable(false);					
+					player=arplayer.next();					
 				}
 				break;
 			case R.id.imageView4:
@@ -454,17 +455,66 @@ public void pere(View v){
 				pass(v);
 	
 	}
-	//if (build.po[2][4]) 
-	   protected Dialog onCreateDialog(int id) {
-	        switch (id) {
-	        case IDD_THREE_BUTTONS:
-		
+
+	public Dialog slych(){
+		final String[] chec={"Дерево","Золото","Камень"};
+		final boolean[] mCheckedItem = { false, false, false };
+		 AlertDialog.Builder sfab = new AlertDialog.Builder(this);
+		 sfab.setTitle("Выберите ровно 1 ресурс ")
+		 .setCancelable(false)
+		 .setMultiChoiceItems(chec,mCheckedItem,
+				 new DialogInterface.OnMultiChoiceClickListener() {
+	         @Override
+	         public void onClick(DialogInterface dialog,
+	                 int which, boolean isChecked) {
+	             mCheckedItem[which] = isChecked;
+	         
+	         }
+	     })
+	     .setPositiveButton("Отдать",
+	    		 new DialogInterface.OnClickListener() {
+	         @Override
+	         public void onClick(DialogInterface dialog,
+	                 int id) {        	 
+	        	int ch1=0,che1=0;        	
+	        	for(int i=0;i<chec.length;i++)
+	        		if(mCheckedItem[i]) ch1++;
+	        	if (ch1==1) {
+	        			if (mCheckedItem[0] && player.wood>0 ) {player.wood--;che1++;}
+	        			if (mCheckedItem[1] && player.gold>0) {player.gold--;che1++;}
+	        			if (mCheckedItem[2] && player.stone>0) {player.stone--;che1++;} 
+	        		if (che1==1) player.win++;        		
+	        		else  {Toast.makeText(
+	                        getApplicationContext(),
+	                        "Нехватает ресурсов",		                                            
+	                        Toast.LENGTH_SHORT).show();    
+	        		}        		
+	        	}else {Toast.makeText(
+	                    getApplicationContext(),
+	                    "Выберите ровно 1 ресурс",		                                            
+	                    Toast.LENGTH_SHORT).show();
+	        	}
+	         }
+	         }
+	     )
+	         .setNegativeButton("Далее",
+	                 new DialogInterface.OnClickListener() {
+	                     @Override
+	                     public void onClick(DialogInterface dialog,
+	                             int id) {
+	                         dialog.cancel();
+	                         
+	                     }
+	                 });
+	return sfab.create();
+		}	
+	
+	   public Dialog onCreateDialog4() {     
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("Хотите использовать ратушу")
 					.setCancelable(false)
 					.setPositiveButton("Да,сжечь +2 к кубику",new 
-							DialogInterface.OnClickListener() {						
-								
+							DialogInterface.OnClickListener() {			
 								public void onClick(DialogInterface dialog,int id) {
 									if (player.plus>0) {player.plus--;player.win++; dialog.cancel();} else Toast.makeText(
 		                                    getApplicationContext(),
@@ -473,6 +523,14 @@ public void pere(View v){
 									
 								}
 					})
+					.setNegativeButton("Да,сжечь 1 ресурс",
+							new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog,
+                                int id) {
+                    	   slych().show();
+                        	
+                       }
+                        })
 						.setNeutralButton("Нет",
 								new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
@@ -480,13 +538,13 @@ public void pere(View v){
                                 dialog.cancel();
                             }
                         });
-			 return builder.create();	
-	        default:
-	            return null;
+			return builder.create();
+	   
 	        }
 	
+	
 		}
-	}
+	
 	
 			
 

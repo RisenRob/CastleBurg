@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.castleburg.logic.Build;
 import com.castleburg.logic.Monstr;
 import com.castleburg.logic.Player;
 import com.castleburg.logic.Time;
@@ -44,10 +45,12 @@ public class FieldActivity extends Activity {
 	int num;
 	//Монстр
 	Monstr monstr;
+	public Build build= new Build();
 
 	String[] res;
 	int kol=0,pl;
 	boolean[][] hbuild=new boolean[2][3];
+	
 
 
 	@Override
@@ -172,62 +175,10 @@ public class FieldActivity extends Activity {
 
 	public void activnext(){
 		Intent intent;
-		if (time.phase==7) {				
-			final String[] check={"Дерево","Золото","Камень"};
-			final boolean[] mCheckedItems = { false, false, false };
-			 AlertDialog.Builder sf = new AlertDialog.Builder(this);
-			 sf.setTitle("Выберите 2 ресурса")
-			 .setCancelable(false)
-			 .setMultiChoiceItems(check,mCheckedItems,
-					 new DialogInterface.OnMultiChoiceClickListener() {
-                 @Override
-                 public void onClick(DialogInterface dialog,
-                         int which, boolean isChecked) {
-                     mCheckedItems[which] = isChecked;
-                 
-                 }
-             })
-             .setPositiveButton("Отдать",
-            		 new DialogInterface.OnClickListener() {
-                 @Override
-                 public void onClick(DialogInterface dialog,
-                         int id) {
-                	 
-                	int ch=0,che=0;
-                	
-                	for(int i=0;i<check.length;i++)
-                		if(mCheckedItems[i]) ch++;
-                	if (ch%2==0) {
-                			if (mCheckedItems[0] && player.wood>0 ) {player.wood--;che++;}
-                			if (mCheckedItems[1] && player.gold>0) {player.gold--;che++;}
-                			if (mCheckedItems[2] && player.stone>0) {player.stone--;che++;} 
-                		if (che%2==0 && che>0)player.war++;else  {Toast.makeText(
-                                getApplicationContext(),
-                                "Нехватает ресурсов",		                                            
-                                Toast.LENGTH_SHORT).show();    
-                		che=0;
-                		}
-                		
-                	}else {Toast.makeText(
-                            getApplicationContext(),
-                            "Выберите ровно 2 ресурса",		                                            
-                            Toast.LENGTH_SHORT).show();
-                	ch=0;}
-                 }
-              
-                 }
-             )
-                 .setNegativeButton("Далее",
-                         new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog,
-                                     int id) {
-                                 dialog.cancel();
-                                 
-                             }
-                         });
-sf.create().show();
-			}
+	 for (int i=0;i<arplayer.ar.length;i++)
+	if ((time.phase==7) && (arplayer.ar[i].build.po[2][2]==true)) kazarma().show();
+	else	
+		if (time.phase==7) sevenf().show();
 		if (time.phase==8) {
 			Toast.makeText(this, "Монстры", Toast.LENGTH_SHORT).show();
 			intent=new Intent(this,MonstrActivity.class);
@@ -610,6 +561,111 @@ sf.create().show();
 		return 0;
 
 	}
+public Dialog sevenf(){
+		final String[] check={"Дерево","Золото","Камень"};
+		final boolean[] mCheckedItems = { false, false, false };
+		 AlertDialog.Builder sf = new AlertDialog.Builder(this);
+		 sf.setTitle("Выберите 2 разных ресурса")
+		 .setCancelable(false)
+		 .setMultiChoiceItems(check,mCheckedItems,
+				 new DialogInterface.OnMultiChoiceClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog,
+                     int which, boolean isChecked) {
+                 mCheckedItems[which] = isChecked;             
+             }
+         })
+        .setPositiveButton("Отдать",
+        		 new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog,
+                     int id) {            	 
+            	int ch=0,che=0;            	
+            	for(int i=0;i<check.length;i++)
+            		if(mCheckedItems[i]) ch++;
+            	if (ch==2) {
+            			if (mCheckedItems[0] && player.wood>0 ) {player.wood--;che++;}
+            			if (mCheckedItems[1] && player.gold>0) {player.gold--;che++;}
+            			if (mCheckedItems[2] && player.stone>0) {player.stone--;che++;} 
+            		if (che==2)player.war++;            		
+            		else  {Toast.makeText(
+                            getApplicationContext(),
+                            "Нехватает ресурсов",		                                            
+                            Toast.LENGTH_SHORT).show();        		  		
+            		}
+            		
+            	}else {Toast.makeText(
+                        getApplicationContext(),
+                        "Выберите ровно 2 ресурса",		                                            
+                        Toast.LENGTH_SHORT).show();
+            	}
+             }
+          
+             }
+         )
+             .setNegativeButton("Далее",
+                     new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog,
+                                 int id) {
+                             dialog.cancel();
+                             
+                         }
+                     });
+return sf.create();
+		}
+public Dialog kazarma(){
+	final String[] chec={"Дерево","Золото","Камень"};
+	final boolean[] mCheckedItem = { false, false, false };
+	 AlertDialog.Builder sfa = new AlertDialog.Builder(this);
+	 sfa.setTitle("Выберите ровно 1 ресурс ")
+	 .setCancelable(false)
+	 .setMultiChoiceItems(chec,mCheckedItem,
+			 new DialogInterface.OnMultiChoiceClickListener() {
+         @Override
+         public void onClick(DialogInterface dialog,
+                 int which, boolean isChecked) {
+             mCheckedItem[which] = isChecked;
+         
+         }
+     })
+     .setPositiveButton("Отдать",
+    		 new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface dialog,
+                 int id) {        	 
+        	int ch1=0,che1=0;        	
+        	for(int i=0;i<chec.length;i++)
+        		if(mCheckedItem[i]) ch1++;
+        	if (ch1==1) {
+        			if (mCheckedItem[0] && player.wood>0 ) {player.wood--;che1++;}
+        			if (mCheckedItem[1] && player.gold>0) {player.gold--;che1++;}
+        			if (mCheckedItem[2] && player.stone>0) {player.stone--;che1++;} 
+        		if (che1==1) player.war++;        		
+        		else  {Toast.makeText(
+                        getApplicationContext(),
+                        "Нехватает ресурсов",		                                            
+                        Toast.LENGTH_SHORT).show();    
+        		}        		
+        	}else {Toast.makeText(
+                    getApplicationContext(),
+                    "Выберите ровно 1 ресурс",		                                            
+                    Toast.LENGTH_SHORT).show();
+        	}
+         }
+         }
+     )
+         .setNegativeButton("Далее",
+                 new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog,
+                             int id) {
+                         dialog.cancel();
+                         
+                     }
+                 });
+return sfa.create();
+	}	
 
 
 	/*
