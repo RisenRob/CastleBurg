@@ -42,6 +42,7 @@ public class arPlayer implements Serializable {
                 return 0;
             }
         });
+		cur=7;
 	}
 	
 	//следующий игрок
