@@ -5,6 +5,7 @@ import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 public class GameActivity extends Activity {
 	
 	public arPlayer arplayer=new arPlayer(3);
+	public arPlayer next_arplayer;
 	public Player player;
 	public ListView list_player;
 	public Time time=new Time();
@@ -32,18 +34,63 @@ public class GameActivity extends Activity {
 		ltime=(LinearLayout)findViewById(R.id.time);
 		field=new Field();
 		builder=new Builder();
+		
+		next_arplayer=new arPlayer(arplayer.ar.length);
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
+			next_arplayer.ar[i].refresh(0);
+		}
+		
 		refresh();
 	}
 	
+	
+	public void next_player(){
+		player=arplayer.next();
+		refresh_players();
+	}
+	
 	public void next(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
+
+		}
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
+		adb.setAdapter(adapter_player, null);
+		adb.setTitle("Результаты урожая");
+		adb.setNeutralButton("Дальше",null);
+		adb.setCancelable(false).create().show();
+		
 		time.next(arplayer);
+		next_arplayer=new arPlayer(arplayer.ar.length);
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
+			next_arplayer.ar[i].refresh(0);
+		}
+		
 		refresh();
 	}
 	
 	public void pass(View v){
 		player.refresh(0);
 		player=arplayer.next();
-		if (!arplayer.empty()) next();
+		if (!arplayer.empty()) field.getres();
 		refresh_players();
 	}	
 	
