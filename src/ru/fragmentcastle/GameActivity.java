@@ -1,6 +1,8 @@
 package ru.fragmentcastle;
 
 
+import java.util.Arrays;
+
 import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
@@ -38,8 +40,7 @@ public class GameActivity extends Activity {
 		builder=new Builder();
 
 		next_arplayer=new arPlayer(arplayer.ar.length);
-		next_arplayer.sort();
-		arplayer.sort();
+		next_arplayer.sort(); arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
@@ -49,7 +50,7 @@ public class GameActivity extends Activity {
 			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
 			next_arplayer.ar[i].refresh(0);
 		}
-		arplayer.refresh();
+		Arrays.sort(arplayer.ar);
 		refresh();
 	}
 
@@ -61,7 +62,7 @@ public class GameActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 			/*if (time.phase%2==1)
 			{ft = getFragmentManager().beginTransaction();ft.replace(R.id.fragment, builder);ft.commit();}*/
-			builder.pere(arplayer.ar[position]);
+			builder.pere(arplayer.ar[arplayer.queue().charAt(position)-'0']);
 			
 		}
 		
@@ -73,7 +74,6 @@ public class GameActivity extends Activity {
 	}
 
 	public void next(){
-		arplayer.sort(); next_arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
@@ -83,6 +83,7 @@ public class GameActivity extends Activity {
 			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
 
 		}
+		
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
@@ -92,7 +93,7 @@ public class GameActivity extends Activity {
 
 		
 		next_arplayer=new arPlayer(arplayer.ar.length);
-		next_arplayer.sort();
+		next_arplayer.sort(); arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
@@ -109,9 +110,10 @@ public class GameActivity extends Activity {
 	public void pass(View v){
 		if (time.phase%2==1) {
 			player.refresh(0);
-			if (!arplayer.empty()) field.getres();
+			if (!arplayer.empty()) {arplayer.sort();field.getres();} else{
 			next_player();
 			field.refresh();
+			}
 		} else {
 			next_player();
 			if (arplayer.cur==0) next();

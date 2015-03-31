@@ -85,6 +85,7 @@ public class PlayerAdapter extends BaseAdapter {
 		return 0;
 
 	}
+	
 
 	//обновлние кубиков игрока
 	public void gettess(int num,LinearLayout lin_comb){

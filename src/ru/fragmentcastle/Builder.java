@@ -48,8 +48,6 @@ public class Builder extends Fragment {
 		image[3][2] = (ImageView)v.findViewById(R.id.imageView12);
 		image[3][3] = (ImageView)v.findViewById(R.id.imageView16);
 		image[3][4] = (ImageView)v.findViewById(R.id.imageView20);
-		game.arplayer.sort();
-		game.next_player();
 		player=game.player;
 		build=player.build;
 		pos=build.pos;

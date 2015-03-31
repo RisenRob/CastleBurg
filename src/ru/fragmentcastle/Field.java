@@ -191,6 +191,7 @@ public class Field extends Fragment {
 						break;
 					}
 			}
+			
 			game.next();
 			return 0;
 		}
@@ -319,8 +320,8 @@ public class Field extends Fragment {
 		public void onClick(DialogInterface dialog, int position) {
 			game.player.del(num, position);
 			sov_chose[num]=game.player.num;
-			if (!game.arplayer.empty()) getres();
 			game.next_player();
+			if (!game.arplayer.empty()) {game.arplayer.sort();getres();}
 			refresh();
 		}
 
