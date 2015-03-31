@@ -67,8 +67,29 @@ public class Builder extends Fragment {
 		return v;
 	}
 
+
+	public void pere(Player player){	 
+		if (player.num==game.arplayer.ar[game.arplayer.cur].num){refreshp(player);}else { 
+			refreshp(player); 
+			for (int i=0;i<4;i++) 
+				for (int j=0;j<5;j++) 
+					image[i][j].setClickable(false);} 
+
+
+	} 
+
 	
-	
+	public void refreshp(Player player){
+		build=player.build;
+		sosbutt=build.sosbut;
+
+		for (int i=0;i<4;i++)
+			for (int j=0;j<5;j++){
+				if (sosbutt[i][j]) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
+				image[i][j].setImageResource(idim(i,j,build.po[i][j]));
+			}
+	}
+
 	public void refresh(){
 		player=game.player;
 		build=player.build;
@@ -112,7 +133,7 @@ public class Builder extends Fragment {
 				if (build.po[0][2]){
 					image[1][2].setClickable(true);
 					image[0][2].setClickable(false);
-	
+
 				}
 				break;
 			case R.id.imageView13:
@@ -121,7 +142,7 @@ public class Builder extends Fragment {
 				if (build.po[0][3]){
 					image[1][3].setClickable(true);
 					image[0][3].setClickable(false);
-				
+
 				}
 				break;
 			case R.id.imageView17:
@@ -130,7 +151,6 @@ public class Builder extends Fragment {
 				if (build.po[0][4]){
 					image[1][4].setClickable(true);
 					image[0][4].setClickable(false);
-					game.next_player();
 				}
 				break;
 			case R.id.imageView2:
@@ -139,7 +159,6 @@ public class Builder extends Fragment {
 				if (build.po[1][0]){
 					image[2][0].setClickable(true);
 					image[1][0].setClickable(false);
-					game.next_player();
 				}
 				break;
 			case R.id.imageView6:
@@ -156,7 +175,7 @@ public class Builder extends Fragment {
 				if (build.po[1][2]){
 					image[2][2].setClickable(true);
 					image[1][2].setClickable(false);
-		
+
 				}         
 				break;
 			case R.id.imageView14:
@@ -165,7 +184,7 @@ public class Builder extends Fragment {
 				if (build.po[1][3]){
 					image[2][3].setClickable(true);
 					image[1][3].setClickable(false);
-					
+
 				}
 				break;
 			case R.id.imageView18:
@@ -174,7 +193,7 @@ public class Builder extends Fragment {
 				if (build.po[1][4]){
 					image[2][4].setClickable(true);
 					image[1][4].setClickable(false);
-				
+
 				}
 				break;
 			case R.id.imageView3:
@@ -183,7 +202,7 @@ public class Builder extends Fragment {
 				if (build.po[2][0]){
 					image[3][0].setClickable(true);
 					image[2][0].setClickable(false);
-			
+
 				}
 				break;
 			case R.id.imageView7:
@@ -192,7 +211,7 @@ public class Builder extends Fragment {
 				if (build.po[2][1]){
 					image[3][1].setClickable(true);
 					image[2][1].setClickable(false);
-			
+
 				}
 				break;
 			case R.id.imageView11:
@@ -201,7 +220,7 @@ public class Builder extends Fragment {
 				if (build.po[2][2]){
 					image[3][2].setClickable(true);
 					image[2][2].setClickable(false);
-			
+
 				}
 				break;
 			case R.id.imageView15:
@@ -210,7 +229,7 @@ public class Builder extends Fragment {
 				if (build.po[2][3]){
 					image[3][3].setClickable(true);
 					image[2][3].setClickable(false);
-				
+
 				}
 				break;
 			case R.id.imageView19:
@@ -219,7 +238,7 @@ public class Builder extends Fragment {
 				if (build.po[2][4]){
 					image[3][4].setClickable(true);
 					image[2][4].setClickable(false);
-				
+
 				}
 				break;
 			case R.id.imageView4:
@@ -227,7 +246,7 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][0]){
 					image[3][0].setClickable(false);
-					
+
 				}
 				break;
 			case R.id.imageView8:
@@ -235,7 +254,7 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][1]){
 					image[3][1].setClickable(false);   
-				
+
 				}
 				break;
 			case R.id.imageView12:
@@ -243,7 +262,7 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][2]){
 					image[3][2].setClickable(false); 
-				
+
 				}
 				break;
 			case R.id.imageView16:
@@ -251,7 +270,7 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][3]){
 					image[3][3].setClickable(false);    	
-			
+
 				}
 				break;
 			case R.id.imageView20:
@@ -259,7 +278,7 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][4]){
 					image[3][4].setClickable(false);    	
-				
+
 				}
 				break; 	   	
 
@@ -270,7 +289,7 @@ public class Builder extends Fragment {
 					sosbutt[i][j]=image[i][j].isClickable();
 
 				}
-		
+
 			build.sosbut=sosbutt;
 			build.pos=pos;
 			if (game.arplayer.cur==0) game.next();
