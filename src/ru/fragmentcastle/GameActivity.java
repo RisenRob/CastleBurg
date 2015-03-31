@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -54,26 +55,29 @@ public class GameActivity extends Activity {
 		refresh();
 	}
 
-	
-	
+
+
 	AdapterView.OnItemClickListener list_click=new AdapterView.OnItemClickListener(){
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-			/*if (time.phase%2==1)
-			{ft = getFragmentManager().beginTransaction();ft.replace(R.id.fragment, builder);ft.commit();}*/
-			builder.pere(arplayer.ar[arplayer.queue().charAt(position)-'0']);
-			
+			if (time.phase==1 || time.phase==3 || time.phase==5){
+				ft = getFragmentManager().beginTransaction();
+				ft.replace(R.id.fragment, builder).commit();
+			}
+			if (time.phase==2 || time.phase==4 || time.phase==6) builder.pere(arplayer.ar[arplayer.queue().charAt(position)-'0']);
+
 		}
-		
+
 	};
-	
+
 	public void next_player(){
 		player=arplayer.next();
 		refresh_players();
 	}
 
 	public void next(){
+		//В теории игркои хоть как тут отсортированы
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
@@ -83,7 +87,7 @@ public class GameActivity extends Activity {
 			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
 
 		}
-		
+
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
@@ -91,7 +95,7 @@ public class GameActivity extends Activity {
 		adb.setNeutralButton("Дальше",null);
 		adb.setCancelable(false).create().show();
 
-		
+
 		next_arplayer=new arPlayer(arplayer.ar.length);
 		next_arplayer.sort(); arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
@@ -108,23 +112,31 @@ public class GameActivity extends Activity {
 	}
 
 	public void pass(View v){
-		if (time.phase%2==1) {
+		//Опасная штука
+		if (time.phase==7 || time.phase==8) next(); else
+		if (time.phase==1 || time.phase==3 || time.phase==5) {
 			player.refresh(0);
-			if (!arplayer.empty()) {arplayer.sort();field.getres();} else{
+			if (!arplayer.empty()) {
+				arplayer.sort();
+				field.getres();
+			}else {
 			next_player();
 			field.refresh();
 			}
-		} else {
+		} 
+		else
+		if (time.phase==2 || time.phase==4 || time.phase==6) {
 			next_player();
 			if (arplayer.cur==0) next();
 		}
+		
 	}	
 
 	public void refresh(){
 		player=arplayer.next();
 		refresh_fragment();
-		refresh_time();
 		refresh_players();
+		refresh_time();
 	}
 
 
@@ -169,9 +181,9 @@ public class GameActivity extends Activity {
 
 	public void refresh_fragment(){
 		ft = getFragmentManager().beginTransaction();
-		if (time.phase%2==1) 
-		{ft.replace(R.id.fragment, field);ft.commit();}
-		if (time.phase%2==0)
-		{ft.replace(R.id.fragment, builder);ft.commit();}	
+		if (time.phase==1 || time.phase==3 || time.phase==5) ft.replace(R.id.fragment, field).commit();
+		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();	
+		if (time.phase==7) Toast.makeText(this, "7 фаза", Toast.LENGTH_SHORT).show();
+		if (time.phase==8) Toast.makeText(this, "8 фаза", Toast.LENGTH_SHORT).show();
 	}
 }
