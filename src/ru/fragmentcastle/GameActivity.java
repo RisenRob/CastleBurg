@@ -29,6 +29,8 @@ public class GameActivity extends Activity {
 	public Builder builder;
 	public LinearLayout ltime;
 	public FragmentTransaction ft;
+	public PlayerAdapter adapter_player;
+	public int pos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +65,10 @@ public class GameActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 			if (time.phase==1 || time.phase==3 || time.phase==5){
 				ft = getFragmentManager().beginTransaction();
-				ft.replace(R.id.fragment, builder).commit();
+				if (!builder.isVisible()) ft.replace(R.id.fragment, builder).addToBackStack(null).commit();
 			}
-			if (time.phase==2 || time.phase==4 || time.phase==6) builder.pere(arplayer.ar[arplayer.queue().charAt(position)-'0']);
+			pos=position;
+			builder.pere(adapter_player.getItem(position));
 
 		}
 
@@ -114,22 +117,22 @@ public class GameActivity extends Activity {
 	public void pass(View v){
 		//Опасная штука
 		if (time.phase==7 || time.phase==8) next(); else
-		if (time.phase==1 || time.phase==3 || time.phase==5) {
-			player.refresh(0);
-			if (!arplayer.empty()) {
-				arplayer.sort();
-				field.getres();
-			}else {
-			next_player();
-			field.refresh();
-			}
-		} 
-		else
-		if (time.phase==2 || time.phase==4 || time.phase==6) {
-			next_player();
-			if (arplayer.cur==0) next();
-		}
-		
+			if (time.phase==1 || time.phase==3 || time.phase==5) {
+				player.refresh(0);
+				if (!arplayer.empty()) {
+					arplayer.sort();
+					field.getres();
+				}else {
+					next_player();
+					field.refresh();
+				}
+			} 
+			else
+				if (time.phase==2 || time.phase==4 || time.phase==6) {
+					next_player();
+					if (arplayer.cur==0) next();
+				}
+
 	}	
 
 	public void refresh(){
@@ -141,7 +144,7 @@ public class GameActivity extends Activity {
 
 
 	public void refresh_players(){
-		PlayerAdapter adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
+		adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
 		list_player.setAdapter(adapter_player);
 	}
 

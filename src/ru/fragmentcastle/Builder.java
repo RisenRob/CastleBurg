@@ -51,7 +51,9 @@ public class Builder extends Fragment {
 		/*game.arplayer.sort();
 		game.next_player();
 		game.refresh_players();
-		*/
+		 */
+
+
 		player=game.player;
 		build=player.build;
 		pos=build.pos;
@@ -65,22 +67,26 @@ public class Builder extends Fragment {
 				if (sosbutt[i][j]) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
 				image[i][j].setImageResource(idim(i,j,build.po[i][j]));
 			}
-
+		if (game.time.phase==1 || game.time.phase==3 || game.time.phase==5)pere(game.adapter_player.getItem(game.pos));
 		return v;
 	}
 
 
 	public void pere(Player player){	 
-		if (player.num==game.arplayer.ar[game.arplayer.cur].num){refreshp(player);}else { 
+		if (player.num==game.arplayer.ar[game.arplayer.cur].num
+				&& game.time.phase!=1 && game.time.phase!=3 && game.time.phase!=5)
+			refreshp(player);
+		else { 
 			refreshp(player); 
 			for (int i=0;i<4;i++) 
 				for (int j=0;j<5;j++) 
-					image[i][j].setClickable(false);} 
+					image[i][j].setClickable(false);
+		} 
 
 
 	} 
 
-	
+
 	public void refreshp(Player player){
 		build=player.build;
 		sosbutt=build.sosbut;

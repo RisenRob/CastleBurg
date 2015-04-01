@@ -44,9 +44,8 @@ public class PlayerAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player getItem(int position) {
+		return ar[queue.charAt(position)-'0'];
 	}
 
 	@Override
