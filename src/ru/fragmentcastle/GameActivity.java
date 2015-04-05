@@ -9,6 +9,7 @@ import ru.fragmentcastle.logic.arPlayer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -31,13 +32,13 @@ public class GameActivity extends Activity {
 	public FragmentTransaction ft;
 	public PlayerAdapter adapter_player;
 	public int pos;
+	boolean[][] hbuild=new boolean[2][3];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		list_player=(ListView)findViewById(R.id.list_players);
-		list_player.setOnItemClickListener(list_click);
 		ltime=(LinearLayout)findViewById(R.id.time);
 		field=new Field();
 		builder=new Builder();
@@ -90,7 +91,8 @@ public class GameActivity extends Activity {
 			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
 
 		}
-
+		time.next(arplayer);
+		if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
@@ -110,7 +112,7 @@ public class GameActivity extends Activity {
 			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
 			next_arplayer.ar[i].refresh(0);
 		}
-		time.next(arplayer);
+		Arrays.sort(arplayer.ar);
 		refresh();
 	}
 
@@ -134,7 +136,85 @@ public class GameActivity extends Activity {
 				}
 
 	}	
+	
+		
+	public boolean check_build(){
+		int kol=0;
+		for (int i=1;i>=0;i--){
+			for (int j=2;j>=0;j--){
+				if (hbuild[i][j]==true) kol++;
+			}
+		}
+		return (kol==1);
+	}
+	
+	
+	public void checkplayers(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
+				hbuild[0][i]=true;
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
+				adb.setTitle("Вы хотите использовать Часовню?");
+				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						plef();
+					}});
+				adb.setNegativeButton("Нет", null);
+				adb.create().show();
+			}
+		}
+		if (!check_build()) checkplayers2();
+	}
+	
+	public void checkplayers2(){
+		for (int i=0;i<arplayer.ar.length;i++){
+			if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
+				hbuild[1][i]=true;
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
+				adb.setTitle("Вы хотите использовать Статую?");
+				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						plef1();
+					}});
+				adb.setNegativeButton("Нет", null);
+				adb.create().show();
+			}
+		}
+	}
+	
+	
+	public int plef(){
+		for (int j=2;j>=0;j--){
+			if (hbuild[0][j]==true){
+				arplayer.ar[j].tess.refresh(arplayer.ar[j].tess.toString().length());
+				hbuild[0][j]=false;
+				if (!check_build()) {Arrays.sort(arplayer.ar);checkplayers2();}
+				arplayer.cur=7;
+				refresh();
+				return 0;
+			}
+		}
+		return 0;
+	}
+
+	public int plef1(){
+		for (int j=2;j>=0;j--){
+			if (hbuild[1][j]==true){
+				arplayer.ar[j].tess.reftess();
+				hbuild[1][j]=false;
+				if (!check_build()) Arrays.sort(arplayer.ar);
+				arplayer.cur=7;
+				refresh();
+				return 0;
+			}
+		}
+		return 0;
+	}
+	
 	public void refresh(){
 		player=arplayer.next();
 		refresh_fragment();
@@ -146,6 +226,7 @@ public class GameActivity extends Activity {
 	public void refresh_players(){
 		adapter_player=new PlayerAdapter(this,arplayer.ar.clone(),arplayer.queue());
 		list_player.setAdapter(adapter_player);
+		list_player.setOnItemClickListener(list_click);
 	}
 
 	public void refresh_time(){
