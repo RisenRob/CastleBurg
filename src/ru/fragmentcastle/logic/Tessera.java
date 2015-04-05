@@ -1,4 +1,4 @@
-package com.castleburg.logic;
+package ru.fragmentcastle.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,7 +121,7 @@ public class Tessera extends ArrayList<Character>{
 		for (int i=0;i<step.length();i++) {
 			if (step.charAt(i)!='p' && step.charAt(i)!='l' && step.charAt(i)!='o'){
 				this.set(((int)step.charAt(i)-48), '0');
-			} else if (step.charAt(i)=='p' || step.charAt(i)!='o') market=false; else plus=false;
+			} else if (step.charAt(i)=='p' && step.charAt(i)!='o') market=false; else plus=false;
 		}
 		removeAll(test);
 		sort();

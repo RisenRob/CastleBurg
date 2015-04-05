@@ -1,8 +1,6 @@
-package com.castleburg.logic;
+package ru.fragmentcastle.logic;
 import java.io.IOException;
 import java.io.Serializable;
-
-import com.castleburg.BuildActivity;
 
 public class Player implements Serializable,Comparable<Object>{
 
@@ -17,7 +15,6 @@ public class Player implements Serializable,Comparable<Object>{
 	public boolean market;
 	public Build build;
 	public Tessera tess;
-	public BuildActivity buildActivity=new BuildActivity();
 
 	//инизциализировние игрока
 	public Player(int mwar,int mwin,int mwood,int mgold,int mstone,int mplus,int mnum){
@@ -31,7 +28,6 @@ public class Player implements Serializable,Comparable<Object>{
 		tess=new Tessera();
 		build=new Build();
 		count();
-		
 	}
 	
 	//борьа с монстром
@@ -99,17 +95,17 @@ public class Player implements Serializable,Comparable<Object>{
 		
 		count();
 	}
-	
 	//эффекты строений
-		public void prepare(int phase){		
+		public void prepare(int phase){
 			build.prepare(phase);
 			if (phase==5 && build.po[0][1]==true) plus++;
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
-			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;		
-			//я лалка
-			//if ((phase==2 || phase==4 || phase==6)&& build.po[2][4]==true) buildActivity.onCreateDialog4().show();
+			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
 		}
-	
+		//Пусть пока будет здесь
+		//public void Chasovna(){			
+	//if (tess.toStringSum()<=7) ;
+	//	}
 
 	//сериализация
 	private void writeObject(java.io.ObjectOutputStream out)

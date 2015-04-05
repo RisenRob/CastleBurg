@@ -1,4 +1,4 @@
-package com.castleburg;
+package ru.fragmentcastle;
 
 import android.content.Context;
 import android.view.LayoutInflater;

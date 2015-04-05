@@ -1,5 +1,6 @@
-package com.castleburg;
+package ru.fragmentcastle;
 
+import ru.fragmentcastle.logic.Tessera;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.castleburg.logic.Tessera;
 
 public class TessAdapter extends BaseAdapter {
 	

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.castleburg"
+    package="ru.fragmentcastle"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -22,9 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BuildActivity"></activity>
-        <activity android:name="FieldActivity"></activity>
-        <activity android:name="MonstrActivity"></activity>
+         <activity android:name="GameActivity"></activity>
     </application>
 
 </manifest>

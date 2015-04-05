@@ -1,8 +1,9 @@
-package com.castleburg;
+package ru.fragmentcastle;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
+import ru.fragmentcastle.logic.Player;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,8 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.castleburg.logic.Player;
 
 public class PlayerAdapter extends BaseAdapter {
 
@@ -45,9 +44,8 @@ public class PlayerAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player getItem(int position) {
+		return ar[queue.charAt(position)-'0'];
 	}
 
 	@Override
@@ -60,7 +58,7 @@ public class PlayerAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
 		if (view == null) {
-			view = inflater.inflate(R.layout.spis_player, parent, false);
+			view = inflater.inflate(R.layout.list_player, parent, false);
 			((TextView) view.findViewById(R.id.tess)).setText(ar[queue.charAt(position)-'0'].win+"");  
 			((TextView) view.findViewById(R.id.textView2)).setText(ar[queue.charAt(position)-'0'].war+"");
 			((TextView) view.findViewById(R.id.textView3)).setText(ar[queue.charAt(position)-'0'].wood+"");
@@ -86,6 +84,7 @@ public class PlayerAdapter extends BaseAdapter {
 		return 0;
 
 	}
+	
 
 	//обновлние кубиков игрока
 	public void gettess(int num,LinearLayout lin_comb){

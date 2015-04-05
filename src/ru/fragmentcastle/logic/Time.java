@@ -1,10 +1,8 @@
-package com.castleburg.logic;
+package ru.fragmentcastle.logic;
 
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import android.util.Log;
 
 public class Time implements Serializable{
 	/**
@@ -31,9 +29,8 @@ public class Time implements Serializable{
 		ar.prepare(phase);
 		phase++;
 		if (phase>8) {year++;phase=1;}
-		//Очень важная чать я искал эту оишбку очень долго
-		if (phase%2==1 && phase!=8) ar.refresh();
-		Log.d("LOG", phase+"");
+		if (phase==1 || phase==3 || phase==5) ar.refresh(); 
+		if (phase==2 || phase==4 || phase==6) ar.sort();
 	}
 	
 	//преобразовние времени в строку

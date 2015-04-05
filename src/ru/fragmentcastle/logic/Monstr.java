@@ -1,4 +1,4 @@
-package com.castleburg.logic;
+package ru.fragmentcastle.logic;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-import com.castleburg.DataBaseHelper;
 
 public class Monstr implements Serializable {
 

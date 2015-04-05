@@ -1,4 +1,4 @@
-package com.castleburg.logic;
+package ru.fragmentcastle.logic;
 
 public class Main {
 

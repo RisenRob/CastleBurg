@@ -1,4 +1,4 @@
-package com.castleburg;
+package ru.fragmentcastle.logic;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
