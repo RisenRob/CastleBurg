@@ -9,8 +9,8 @@ public class Time implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public int year;
-	public int phase;
+	public static int year;
+	public static int phase;
 	
 	public Time(){
 		year=1;
@@ -21,6 +21,11 @@ public class Time implements Serializable{
 		year=myear;
 		phase=mphase;
 		
+	}
+	
+	public void next(){
+		phase++;
+		if (phase>8) {year++;phase=1;}
 	}
 	
 	//следующая фаза

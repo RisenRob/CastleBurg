@@ -2,7 +2,9 @@ package ru.fragmentcastle;
 
 import ru.fragmentcastle.logic.Build;
 import ru.fragmentcastle.logic.Player;
+import ru.fragmentcastle.logic.Time;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +20,7 @@ public class Builder extends Fragment {
 	public boolean[][] sosbutt=new boolean [5][6];		
 	public Build build;
 	public Player player;
-
+	 DialogFragment dlg4;
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
 		game=(GameActivity) activity;
@@ -50,9 +52,12 @@ public class Builder extends Fragment {
 		image[3][4] = (ImageView)v.findViewById(R.id.imageView20);
 		/*game.arplayer.sort();
 		game.next_player();
-		game.refresh_players();
-		 */
-
+		game.refresh_players();*/
+		 
+		if (MainActivity.sta==true && Time.phase==2 && Time.year==1) {
+			dlg4 = new dialog04();			  
+		    dlg4.show(getFragmentManager(), "dlg4");
+		}
 
 		player=game.player;
 		build=player.build;
@@ -291,16 +296,18 @@ public class Builder extends Fragment {
 				break; 	   	
 
 			}
-			game.next_player();
+			
 			for (int i=0;i<4;i++)
 				for (int j=0;j<5;j++){
 					sosbutt[i][j]=image[i][j].isClickable();
 
 				}
-
+			if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+			game.next_player();
 			build.sosbut=sosbutt;
 			build.pos=pos;
-			if (game.arplayer.cur==0) game.next();
+			
+			
 			refresh();
 		}
 

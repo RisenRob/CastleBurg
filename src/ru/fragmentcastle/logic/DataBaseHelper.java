@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DataBaseHelper extends SQLiteOpenHelper{
 
     // путь к базе данных вашего приложения
-    private static String DB_PATH = "/data/data/com.castleburg/databases/";
+    private static String DB_PATH = "/data/data/ru.fragmentcastle/databases/";
     private static String DB_NAME = "Monstrs";
     private SQLiteDatabase myDataBase;
     private final Context mContext;

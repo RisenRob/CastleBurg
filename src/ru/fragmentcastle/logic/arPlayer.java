@@ -24,6 +24,47 @@ public class arPlayer implements Serializable {
 		
 	}
 	
+	public byte[] getBytes(){
+		byte[][] a;
+		a=new byte[ar.length][];
+		int size=3+ar.length,cur=3;
+		for (int i=0;i<ar.length;i++){
+			a[i]=ar[i].getBytes();
+			size+=a[i].length;
+		}
+		byte[] arpl=new byte[size];
+		arpl[0]=101;
+		arpl[1]=(byte) this.cur;
+		arpl[2]=(byte) ar.length;
+		for (int i=0;i<ar.length;i++){
+			arpl[cur]=(byte) a[i].length;
+			cur++;
+			for (int j=0;j<a[i].length;j++){
+				arpl[cur]=a[i][j];
+				cur++;
+			}
+		}
+		return arpl;
+	}
+	
+	public arPlayer(byte[] buf){
+		int cur=2;
+		this.cur=buf[0];
+		byte[][] a=new byte[buf[1]][];
+		for (int i=0;i<a.length;i++){
+			a[i]=new byte[buf[cur]];
+			cur++;
+			for (int j=0;j<a[i].length;j++){
+				a[i][j]=buf[cur];
+				cur++;
+			}
+		}
+		ar=new Player[a.length];
+		for (int i=0;i<a.length;i++){
+			ar[i]=new Player(a[i]);
+		}
+	}
+	
 	//перекидывание кубиков у всех игроков
 	//отфиксить
 	public void refresh(){
@@ -83,6 +124,7 @@ public class arPlayer implements Serializable {
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(ar.length);
+		out.writeInt(cur);
 		for (int i=0;i<ar.length;i++) out.writeObject(ar[i]);
 	}
 	
@@ -90,8 +132,9 @@ public class arPlayer implements Serializable {
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ar=new Player[in.readInt()];
+		cur=in.readInt();
 		for (int i=0;i<ar.length;i++) ar[i]=(Player)in.readObject();
-		cur=0;
+		
 	}
 	
 

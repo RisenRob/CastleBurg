@@ -1,12 +1,13 @@
 package ru.fragmentcastle;
 
+import ru.fragmentcastle.bluetooth.BlFind;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends Activity {
-
+	public static boolean sta=false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -14,6 +15,16 @@ public class MainActivity extends Activity {
 	}
 	
 	public void click(View v){
+		Intent intent=new Intent(this,GameActivity.class);
+		startActivity(intent);
+	}
+	
+	public void bluetooth(View v){
+		Intent intent=new Intent(this,BlFind.class);
+		startActivity(intent);
+	}
+	public void click1(View v){
+	sta=true;
 		Intent intent=new Intent(this,GameActivity.class);
 		startActivity(intent);
 	}

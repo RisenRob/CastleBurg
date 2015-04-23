@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/derevyannyy_doski_gorizontalnyy_svetlyy_fon"
     tools:context="${relativePackage}.${activityClass}" >
 
     <Button
@@ -12,5 +13,23 @@
         android:layout_centerVertical="true"
         android:onClick="click"
         android:text="Начать игру" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:onClick="bluetooth"
+        android:text="Bluetooth" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:onClick="click1"
+        android:text="Обучение" />
 
 </RelativeLayout>

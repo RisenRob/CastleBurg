@@ -54,7 +54,7 @@ public class Monstr implements Serializable {
 		c = db.query("Monstr", null, selection, arg, null, null,null);
 		id=(int)(Math.random()*5);
 		if  (c.moveToPosition(id)) toMonstr(c);
-		Log.d("LOG","Монстр:"+name);
+		//Log.d("LOG","Монстр:"+name);
 		
 	}
 	

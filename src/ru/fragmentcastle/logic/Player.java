@@ -2,6 +2,10 @@ package ru.fragmentcastle.logic;
 import java.io.IOException;
 import java.io.Serializable;
 
+import ru.fragmentcastle.MainActivity;
+import ru.fragmentcastle.dialog05;
+import android.app.DialogFragment;
+
 public class Player implements Serializable,Comparable<Object>{
 
 	private static final long serialVersionUID = 1L;
@@ -27,6 +31,80 @@ public class Player implements Serializable,Comparable<Object>{
 		plus=mplus;
 		tess=new Tessera();
 		build=new Build();
+		count();
+	}
+	
+	public byte[] getBytes(){
+		int cur=8;
+		byte[] bytes=new byte[8+90+tess.size()];
+		bytes[0]=(byte) num;
+		bytes[1]=(byte) war;
+		bytes[2]=(byte) win;
+		bytes[3]=(byte) wood;
+		bytes[4]=(byte) gold;
+		bytes[5]=(byte) stone;
+		bytes[6]=(byte) plus;
+		if (market) bytes[7]=1; else bytes[7]=0;
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (build.po[i][j]) bytes[cur]=1; else bytes[cur]=0;
+				cur++;
+			}
+		}
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (build.pos[i][j]) bytes[cur]=1; else bytes[cur]=0;
+				cur++;
+			}
+		}
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (build.sosbut[i][j]) bytes[cur]=1; else bytes[cur]=0;
+				cur++;
+			}
+		}
+		for (int i=0;i<tess.size();i++){
+			bytes[cur]=(byte)(tess.get(i)-'0');
+			cur++;
+		}
+		
+		return bytes;
+	}
+	
+	public Player(byte[] bytes){
+		tess=new Tessera();
+		build=new Build();
+		int cur=8;
+		num=bytes[0];
+		war=bytes[1];
+		win=bytes[2];
+		wood=bytes[3];
+		gold=bytes[4];
+		stone=bytes[5];
+		plus=bytes[6];
+		if (bytes[7]==1) market=true; else market=false;
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (bytes[cur]==1) build.po[i][j]=true; else build.po[i][j]=false;
+				cur++;
+			}
+		}
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (bytes[cur]==1) build.pos[i][j]=true; else build.pos[i][j]=false;
+				cur++;
+			}
+		}
+		for (int i=0;i<5;i++){
+			for (int j=0;j<6;j++){
+				if (bytes[cur]==1) build.sosbut[i][j]=true; else build.sosbut[i][j]=false;
+				cur++;
+			}
+		}
+		tess.clear();
+		for (int i=cur;i<bytes.length;i++){
+			tess.add((char)(bytes[i]+'0'));
+		}
 		count();
 	}
 	
@@ -101,6 +179,7 @@ public class Player implements Serializable,Comparable<Object>{
 			if (phase==5 && build.po[0][1]==true) plus++;
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
 			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
+			
 		}
 		//Пусть пока будет здесь
 		//public void Chasovna(){			

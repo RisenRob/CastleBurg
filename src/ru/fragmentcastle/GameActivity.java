@@ -3,11 +3,13 @@ package ru.fragmentcastle;
 
 import java.util.Arrays;
 
+import ru.fragmentcastle.logic.Monstr;
 import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,32 +19,34 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
-	public arPlayer arplayer=new arPlayer(3);
+	public arPlayer arplayer;
 	public arPlayer next_arplayer;
 	public Player player;
 	public ListView list_player;
-	public Time time=new Time();
+	public Time time;
 	public Field field;
 	public Builder builder;
 	public LinearLayout ltime;
 	public FragmentTransaction ft;
 	public PlayerAdapter adapter_player;
 	public int pos;
+	Monstr monstr;
 	boolean[][] hbuild=new boolean[2][3];
+	DialogFragment dlg1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		dlg1 = new MonstrDialog();
 		setContentView(R.layout.activity_game);
 		list_player=(ListView)findViewById(R.id.list_players);
 		ltime=(LinearLayout)findViewById(R.id.time);
 		field=new Field();
 		builder=new Builder();
-
+		inic();
 		next_arplayer=new arPlayer(arplayer.ar.length);
 		next_arplayer.sort(); arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
@@ -59,6 +63,11 @@ public class GameActivity extends Activity {
 	}
 
 
+	public void inic(){
+		arplayer=new arPlayer(3);
+		time=new Time();
+		monstr=new Monstr(time.year,this);
+	}
 
 	AdapterView.OnItemClickListener list_click=new AdapterView.OnItemClickListener(){
 
@@ -267,7 +276,8 @@ public class GameActivity extends Activity {
 		ft = getFragmentManager().beginTransaction();
 		if (time.phase==1 || time.phase==3 || time.phase==5) ft.replace(R.id.fragment, field).commit();
 		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();	
-		if (time.phase==7) Toast.makeText(this, "7 фаза", Toast.LENGTH_SHORT).show();
-		if (time.phase==8) Toast.makeText(this, "8 фаза", Toast.LENGTH_SHORT).show();
+		if (time.phase==8) {		
+			dlg1.show(getFragmentManager(), "dlg1");
+		}
 	}
 }

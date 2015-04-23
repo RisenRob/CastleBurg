@@ -4,9 +4,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import ru.fragmentcastle.logic.Player;
+import ru.fragmentcastle.logic.Time;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -23,10 +25,14 @@ public class Field extends Fragment {
 	GameActivity game;
 	ImageView[] sov=new ImageView[19];
 	LinearLayout[] lsov=new LinearLayout[19];
-	int[] sov_chose=new int[19];
+	public int[] sov_chose=new int[19];
 	int num,kol;
 	String[] res;
-
+	 DialogFragment dlg1;
+	  DialogFragment dlg2;
+	  DialogFragment dlg3;
+	  DialogFragment dlg5;
+	  boolean so=false;
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
 		game=(GameActivity) activity;
@@ -73,7 +79,18 @@ public class Field extends Fragment {
 		lsov[18]=(LinearLayout)v.findViewById(R.id.linsov_18);
 		for (int i=1;i<19;i++) sov_chose[i]=-1;
 		refresh();
+		if (MainActivity.sta==true && Time.phase==1 && Time.year==1) {
+			dlg1 = new dialog01();
+		    dlg2 = new dialog02();
+		    dlg2.show(getFragmentManager(), "dlg2");
+		    dlg1.show(getFragmentManager(), "dlg1");
+		}
+		if (MainActivity.sta==true && Time.phase==3 && Time.year==1) {
+			dlg5 = new dialog05();			  
+		    dlg5.show(getFragmentManager(), "dlg5");
+		}
 		return v;
+	
 	}
 	
 	
@@ -240,7 +257,7 @@ public class Field extends Fragment {
 
 		};
 
-	public void refresh(){
+	public void refresh(){		
 		for (int i=1;i<19;i++){
 			if (!game.player.tess.steps[i].isEmpty() && sov_chose[i]==-1){
 				sov[i].setImageResource(idim(i,-2));
@@ -312,6 +329,11 @@ public class Field extends Fragment {
 		adb.setTitle("Выбор комбинации");
 		TessAdapter adapter=new TessAdapter(game,game.player.tess,num);
 		adb.setAdapter(adapter, dialclick);
+		if (so==false && MainActivity.sta==true){
+			   dlg3 = new dialog03();
+			    dlg3.show(getFragmentManager(), "dlg2");
+			    so=true;
+		}
 		return adb.create();
 	}
 
@@ -320,8 +342,9 @@ public class Field extends Fragment {
 		public void onClick(DialogInterface dialog, int position) {
 			game.player.del(num, position);
 			sov_chose[num]=game.player.num;
+			if (!game.arplayer.empty()) {game.arplayer.sort();getres();return;}
 			game.next_player();
-			if (!game.arplayer.empty()) {game.arplayer.sort();getres();}
+			
 			refresh();
 		}
 
