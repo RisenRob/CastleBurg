@@ -2,6 +2,7 @@ package ru.fragmentcastle.logic;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -81,6 +82,15 @@ public class Monstr implements Serializable {
 		c = db.query("Monstr", null, selection, arg, null, null,null);
 		if  (c.moveToPosition(this.id)) toMonstr(c);
 		
+	}
+	
+	public String[] win_monstr(){
+		ArrayList<String> res=new ArrayList<String>();
+		if (wwin!=0) res.add(wwin+"p");
+		if (wwood!=0) res.add(wwood+"w");
+		if (wgold!=0) res.add(wgold+"g");
+		if (wstone!=0) res.add(wstone+"s");
+		return res.toArray(new String[res.size()]);
 	}
 	
 	

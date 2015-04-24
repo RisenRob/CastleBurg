@@ -14,7 +14,7 @@ public class Time implements Serializable{
 	
 	public Time(){
 		year=1;
-		phase=1;
+		phase=7;
 	}
 	
 	public Time(int myear,int mphase){

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MonstrDialog extends DialogFragment {
@@ -15,6 +16,7 @@ public class MonstrDialog extends DialogFragment {
 	TextView war;
 	TextView name;
 	Button btn;
+	ListView list1,list2;
 	
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
@@ -32,6 +34,9 @@ public class MonstrDialog extends DialogFragment {
 		name=(TextView)v.findViewById(R.id.textView1);
 		war=(TextView)v.findViewById(R.id.textView2);
 		btn=(Button)v.findViewById(R.id.button1);
+		list1=(ListView)v.findViewById(R.id.listView1);
+		MonstrAdapter mosadap=new MonstrAdapter(getActivity(),game.monstr,true);
+		list1.setAdapter(mosadap);
 		btn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
