@@ -27,15 +27,19 @@ public class arPlayer implements Serializable {
 	public byte[] getBytes(){
 		byte[][] a;
 		a=new byte[ar.length][];
-		int size=3+ar.length,cur=3;
+		int size=ar.length+6,cur=6;
 		for (int i=0;i<ar.length;i++){
 			a[i]=ar[i].getBytes();
 			size+=a[i].length;
 		}
 		byte[] arpl=new byte[size];
+		size-=4;
 		arpl[0]=101;
-		arpl[1]=(byte) this.cur;
-		arpl[2]=(byte) ar.length;
+		arpl[1]=(byte) (size/100);
+		arpl[2]=(byte) (size/10%10);
+		arpl[3]=(byte) (size%10);
+		arpl[4]=(byte) this.cur;
+		arpl[5]=(byte) ar.length;
 		for (int i=0;i<ar.length;i++){
 			arpl[cur]=(byte) a[i].length;
 			cur++;

@@ -3,6 +3,10 @@ package ru.fragmentcastle;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import ru.fragmentcastle.helpdial.dialog01;
+import ru.fragmentcastle.helpdial.dialog02;
+import ru.fragmentcastle.helpdial.dialog03;
+import ru.fragmentcastle.helpdial.dialog05;
 import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;
 import android.app.Activity;

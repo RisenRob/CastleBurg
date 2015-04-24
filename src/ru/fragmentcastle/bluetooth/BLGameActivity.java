@@ -38,7 +38,7 @@ public class BLGameActivity extends GameActivity {
 	
 	public void next_player(){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
-		intent.putExtra("command",6);
+		intent.putExtra("command",8);
 		intent.putExtra("field", field.sov_chose);
 		intent.putExtra("next", 2);
 		intent.putExtra("arplayer", arplayer);
@@ -47,8 +47,6 @@ public class BLGameActivity extends GameActivity {
 	
 	public void bnext_player(){
 		player=arplayer.next();
-		Toast.makeText(this, "Номер текщего игрока"+arplayer.cur, Toast.LENGTH_SHORT).show();
-		//Log.d("LOG","Номер текщего игрока"+arplayer.cur);
 		refresh_players();
 		if (time.phase==1 || time.phase==3 || time.phase==5) field.refresh();
 		if (time.phase==2 || time.phase==4 || time.phase==6) builder.refresh();
@@ -113,6 +111,10 @@ public class BLGameActivity extends GameActivity {
 			int next=intent.getIntExtra("next", -1);
 			int[] sov=intent.getIntArrayExtra("field");
 			Toast.makeText(BLGameActivity.this, "След "+next, Toast.LENGTH_SHORT).show();
+			if (sov!=null){
+				field.sov_chose=sov;
+				field.refresh();
+			}
 			if (tarplayer!=null && next==1){
 				arplayer=tarplayer;
 				bnext();
@@ -121,10 +123,7 @@ public class BLGameActivity extends GameActivity {
 				arplayer=tarplayer;
 				bnext_player();
 			}
-			if (sov!=null){
-				field.sov_chose=sov;
-				field.refresh();
-			}
+			
 		}
 
 	};

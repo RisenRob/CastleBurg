@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -35,12 +36,10 @@ public class GameActivity extends Activity {
 	public int pos;
 	Monstr monstr;
 	boolean[][] hbuild=new boolean[2][3];
-	DialogFragment dlg1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dlg1 = new MonstrDialog();
 		setContentView(R.layout.activity_game);
 		list_player=(ListView)findViewById(R.id.list_players);
 		ltime=(LinearLayout)findViewById(R.id.time);
@@ -102,11 +101,23 @@ public class GameActivity extends Activity {
 		}
 		time.next(arplayer);
 		if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
+		
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
 		adb.setTitle("Результаты фазы");
-		adb.setNeutralButton("Дальше",null);
+		if (time.phase!=8) adb.setNeutralButton("Дальше",null); else
+			adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					Toast.makeText(GameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
+					MonstrDialog md=new MonstrDialog();
+					md.show(getFragmentManager(), "md");
+					
+				}
+				
+			});
 		adb.setCancelable(false).create().show();
 
 
@@ -275,9 +286,7 @@ public class GameActivity extends Activity {
 	public void refresh_fragment(){
 		ft = getFragmentManager().beginTransaction();
 		if (time.phase==1 || time.phase==3 || time.phase==5) ft.replace(R.id.fragment, field).commit();
-		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();	
-		if (time.phase==8) {		
-			dlg1.show(getFragmentManager(), "dlg1");
-		}
+		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();
+		
 	}
 }

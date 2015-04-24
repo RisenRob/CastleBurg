@@ -48,6 +48,7 @@ public class BlService extends Service {
 		Intent mes;
 		Intent rec;
 		arPlayer arplayer=null;
+		int[] sov=null;
 		Log.d("LOG",command+"");
 		switch (command){
 		case 1:
@@ -104,13 +105,13 @@ public class BlService extends Service {
 			break;
 		case 6:
 			arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
-			int[] sov=intent.getIntArrayExtra("field");
+			sov=intent.getIntArrayExtra("field");
 			next=intent.getIntExtra("next", -1);
 			Log.d("LOG","След "+next);
 			if (client!=null && arplayer!=null) {
 				client.write_next(next);
-				if (sov!=null) client.write_sov(sov);
 				client.write(arplayer); 
+				if (sov!=null) client.write_sov(sov);
 			}
 			for (int i=0;i<blins.size();i++){
 				if (client==null && arplayer!=null) {
@@ -123,11 +124,34 @@ public class BlService extends Service {
 				mes = new Intent("ru.castleburg.bluetooth");
 				mes.putExtra("arplayer", arplayer);
 				mes.putExtra("next", next);
+				mes.putExtra("field", sov);
 				sendBroadcast(mes);
 			}
 			break;
 		case 7:
 			find.interrupt();
+			break;
+		case 8:
+			arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
+			sov=intent.getIntArrayExtra("field");
+			next=intent.getIntExtra("next", -1);
+			if (arplayer!=null && sov!=null){ 
+				if (client==null){
+					for (int i=0;i<blins.size();i++){
+						blins.get(i).write_next(next);
+						blins.get(i).write_game(arplayer, sov);
+					}
+				} else {
+					client.write_next(next);
+					client.write_game(arplayer, sov);
+				}
+					
+				mes = new Intent("ru.castleburg.bluetooth");
+				mes.putExtra("arplayer", arplayer);
+				mes.putExtra("field", sov);
+				mes.putExtra("next", next);
+				sendBroadcast(mes);
+			}
 			break;
 		}
 
@@ -230,12 +254,30 @@ public class BlService extends Service {
 			}
 
 		}
-		
+
 		public void write_sov(int[] sov){
 			byte[] buf=new byte[sov.length+1];
 			buf[0]=102;
 			for (int i=0;i<sov.length;i++){
 				buf[i+1]=(byte) sov[i];
+			}
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		public void write_game(arPlayer ar,int[] sov){
+			byte[] bar=ar.getBytes();
+			byte[] buf=new byte[sov.length+bar.length];
+			bar[0]=103;
+			for (int i=0;i<bar.length;i++){
+				buf[i]=bar[i];
+			}
+			for (int i=bar.length;i<buf.length;i++){
+				buf[i]=(byte) sov[i-bar.length];
 			}
 			try {
 				out.write(buf);
@@ -262,6 +304,7 @@ public class BlService extends Service {
 				try {
 					int bit,size;
 					Intent intent;
+					int[] sov;
 					byte[] buf;
 					bit=in.read();
 					switch (bit){
@@ -300,7 +343,10 @@ public class BlService extends Service {
 						sendBroadcast(intent);
 						break;
 					case 101:
-						size=in.available();
+						size=0;
+						size=in.read();
+						size=size*10+in.read();
+						size=size*10+in.read();
 						buf=new byte[size];
 						in.read(buf);
 						arPlayer arplayer=new arPlayer(buf);
@@ -314,10 +360,9 @@ public class BlService extends Service {
 						sendBroadcast(intent);
 						break;
 					case 102:
-						size=in.available();
-						buf=new byte[size];
+						buf=new byte[19];
 						in.read(buf);
-						int[] sov=new int[buf.length];
+						sov=new int[buf.length];
 						for (int i=0;i<buf.length;i++){
 							sov[i]=buf[i];
 						}
@@ -329,7 +374,36 @@ public class BlService extends Service {
 						intent.putExtra("field", sov);
 						sendBroadcast(intent);
 						break;
+					case 103:
+						size=0;
+						size=in.read();
+						size=size*10+in.read();
+						size=size*10+in.read();
+						buf=new byte[size];
+						in.read(buf);
+						arPlayer ar=new arPlayer(buf);
+						if (client==null)
+							for (int i=0;i<blins.size();i++){
+								blins.get(i).write(ar);
+							}
+						buf=new byte[19];
+						in.read(buf);
+						sov=new int[buf.length];
+						for (int i=0;i<buf.length;i++){
+							sov[i]=buf[i];
+						}
+						if (client==null)
+							for (int i=0;i<blins.size();i++){
+								blins.get(i).write_sov(sov);
+							}
+						intent = new Intent("ru.castleburg.bluetooth");
+						intent.putExtra("arplayer", ar);
+						intent.putExtra("field", sov);
+						intent.putExtra("next", next);
+						sendBroadcast(intent);
+						break;
 					}
+
 				} catch (IOException e) {
 					break;
 				}
@@ -424,5 +498,24 @@ public class BlService extends Service {
 				e.printStackTrace();
 			}
 		}
+
+		public void write_game(arPlayer ar,int[] sov){
+			byte[] bar=ar.getBytes();
+			byte[] buf=new byte[sov.length+bar.length];
+			bar[0]=103;
+			for (int i=0;i<bar.length;i++){
+				buf[i]=bar[i];
+			}
+			for (int i=bar.length;i<buf.length;i++){
+				buf[i]=(byte) sov[i-bar.length];
+			}
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}//Client
 }

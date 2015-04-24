@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import ru.fragmentcastle.MainActivity;
-import ru.fragmentcastle.dialog05;
+import ru.fragmentcastle.helpdial.dialog05;
 import android.app.DialogFragment;
 
 public class Player implements Serializable,Comparable<Object>{

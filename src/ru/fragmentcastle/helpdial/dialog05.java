@@ -1,5 +1,8 @@
-package ru.fragmentcastle;
+package ru.fragmentcastle.helpdial;
 
+import ru.fragmentcastle.R;
+import ru.fragmentcastle.R.id;
+import ru.fragmentcastle.R.layout;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,5 +1,6 @@
 package ru.fragmentcastle;
 
+import ru.fragmentcastle.helpdial.dialog04;
 import ru.fragmentcastle.logic.Build;
 import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;

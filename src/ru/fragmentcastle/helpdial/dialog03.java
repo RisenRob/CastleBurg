@@ -1,5 +1,8 @@
-package ru.fragmentcastle;
+package ru.fragmentcastle.helpdial;
 
+import ru.fragmentcastle.R;
+import ru.fragmentcastle.R.id;
+import ru.fragmentcastle.R.layout;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,12 +10,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-public class dialog04 extends DialogFragment implements OnClickListener { 
+public class dialog03 extends DialogFragment implements OnClickListener { 
 	
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		      Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.dialog4, null);
+		View v = inflater.inflate(R.layout.dialog3, null);
 		v.findViewById(R.id.button1).setOnClickListener(this);
 		return v;
 		
