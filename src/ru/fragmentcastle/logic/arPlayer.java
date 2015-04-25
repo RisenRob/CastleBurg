@@ -16,7 +16,7 @@ public class arPlayer implements Serializable {
 	public arPlayer(int n){
 		ar=new Player[n];
 		for(int i=0;i<n;i++) {
-			ar[i]=new Player(100,100,100,100,100,100,i);
+			ar[i]=new Player(0,0,0,0,0,0,i);
 		}
 		//сортировка по возрастанию чисел на кубиках
 		Arrays.sort(ar);
@@ -75,6 +75,10 @@ public class arPlayer implements Serializable {
 		for (int i=0;i<ar.length;i++) ar[i].refresh(3);
 		
 		Arrays.sort(ar);
+	}
+	
+	public void fight(Monstr monstr){
+		for (int i=0;i<ar.length;i++) ar[i].fight(monstr);
 	}
 	
 	//сортировка по номеру

@@ -14,7 +14,7 @@ public class Time implements Serializable{
 	
 	public Time(){
 		year=1;
-		phase=7;
+		phase=1;
 	}
 	
 	public Time(int myear,int mphase){
@@ -25,7 +25,7 @@ public class Time implements Serializable{
 	
 	public void next(){
 		phase++;
-		if (phase>8) {year++;phase=1;}
+		if (phase>7) {year++;phase=1;}
 	}
 	
 	//следующая фаза
@@ -33,7 +33,7 @@ public class Time implements Serializable{
 		//эффекты строений
 		ar.prepare(phase);
 		phase++;
-		if (phase>8) {year++;phase=1;}
+		if (phase>7) {year++;phase=1;}
 		if (phase==1 || phase==3 || phase==5) ar.refresh(); 
 		if (phase==2 || phase==4 || phase==6) ar.sort();
 	}

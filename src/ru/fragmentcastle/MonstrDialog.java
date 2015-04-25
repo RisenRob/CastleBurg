@@ -35,12 +35,16 @@ public class MonstrDialog extends DialogFragment {
 		war=(TextView)v.findViewById(R.id.textView2);
 		btn=(Button)v.findViewById(R.id.button1);
 		list1=(ListView)v.findViewById(R.id.listView1);
-		MonstrAdapter mosadap=new MonstrAdapter(getActivity(),game.monstr,true);
-		list1.setAdapter(mosadap);
+		list2=(ListView)v.findViewById(R.id.listView2);
+		MonstrAdapter winadap=new MonstrAdapter(getActivity(),game.monstr,true);
+		MonstrAdapter loseadap=new MonstrAdapter(getActivity(),game.monstr,false);
+		list1.setAdapter(winadap);
+		list2.setAdapter(loseadap);
 		btn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				game.arplayer.fight(game.monstr);
 				game.next();
 				MonstrDialog.this.getDialog().cancel();
 			}

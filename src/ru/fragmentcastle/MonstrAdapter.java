@@ -15,23 +15,20 @@ public class MonstrAdapter extends BaseAdapter {
 
 	Context ctx;
 	LayoutInflater inflater;
-	Monstr monstr;
-	String[] win_monstr;
+	String[] win_monstr,lose_monstr;
 	boolean win;
 
 
-	public MonstrAdapter(Context context, Monstr mmonstr,boolean mwin){
-		monstr=mmonstr;
+	public MonstrAdapter(Context context, Monstr monstr,boolean mwin){
 		ctx=context;
 		win=mwin;
 		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		if (win) win_monstr=monstr.win_monstr();
+		if (win) win_monstr=monstr.win_monstr(); else lose_monstr=monstr.lose_monstr();
 	}
 
 	@Override
 	public int getCount() {
-		if (win) return win_monstr.length;
-		return 0;
+		if (win) return win_monstr.length; else return lose_monstr.length;
 	}
 
 	@Override
@@ -52,6 +49,9 @@ public class MonstrAdapter extends BaseAdapter {
 		if (win){
 			((TextView)convertView.findViewById(R.id.textView1)).setText(win_monstr[position].charAt(0)+"");
 			((ImageView)convertView.findViewById(R.id.imageView1)).setImageResource(getImage(win_monstr[position].charAt(1)));
+		} else {
+			((TextView)convertView.findViewById(R.id.textView1)).setText(lose_monstr[position].charAt(0)+"");
+			((ImageView)convertView.findViewById(R.id.imageView1)).setImageResource(getImage(lose_monstr[position].charAt(1)));
 		}
 		return convertView;
 	}

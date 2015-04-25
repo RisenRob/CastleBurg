@@ -9,7 +9,6 @@ import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -100,13 +99,14 @@ public class GameActivity extends Activity {
 
 		}
 		time.next(arplayer);
+		if (time.phase==1) monstr=new Monstr(time.year,this);
 		if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
 		
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
 		adb.setTitle("Результаты фазы");
-		if (time.phase!=8) adb.setNeutralButton("Дальше",null); else
+		if (time.phase!=7) adb.setNeutralButton("Дальше",null); else
 			adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
 
 				@Override
@@ -138,7 +138,7 @@ public class GameActivity extends Activity {
 
 	public void pass(View v){
 		//Опасная штука
-		if (time.phase==7 || time.phase==8) next(); else
+		if (time.phase==7) next(); else
 			if (time.phase==1 || time.phase==3 || time.phase==5) {
 				player.refresh(0);
 				if (!arplayer.empty()) {

@@ -126,6 +126,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 5:
@@ -136,6 +137,7 @@ public class Field extends Fragment {
 						res=new String[]{"dawg","easg","haws"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 7:
@@ -143,6 +145,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 8:
@@ -153,6 +156,7 @@ public class Field extends Fragment {
 						res=new String[]{"gw","sw"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 10:
@@ -165,6 +169,7 @@ public class Field extends Fragment {
 						res=new String[]{"gs","ws"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 12:
@@ -172,6 +177,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 13:
@@ -182,6 +188,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 
@@ -199,6 +206,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 18:
@@ -327,7 +335,16 @@ public class Field extends Fragment {
 		}
 	};
 
+	
+	public View getTitle(int num){
+		LayoutInflater inflater=getActivity().getLayoutInflater();
+		View v=inflater.inflate(R.layout.title_sov, null);
+		LinearLayout lin=(LinearLayout)v.findViewById(R.id.lin);
+		lin.setBackgroundColor(getColor(num));
+		return v;
+	}
 
+	
 	protected Dialog CreateDialog(int num) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(game);
 		adb.setTitle("Выбор комбинации");

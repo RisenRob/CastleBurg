@@ -65,7 +65,7 @@ public class PlayerAdapter extends BaseAdapter {
 			((TextView) view.findViewById(R.id.textView4)).setText(ar[queue.charAt(position)-'0'].gold+"");
 			((TextView) view.findViewById(R.id.textView5)).setText(ar[queue.charAt(position)-'0'].stone+"");
 			((TextView) view.findViewById(R.id.textView6)).setText(ar[queue.charAt(position)-'0'].plus+"");
-			((LinearLayout)view.findViewById(R.id.lin)).setBackgroundColor(getColor(queue.charAt(position)-'0'));
+			((LinearLayout)view.findViewById(R.id.lin_num)).setBackgroundColor(getColor(queue.charAt(position)-'0'));
 			LinearLayout tessera=((LinearLayout)view.findViewById(R.id.tessera));
 			gettess(queue.charAt(position)-'0',tessera);
 

@@ -39,7 +39,7 @@ public class ResAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) convertView = (LinearLayout) inflater.inflate(R.layout.tess, parent, false);
-		LinearLayout lin=(LinearLayout) convertView.findViewById(R.id.lin);
+		LinearLayout lin=(LinearLayout) convertView.findViewById(R.id.lin_num);
 		lin.removeAllViews();
 			for (int j=0;j<res[position].length();j++){
 				lin.addView(getImage(res[position].charAt(j)));

@@ -15,6 +15,7 @@ public class Monstr implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public String name;
 	public int war, wwin, wwood, wgold, wstone, lwin, lwood, lgold, lstone,id;
+	public boolean destroy;
 	private DataBaseHelper myDbHelper;
 	private SQLiteDatabase db;
 
@@ -90,6 +91,15 @@ public class Monstr implements Serializable {
 		if (wwood!=0) res.add(wwood+"w");
 		if (wgold!=0) res.add(wgold+"g");
 		if (wstone!=0) res.add(wstone+"s");
+		return res.toArray(new String[res.size()]);
+	}
+	
+	public String[] lose_monstr(){
+		ArrayList<String> res=new ArrayList<String>();
+		if (lwin!=0) res.add(lwin+"p");
+		if (lwood!=0) res.add(lwood+"w");
+		if (lgold!=0) res.add(lgold+"g");
+		if (lstone!=0) res.add(lstone+"s");
 		return res.toArray(new String[res.size()]);
 	}
 	

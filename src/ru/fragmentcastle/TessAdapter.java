@@ -51,7 +51,7 @@ public class TessAdapter extends BaseAdapter {
 	     
 	    }
 	    
-	    LinearLayout lin=(LinearLayout) view.findViewById(R.id.lin);
+	    LinearLayout lin=(LinearLayout) view.findViewById(R.id.lin_num);
 	    lin.removeAllViews();
 	      String comb=tess.toComb(num, position);
 	    	for (int j=0;j<comb.length();j++){
