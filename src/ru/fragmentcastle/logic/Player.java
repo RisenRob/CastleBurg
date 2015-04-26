@@ -170,11 +170,13 @@ public class Player implements Serializable,Comparable<Object>{
 		count();
 	}
 	//эффекты строений
-		public void prepare(int phase){
+		public void prepare(int phase,int year){
 			build.prepare(phase);
 			if (phase==5 && build.po[0][1]==true) plus++;
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
 			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
+			if (phase==7 && year==5 && build.po[3][0]==true) win+=(gold+wood+stone)/2;
+			
 			
 		}
 		//Пусть пока будет здесь

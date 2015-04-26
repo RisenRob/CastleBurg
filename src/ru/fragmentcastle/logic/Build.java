@@ -118,14 +118,15 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 			player.wood-=2;
 			player.stone--;	
 			player.win+=4;
-			po[2][2]=true;//Казармы в фазе наёма войск платить всего 1 тавар
+			player.war++;
+			po[2][2]=true;
 		}else
 		if (pos[2][2]==true && player.gold>=2 && player.wood>=2 && player.stone>=1 &&po[2][2]==false){
 			player.gold-=2;
 			player.wood-=2;
 			player.stone--;	
 			player.win+=4;
-		    po[2][2]=true;//Казармы в фазе наёма войск платить всего 1 тавар
+		    po[2][2]=true;
 		}
 		if (pos[2][3]==true && player.gold>=1 &&  player.stone>=2 &&po[2][3]==false && po[1][4]==true){
 			player.gold-=1;	

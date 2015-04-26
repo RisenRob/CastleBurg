@@ -15,11 +15,13 @@ public class MainActivity extends Activity {
 	}
 	
 	public void click(View v){
+		sta=false;
 		Intent intent=new Intent(this,GameActivity.class);
 		startActivity(intent);
 	}
 	
 	public void bluetooth(View v){
+		sta=false;
 		Intent intent=new Intent(this,BlFind.class);
 		startActivity(intent);
 	}
