@@ -11,13 +11,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameActivity extends Activity {
@@ -33,6 +36,7 @@ public class GameActivity extends Activity {
 	public FragmentTransaction ft;
 	public PlayerAdapter adapter_player;
 	public int pos;
+	public int id;
 	Monstr monstr;
 	boolean[][] hbuild=new boolean[2][3];
 
@@ -62,7 +66,8 @@ public class GameActivity extends Activity {
 
 
 	public void inic(){
-		arplayer=new arPlayer(3);
+		id=-1;
+		arplayer=(arPlayer)getIntent().getSerializableExtra("arplayer");
 		time=new Time();
 		monstr=new Monstr(time.year,this);
 	}
@@ -76,7 +81,7 @@ public class GameActivity extends Activity {
 				if (!builder.isVisible()) ft.replace(R.id.fragment, builder).addToBackStack(null).commit();
 			}
 			pos=position;
-			builder.pere(adapter_player.getItem(position));
+			if (builder.isVisible()) builder.pere(adapter_player.getItem(position));
 
 		}
 
@@ -105,7 +110,7 @@ public class GameActivity extends Activity {
 
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 
-		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
+		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,arplayer.oqueue());
 		adb.setAdapter(adapter_player, null);
 		adb.setTitle("Результаты фазы");
 		if (time.phase!=7) adb.setNeutralButton("Дальше",null); else
@@ -192,7 +197,7 @@ public class GameActivity extends Activity {
 			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
 				hbuild[0][i]=true;
 				AlertDialog.Builder adb = new AlertDialog.Builder(this);
-				adb.setTitle("Вы хотите использовать Часовню?");
+				adb.setCustomTitle(getTitle(arplayer.ar[i].num,"Вы хотите использовать Часовню?"));
 				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -210,7 +215,7 @@ public class GameActivity extends Activity {
 			if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
 				hbuild[1][i]=true;
 				AlertDialog.Builder adb = new AlertDialog.Builder(this);
-				adb.setTitle("Вы хотите использовать Статую?");
+				adb.setCustomTitle(getTitle(arplayer.ar[i].num,"Вы хотите использовать Часовню?"));
 				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
 					@Override
@@ -305,6 +310,25 @@ public class GameActivity extends Activity {
 		ft = getFragmentManager().beginTransaction();
 		if (time.phase==1 || time.phase==3 || time.phase==5) ft.replace(R.id.fragment, field).commit();
 		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();
+
+	}
+	
+	public View getTitle(int num,String mes){
+		LayoutInflater inflater=getLayoutInflater();
+		View v=inflater.inflate(R.layout.title_sov, null);
+		TextView tv=(TextView)v.findViewById(R.id.textView1);
+		LinearLayout lin=(LinearLayout)v.findViewById(R.id.lin);
+		lin.setBackgroundColor(getColor(num));
+		tv.setText(mes);
+		return v;
+	}
+	
+	private int getColor(int a){
+		if (a==0) return Color.BLUE;
+		if (a==1) return Color.YELLOW;
+		if (a==2) return Color.GREEN;
+		if (a==3) return Color.RED;
+		return 0;
 
 	}
 }

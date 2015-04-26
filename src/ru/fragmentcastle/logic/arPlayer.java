@@ -120,6 +120,14 @@ public class arPlayer implements Serializable {
 		return sb.toString();
 	}
 	
+	public String oqueue(){
+		StringBuilder sb=new StringBuilder();
+		for (int i=0;i<ar.length;i++){
+			sb.append((char)(i+'0'));
+		}
+		return sb.toString();
+	}
+	
 	//проверка есть ли хоть у одного иигрока кубики
 	public boolean empty(){
 		int sum=0;

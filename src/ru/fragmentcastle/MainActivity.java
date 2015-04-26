@@ -16,8 +16,10 @@ public class MainActivity extends Activity {
 	
 	public void click(View v){
 		sta=false;
-		Intent intent=new Intent(this,GameActivity.class);
-		startActivity(intent);
+		StartGame start=new StartGame();
+		start.show(getFragmentManager(), "start");
+		/*Intent intent=new Intent(this,GameActivity.class);
+		startActivity(intent);*/
 	}
 	
 	public void bluetooth(View v){

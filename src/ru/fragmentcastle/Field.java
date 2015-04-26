@@ -82,7 +82,10 @@ public class Field extends Fragment {
 		lsov[16]=(LinearLayout)v.findViewById(R.id.linsov_16);
 		lsov[17]=(LinearLayout)v.findViewById(R.id.linsov_17);
 		lsov[18]=(LinearLayout)v.findViewById(R.id.linsov_18);
-		for (int i=1;i<19;i++) sov_chose[i]=-1;
+		for (int i=1;i<19;i++){
+			if (sov_chose[1]!=-1) for (int j=1;j<19;j++) sov_chose[j]=-1;
+		}
+		
 		refresh();
 		if (MainActivity.sta==true && Time.phase==1 && Time.year==1) {
 			dlg1 = new dialog01();
@@ -526,6 +529,26 @@ public class Field extends Fragment {
 		case 16: return R.drawable.sov_16_g;
 		case 17: return R.drawable.sov_17_g;
 		case 18: return R.drawable.sov_18_g;
+		}
+		if (f==3) switch(i){
+		case 1: return R.drawable.sov_1_r;
+		case 2: return R.drawable.sov_2_r;
+		case 3: return R.drawable.sov_3_r;
+		case 4: return R.drawable.sov_4_r;
+		case 5: return R.drawable.sov_5_r;
+		case 6: return R.drawable.sov_6_r;
+		case 7: return R.drawable.sov_7_r;
+		case 8: return R.drawable.sov_8_r;
+		case 9: return R.drawable.sov_9_r;
+		case 10: return R.drawable.sov_10_r;
+		case 11: return R.drawable.sov_11_r;
+		case 12: return R.drawable.sov_12_r;
+		case 13: return R.drawable.sov_13_r;
+		case 14: return R.drawable.sov_14_r;
+		case 15: return R.drawable.sov_15_r;
+		case 16: return R.drawable.sov_16_r;
+		case 17: return R.drawable.sov_17_r;
+		case 18: return R.drawable.sov_18_r;
 		}
 		return 0;
 	}

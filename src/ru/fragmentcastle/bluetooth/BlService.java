@@ -123,6 +123,7 @@ public class BlService extends Service {
 			if (find!=null){
 				mes = new Intent("ru.castleburg.bluetooth");
 				mes.putExtra("arplayer", arplayer);
+				//mes.putExtra("id", 0);
 				mes.putExtra("next", next);
 				mes.putExtra("field", sov);
 				sendBroadcast(mes);
@@ -269,6 +270,17 @@ public class BlService extends Service {
 			}
 		}
 
+		
+		public void write_id(int id){
+			byte[] buf=new byte[]{3,(byte)(id)};
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		public void write_game(arPlayer ar,int[] sov){
 			byte[] bar=ar.getBytes();
 			byte[] buf=new byte[sov.length+bar.length];
@@ -328,6 +340,12 @@ public class BlService extends Service {
 							for (int i=0;i<blins.size();i++){
 								blins.get(i).write_next(mnext);
 							}
+						break;
+					case 3:
+						int id=in.read();
+						intent = new Intent("ru.castleburg.bluetooth");
+						intent.putExtra("id", id);
+						sendBroadcast(intent);
 						break;
 					case 100:
 						size=in.available();
@@ -516,6 +534,16 @@ public class BlService extends Service {
 				e.printStackTrace();
 			}
 		}
-
+		
+		public void write_id(int id){
+			byte[] buf=new byte[]{3,(byte)(id)};
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}//Client
 }
