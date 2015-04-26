@@ -129,7 +129,8 @@ public class Builder extends Fragment {
 				if (build.po[0][0]){
 					image[1][0].setClickable(true);
 					image[0][0].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView5:
@@ -138,7 +139,8 @@ public class Builder extends Fragment {
 				if (build.po[0][1]){
 					image[1][1].setClickable(true);
 					image[0][1].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView9:
@@ -147,7 +149,8 @@ public class Builder extends Fragment {
 				if (build.po[0][2]){
 					image[1][2].setClickable(true);
 					image[0][2].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView13:
@@ -156,7 +159,8 @@ public class Builder extends Fragment {
 				if (build.po[0][3]){
 					image[1][3].setClickable(true);
 					image[0][3].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView17:
@@ -165,6 +169,8 @@ public class Builder extends Fragment {
 				if (build.po[0][4]){
 					image[1][4].setClickable(true);
 					image[0][4].setClickable(false);
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView2:
@@ -173,6 +179,8 @@ public class Builder extends Fragment {
 				if (build.po[1][0]){
 					image[2][0].setClickable(true);
 					image[1][0].setClickable(false);
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView6:
@@ -181,6 +189,8 @@ public class Builder extends Fragment {
 				if (build.po[1][1]){
 					image[2][1].setClickable(true);
 					image[1][1].setClickable(false);
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView10:
@@ -189,7 +199,8 @@ public class Builder extends Fragment {
 				if (build.po[1][2]){
 					image[2][2].setClickable(true);
 					image[1][2].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}         
 				break;
 			case R.id.imageView14:
@@ -198,7 +209,8 @@ public class Builder extends Fragment {
 				if (build.po[1][3]){
 					image[2][3].setClickable(true);
 					image[1][3].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView18:
@@ -207,7 +219,8 @@ public class Builder extends Fragment {
 				if (build.po[1][4]){
 					image[2][4].setClickable(true);
 					image[1][4].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView3:
@@ -216,7 +229,8 @@ public class Builder extends Fragment {
 				if (build.po[2][0]){
 					image[3][0].setClickable(true);
 					image[2][0].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView7:
@@ -225,7 +239,8 @@ public class Builder extends Fragment {
 				if (build.po[2][1]){
 					image[3][1].setClickable(true);
 					image[2][1].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView11:
@@ -234,7 +249,8 @@ public class Builder extends Fragment {
 				if (build.po[2][2]){
 					image[3][2].setClickable(true);
 					image[2][2].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView15:
@@ -243,7 +259,8 @@ public class Builder extends Fragment {
 				if (build.po[2][3]){
 					image[3][3].setClickable(true);
 					image[2][3].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView19:
@@ -252,7 +269,8 @@ public class Builder extends Fragment {
 				if (build.po[2][4]){
 					image[3][4].setClickable(true);
 					image[2][4].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView4:
@@ -260,7 +278,8 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][0]){
 					image[3][0].setClickable(false);
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView8:
@@ -268,7 +287,8 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][1]){
 					image[3][1].setClickable(false);   
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView12:
@@ -276,7 +296,8 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][2]){
 					image[3][2].setClickable(false); 
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView16:
@@ -284,7 +305,8 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][3]){
 					image[3][3].setClickable(false);    	
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break;
 			case R.id.imageView20:
@@ -292,7 +314,8 @@ public class Builder extends Fragment {
 				build.build(player,pos);
 				if (build.po[3][4]){
 					image[3][4].setClickable(false);    	
-
+					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
+					game.next_player();
 				}
 				break; 	   	
 
@@ -303,8 +326,7 @@ public class Builder extends Fragment {
 					sosbutt[i][j]=image[i][j].isClickable();
 
 				}
-			if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
-			game.next_player();
+			
 			build.sosbut=sosbutt;
 			build.pos=pos;
 			
