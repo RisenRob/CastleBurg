@@ -15,22 +15,29 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="GameActivity" >
+        <activity
+            android:name="GameActivity"
+            android:screenOrientation="landscape" >
         </activity>
-        <activity android:name=".bluetooth.BLGameActivity" >
+        <activity
+            android:name=".bluetooth.BLGameActivity"
+            android:screenOrientation="landscape" >
         </activity>
 
         <service android:name=".bluetooth.BlService" >
         </service>
 
-        <activity android:name=".bluetooth.BlFind" >
+        <activity
+            android:name=".bluetooth.BlFind"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

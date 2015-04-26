@@ -2,10 +2,6 @@ package ru.fragmentcastle.logic;
 import java.io.IOException;
 import java.io.Serializable;
 
-import ru.fragmentcastle.MainActivity;
-import ru.fragmentcastle.helpdial.dialog05;
-import android.app.DialogFragment;
-
 public class Player implements Serializable,Comparable<Object>{
 
 	private static final long serialVersionUID = 1L;
@@ -129,10 +125,10 @@ public class Player implements Serializable,Comparable<Object>{
 	
 	//игрок проиграл
 	private void lose(Monstr monstr){
-		gold-=monstr.wgold;
-		win-=monstr.wwin;
-		wood-=monstr.wwood;
-		stone-=monstr.wstone;
+		gold-=monstr.lgold;
+		win-=monstr.lwin;
+		wood-=monstr.lwood;
+		stone-=monstr.lstone;
 	}
 	
 	//сортировка по возрастанию чисел на кубиках

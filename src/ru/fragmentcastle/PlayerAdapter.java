@@ -36,7 +36,18 @@ public class PlayerAdapter extends BaseAdapter {
 			}
 		});
 	}	
-
+	
+	public void sort_win(){
+		Arrays.sort(ar, new Comparator<Player>() {
+			@Override
+			public int compare(Player a,Player b) {
+				if (a.win>b.win) return 1;
+				if (a.win<b.win) return -1;
+				return 0;
+			}
+		});
+	}
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

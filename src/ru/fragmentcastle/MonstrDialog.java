@@ -11,24 +11,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class MonstrDialog extends DialogFragment {
-	
+
 	GameActivity game;
 	TextView war;
 	TextView name;
 	Button btn;
 	ListView list1,list2;
-	
+
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
 		game=(GameActivity) activity;
 	}
-	
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE,0);
-    }
-	
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NO_TITLE,0);
+		setCancelable(false);
+	}
+
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View v=inflater.inflate(R.layout.dialog_monstr,container,false);
 		name=(TextView)v.findViewById(R.id.textView1);
@@ -41,11 +42,13 @@ public class MonstrDialog extends DialogFragment {
 		list1.setAdapter(winadap);
 		list2.setAdapter(loseadap);
 		btn.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				game.arplayer.fight(game.monstr);
-				game.next();
+				if (game.time.phase==7) {
+					game.arplayer.fight(game.monstr);
+					game.next();
+				} else game.field.getres();
 				MonstrDialog.this.getDialog().cancel();
 			}
 		});
@@ -53,5 +56,5 @@ public class MonstrDialog extends DialogFragment {
 		war.setText("Очки силы:"+game.monstr.war);
 		return v;
 	}
-	
+
 }

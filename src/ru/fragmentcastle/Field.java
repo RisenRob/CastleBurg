@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 public class Field extends Fragment {
 
@@ -103,7 +104,7 @@ public class Field extends Fragment {
 			ResAdapter adapter;
 			AlertDialog.Builder adb;
 			adb = new AlertDialog.Builder(game);
-			adb.setTitle("Выберите желаемые ресурсы");
+			String s="Выберите желаемые ресурсы";
 
 			for (int i=1;i<19;i++){
 				int num=sov_chose[i];
@@ -126,7 +127,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 5:
@@ -137,7 +138,7 @@ public class Field extends Fragment {
 						res=new String[]{"dawg","easg","haws"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 7:
@@ -145,7 +146,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 8:
@@ -156,20 +157,30 @@ public class Field extends Fragment {
 						res=new String[]{"gw","sw"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 10:
 						game.arplayer.ar[num].war+=2;
-						//Toast.makeText(game, "Имя монстра:"+game.monstr.name+" Сила:"+monstr.war, Toast.LENGTH_SHORT).show();
+						adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								MonstrDialog md=new MonstrDialog();
+								md.show(getFragmentManager(), "md");
+								arg0.cancel();
+							}
+
+						});
+						adb.setCustomTitle(getTitle(num,"Вы готовы подсмотреть монстра?"));
+						adb.setCancelable(false).create().show();
 						sov_chose[i]=-1;
-						break;
+						return 1;
 						//Ещё монстра подглядеть
 					case 11:
 						res=new String[]{"gs","ws"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 12:
@@ -177,7 +188,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 13:
@@ -188,7 +199,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 
@@ -206,7 +217,7 @@ public class Field extends Fragment {
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num));
+						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
 						return 1;
 					case 18:
@@ -336,11 +347,13 @@ public class Field extends Fragment {
 	};
 
 	
-	public View getTitle(int num){
+	public View getTitle(int num,String mes){
 		LayoutInflater inflater=getActivity().getLayoutInflater();
 		View v=inflater.inflate(R.layout.title_sov, null);
+		TextView tv=(TextView)v.findViewById(R.id.textView1);
 		LinearLayout lin=(LinearLayout)v.findViewById(R.id.lin);
 		lin.setBackgroundColor(getColor(num));
+		tv.setText(mes);
 		return v;
 	}
 

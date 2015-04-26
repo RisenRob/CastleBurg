@@ -101,8 +101,10 @@ public class GameActivity extends Activity {
 		time.next(arplayer);
 		if (time.phase==1) monstr=new Monstr(time.year,this);
 		if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
-		
+
+
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
 		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
 		adb.setAdapter(adapter_player, null);
 		adb.setTitle("Результаты фазы");
@@ -114,10 +116,26 @@ public class GameActivity extends Activity {
 					Toast.makeText(GameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
 					MonstrDialog md=new MonstrDialog();
 					md.show(getFragmentManager(), "md");
-					
+
 				}
-				
+
 			});
+		if (time.year==6) {
+			adb.setTitle("Конец игры!");
+			WinAdapter win=new WinAdapter(this,arplayer.ar.clone());
+			adb.setAdapter(win, null);
+			adb.setNeutralButton("Конец",new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dial, int arg1) {
+					dial.cancel();
+					GameActivity.this.finish();
+				}
+
+			});
+		}
+		
+		
 		adb.setCancelable(false).create().show();
 
 
@@ -156,8 +174,8 @@ public class GameActivity extends Activity {
 				}
 
 	}	
-	
-		
+
+
 	public boolean check_build(){
 		int kol=0;
 		for (int i=1;i>=0;i--){
@@ -167,8 +185,8 @@ public class GameActivity extends Activity {
 		}
 		return (kol==1);
 	}
-	
-	
+
+
 	public void checkplayers(){
 		for (int i=0;i<arplayer.ar.length;i++){
 			if (arplayer.ar[i].build.po[1][0]==true && arplayer.ar[i].tess.toStringSum()<=7) {
@@ -186,7 +204,7 @@ public class GameActivity extends Activity {
 		}
 		if (!check_build()) checkplayers2();
 	}
-	
+
 	public void checkplayers2(){
 		for (int i=0;i<arplayer.ar.length;i++){
 			if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
@@ -205,8 +223,8 @@ public class GameActivity extends Activity {
 			}
 		}
 	}
-	
-	
+
+
 	public int plef(){
 		for (int j=2;j>=0;j--){
 			if (hbuild[0][j]==true){
@@ -234,7 +252,7 @@ public class GameActivity extends Activity {
 		}
 		return 0;
 	}
-	
+
 	public void refresh(){
 		player=arplayer.next();
 		refresh_fragment();
@@ -287,6 +305,6 @@ public class GameActivity extends Activity {
 		ft = getFragmentManager().beginTransaction();
 		if (time.phase==1 || time.phase==3 || time.phase==5) ft.replace(R.id.fragment, field).commit();
 		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();
-		
+
 	}
 }
