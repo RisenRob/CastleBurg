@@ -244,9 +244,11 @@ if (pos[1][1]==true && player.wood>=2 && player.gold>=2 && po[1][1]==false){
 	if (po[0][3]) pwar++;
 	if (po[1][2]) pwar++;
 	if (po[2][3]) pwar++;
+	if (po[2][2]) pwar++;
 	if (po[3][2]) pwar++;
 	if (po[3][3]) pwar++;
 	return pwar;
+	
 	}
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException,ClassNotFoundException {
