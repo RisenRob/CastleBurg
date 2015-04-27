@@ -40,7 +40,7 @@
             android:layout_height="200dp"
             android:layout_weight="1"
             android:onClick="pass"
-            android:src="@drawable/pas" />
+            android:src="@drawable/dalee" />
 
     </LinearLayout>
 

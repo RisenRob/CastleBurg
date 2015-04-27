@@ -7,6 +7,7 @@ import ru.fragmentcastle.helpdial.dialog01;
 import ru.fragmentcastle.helpdial.dialog02;
 import ru.fragmentcastle.helpdial.dialog03;
 import ru.fragmentcastle.helpdial.dialog05;
+import ru.fragmentcastle.helpdial.dialogdp;
 import ru.fragmentcastle.logic.Player;
 import ru.fragmentcastle.logic.Time;
 import android.app.Activity;
@@ -37,6 +38,7 @@ public class Field extends Fragment {
 	  DialogFragment dlg2;
 	  DialogFragment dlg3;
 	  DialogFragment dlg5;
+	  DialogFragment dlgdp;
 	  boolean so=false;
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
@@ -90,7 +92,9 @@ public class Field extends Fragment {
 		if (MainActivity.sta==true && Time.phase==1 && Time.year==1) {
 			dlg1 = new dialog01();
 		    dlg2 = new dialog02();
+		    dlgdp = new dialogdp();
 		    dlg2.show(getFragmentManager(), "dlg2");
+		    dlgdp.show(getFragmentManager(), "dlgdp");
 		    dlg1.show(getFragmentManager(), "dlg1");
 		}
 		if (MainActivity.sta==true && Time.phase==3 && Time.year==1) {

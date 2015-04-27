@@ -176,8 +176,7 @@ public class Player implements Serializable,Comparable<Object>{
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
 			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
 			if (phase==7 && year==5 && build.po[3][0]==true) win+=(gold+wood+stone)/2;
-			if ((year==1 && phase==1) || (year==2 && phase==1) || (year==3 && phase==1)||(year==4 && phase==1)
-					|| (year==5 && phase==1)) {
+			if (phase==1) {
 				war=0;
 				war=build.kwar();
 			}
