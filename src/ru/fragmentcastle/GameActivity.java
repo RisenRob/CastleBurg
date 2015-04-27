@@ -39,6 +39,7 @@ public class GameActivity extends Activity {
 	public int id;
 	public Monstr monstr;
 	boolean[][] hbuild=new boolean[2][6];
+	public ImageView pas;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class GameActivity extends Activity {
 		setContentView(R.layout.activity_game);
 		list_player=(ListView)findViewById(R.id.list_players);
 		ltime=(LinearLayout)findViewById(R.id.time);
+		pas=(ImageView)findViewById(R.id.imageView1);
 		field=new Field();
 		builder=new Builder();
 		inic();
@@ -303,6 +305,7 @@ public class GameActivity extends Activity {
 
 	public void refresh(){
 		player=arplayer.next();
+		if (id==-1 || id==player.num) pas.setClickable(true); else pas.setClickable(false);
 		refresh_fragment();
 		refresh_players();
 		refresh_time();

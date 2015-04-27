@@ -111,7 +111,9 @@ public class Builder extends Fragment {
 
 		for (int i=0;i<4;i++)
 			for (int j=0;j<5;j++){
-				if (sosbutt[i][j]) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
+				//возможна ошибка
+				if (sosbutt[i][j] && (game.id==-1 ||game.id==player.num)) image[i][j].setOnClickListener(click);
+				else image[i][j].setClickable(false);
 				image[i][j].setImageResource(idim(i,j,build.po[i][j]));
 			}
 	}

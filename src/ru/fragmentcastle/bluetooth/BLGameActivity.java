@@ -34,6 +34,7 @@ public class BLGameActivity extends GameActivity {
 	public void inic(){
 		Intent intent=getIntent();
 		int idm=intent.getIntExtra("monstr", -1);
+		id=intent.getIntExtra("id", -1);
 		time=new Time();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		monstr=new Monstr(time.year,idm,this);
@@ -53,6 +54,7 @@ public class BLGameActivity extends GameActivity {
 		refresh_players();
 		if (time.phase==1 || time.phase==3 || time.phase==5) field.refresh();
 		if (time.phase==2 || time.phase==4 || time.phase==6) builder.refresh();
+		if (id==player.num) pas.setClickable(true); else pas.setClickable(false);
 	}
 	
 	public void next(){

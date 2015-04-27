@@ -291,8 +291,9 @@ public class Field extends Fragment {
 		for (int i=1;i<19;i++){
 			if (!game.player.tess.steps[i].isEmpty() && sov_chose[i]==-1){
 				sov[i].setImageResource(idim(i,-2));
-				sov[i].setClickable(true);
 				sov[i].setOnClickListener(make);
+				if (game.id==-1 || game.id==game.player.num)sov[i].setClickable(true); else 
+					sov[i].setClickable(false);
 			} else {
 				sov[i].setClickable(false);
 				sov[i].setImageResource(idim(i,sov_chose[i]));

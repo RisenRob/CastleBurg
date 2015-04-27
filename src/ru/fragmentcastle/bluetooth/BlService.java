@@ -129,16 +129,15 @@ public class BlService extends Service {
 						blins.get(i).write_next(next);
 						blins.get(i).write_game(arplayer, sov);
 					}
+					mes = new Intent("ru.castleburg.bluetooth");
+					mes.putExtra("arplayer", arplayer);
+					mes.putExtra("field", sov);
+					mes.putExtra("next", next);
+					sendBroadcast(mes);
 				} else {
 					client.write_next(next);
 					client.write_game(arplayer, sov);
 				}
-
-				mes = new Intent("ru.castleburg.bluetooth");
-				mes.putExtra("arplayer", arplayer);
-				mes.putExtra("field", sov);
-				mes.putExtra("next", next);
-				sendBroadcast(mes);
 			}
 			break;
 		}
