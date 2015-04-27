@@ -37,8 +37,8 @@ public class GameActivity extends Activity {
 	public PlayerAdapter adapter_player;
 	public int pos;
 	public int id;
-	Monstr monstr;
-	boolean[][] hbuild=new boolean[2][3];
+	public Monstr monstr;
+	boolean[][] hbuild=new boolean[2][6];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -184,11 +184,11 @@ public class GameActivity extends Activity {
 	public boolean check_build(){
 		int kol=0;
 		for (int i=1;i>=0;i--){
-			for (int j=2;j>=0;j--){
+			for (int j=5;j>=0;j--){
 				if (hbuild[i][j]==true) kol++;
 			}
 		}
-		return (kol==1);
+		return (kol>=1);
 	}
 
 
@@ -203,8 +203,14 @@ public class GameActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						plef();
 					}});
-				adb.setNegativeButton("Нет", null);
-				adb.create().show();
+				adb.setNegativeButton("Нет",  new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						plefn();
+					}});
+				adb.setCancelable(false).create().show();
 			}
 		}
 		if (!check_build()) checkplayers2();
@@ -215,7 +221,7 @@ public class GameActivity extends Activity {
 			if (arplayer.ar[i].build.po[0][0]==true && arplayer.ar[i].tess.check()) {
 				hbuild[1][i]=true;
 				AlertDialog.Builder adb = new AlertDialog.Builder(this);
-				adb.setCustomTitle(getTitle(arplayer.ar[i].num,"Вы хотите использовать Часовню?"));
+				adb.setCustomTitle(getTitle(arplayer.ar[i].num,"Вы хотите использовать Статую?"));
 				adb.setPositiveButton("Да", new DialogInterface.OnClickListener(){
 
 					@Override
@@ -223,21 +229,41 @@ public class GameActivity extends Activity {
 
 						plef1();
 					}});
-				adb.setNegativeButton("Нет", null);
-				adb.create().show();
+				adb.setNegativeButton("Нет", new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						plef1n();
+					}});
+				adb.setCancelable(false).create().show();
 			}
 		}
 	}
 
 
 	public int plef(){
-		for (int j=2;j>=0;j--){
+		for (int j=5;j>=0;j--){
 			if (hbuild[0][j]==true){
 				arplayer.ar[j].tess.refresh(arplayer.ar[j].tess.toString().length());
 				hbuild[0][j]=false;
-				if (!check_build()) {Arrays.sort(arplayer.ar);checkplayers2();}
+				if (!check_build()) {Arrays.sort(arplayer.ar);checkplayers2();
 				arplayer.cur=7;
 				refresh();
+				}
+				return 0;
+			}
+		}
+		return 0;
+	}
+	public int plefn(){
+		for (int j=5;j>=0;j--){
+			if (hbuild[0][j]==true){
+				hbuild[0][j]=false;
+				if (!check_build()) {Arrays.sort(arplayer.ar);checkplayers2();
+				arplayer.cur=7;
+				refresh();
+				}
 				return 0;
 			}
 		}
@@ -245,13 +271,30 @@ public class GameActivity extends Activity {
 	}
 
 	public int plef1(){
-		for (int j=2;j>=0;j--){
+		for (int j=5;j>=0;j--){
 			if (hbuild[1][j]==true){
 				arplayer.ar[j].tess.reftess();
 				hbuild[1][j]=false;
-				if (!check_build()) Arrays.sort(arplayer.ar);
+				if (!check_build()) {
+				Arrays.sort(arplayer.ar);
 				arplayer.cur=7;
 				refresh();
+				}
+				return 0;
+			}
+		}
+		return 0;
+	}
+	
+	public int plef1n(){
+		for (int j=5;j>=0;j--){
+			if (hbuild[1][j]==true){
+				hbuild[1][j]=false;
+				if (!check_build()) {
+				Arrays.sort(arplayer.ar);
+				arplayer.cur=7;
+				refresh();
+				}
 				return 0;
 			}
 		}

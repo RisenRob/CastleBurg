@@ -13,23 +13,22 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-	
+
 	public void click(View v){
 		sta=false;
 		StartGame start=new StartGame();
 		start.show(getFragmentManager(), "start");
-		/*Intent intent=new Intent(this,GameActivity.class);
-		startActivity(intent);*/
 	}
-	
+
 	public void bluetooth(View v){
 		sta=false;
 		Intent intent=new Intent(this,BlFind.class);
 		startActivity(intent);
 	}
+
 	public void click1(View v){
-	sta=true;
-		Intent intent=new Intent(this,GameActivity.class);
-		startActivity(intent);
+		sta=true;
+		StartGame start=new StartGame();
+		start.show(getFragmentManager(), "start");
 	}
 }

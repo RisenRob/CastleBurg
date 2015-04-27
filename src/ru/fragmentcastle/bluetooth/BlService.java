@@ -45,6 +45,7 @@ public class BlService extends Service {
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		int command=intent.getIntExtra("command", -1);
+		int monstr;
 		Intent mes;
 		Intent rec;
 		arPlayer arplayer=null;
@@ -105,29 +106,15 @@ public class BlService extends Service {
 			break;
 		case 6:
 			arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
-			sov=intent.getIntArrayExtra("field");
-			next=intent.getIntExtra("next", -1);
-			Log.d("LOG","След "+next);
-			if (client!=null && arplayer!=null) {
-				client.write_next(next);
-				client.write(arplayer); 
-				if (sov!=null) client.write_sov(sov);
-			}
+			monstr=intent.getIntExtra("monstr", -1);
 			for (int i=0;i<blins.size();i++){
-				if (client==null && arplayer!=null) {
-					blins.get(i).write_next(next);
-					blins.get(i).write(arplayer);
-					if (sov!=null) blins.get(i).write_sov(sov);
-				}
+				blins.get(i).start_game(i+1,monstr,arplayer);
 			}
-			if (find!=null){
-				mes = new Intent("ru.castleburg.bluetooth");
-				mes.putExtra("arplayer", arplayer);
-				//mes.putExtra("id", 0);
-				mes.putExtra("next", next);
-				mes.putExtra("field", sov);
-				sendBroadcast(mes);
-			}
+			mes = new Intent("ru.castleburg.bluetooth");
+			mes.putExtra("arplayer", arplayer);
+			mes.putExtra("monstr", monstr);
+			mes.putExtra("id", 0);
+			sendBroadcast(mes);
 			break;
 		case 7:
 			find.interrupt();
@@ -146,7 +133,7 @@ public class BlService extends Service {
 					client.write_next(next);
 					client.write_game(arplayer, sov);
 				}
-					
+
 				mes = new Intent("ru.castleburg.bluetooth");
 				mes.putExtra("arplayer", arplayer);
 				mes.putExtra("field", sov);
@@ -184,7 +171,7 @@ public class BlService extends Service {
 					blins.add(new BlinStream(sockets.get(sockets.size()-1)));
 					Intent intent = new Intent("ru.castleburg.bluetooth");
 					intent.putExtra("status", "Сервер запущен");
-					intent.putExtra("kol", blins.size()+"");
+					intent.putExtra("kol", blins.size());
 					sendBroadcast(intent);
 				}
 			}
@@ -270,7 +257,7 @@ public class BlService extends Service {
 			}
 		}
 
-		
+
 		public void write_id(int id){
 			byte[] buf=new byte[]{3,(byte)(id)};
 			try {
@@ -280,7 +267,7 @@ public class BlService extends Service {
 				e.printStackTrace();
 			}
 		}
-		
+
 		public void write_game(arPlayer ar,int[] sov){
 			byte[] bar=ar.getBytes();
 			byte[] buf=new byte[sov.length+bar.length];
@@ -290,6 +277,24 @@ public class BlService extends Service {
 			}
 			for (int i=bar.length;i<buf.length;i++){
 				buf[i]=(byte) sov[i-bar.length];
+			}
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
+		public void start_game(int id,int monstr,arPlayer ar){
+			byte[] bar=ar.getBytes();
+			byte[] buf=new byte[bar.length+3];
+			buf[0]=3;
+			buf[1]=(byte) id;
+			buf[2]=(byte) monstr;
+			for (int i=0;i<bar.length;i++){
+				buf[i+3]=bar[i];
 			}
 			try {
 				out.write(buf);
@@ -314,6 +319,7 @@ public class BlService extends Service {
 		public void run() {
 			while (true){
 				try {
+					arPlayer arplayer;
 					int bit,size;
 					Intent intent;
 					int[] sov;
@@ -342,8 +348,18 @@ public class BlService extends Service {
 							}
 						break;
 					case 3:
-						int id=in.read();
+						int id=in.read(),monstr=in.read();
+						in.read();
+						size=0;
+						size=in.read();
+						size=size*10+in.read();
+						size=size*10+in.read();
+						buf=new byte[size];
+						in.read(buf);
+						arplayer=new arPlayer(buf);
 						intent = new Intent("ru.castleburg.bluetooth");
+						intent.putExtra("arplayer", arplayer);
+						intent.putExtra("monstr", monstr);
 						intent.putExtra("id", id);
 						sendBroadcast(intent);
 						break;
@@ -367,7 +383,7 @@ public class BlService extends Service {
 						size=size*10+in.read();
 						buf=new byte[size];
 						in.read(buf);
-						arPlayer arplayer=new arPlayer(buf);
+						arplayer=new arPlayer(buf);
 						intent = new Intent("ru.castleburg.bluetooth");
 						if (client==null && find!=null)
 							for (int i=0;i<blins.size();i++){
@@ -534,16 +550,6 @@ public class BlService extends Service {
 				e.printStackTrace();
 			}
 		}
-		
-		public void write_id(int id){
-			byte[] buf=new byte[]{3,(byte)(id)};
-			try {
-				out.write(buf);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
+
 	}//Client
 }

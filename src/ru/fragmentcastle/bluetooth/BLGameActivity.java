@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import ru.fragmentcastle.GameActivity;
 import ru.fragmentcastle.PlayerAdapter;
+import ru.fragmentcastle.logic.Monstr;
 import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
 import android.app.AlertDialog;
@@ -32,8 +33,10 @@ public class BLGameActivity extends GameActivity {
 	
 	public void inic(){
 		Intent intent=getIntent();
-		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
+		int idm=intent.getIntExtra("monstr", -1);
 		time=new Time();
+		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
+		monstr=new Monstr(time.year,idm,this);
 	}
 	
 	public void next_player(){
@@ -58,8 +61,9 @@ public class BLGameActivity extends GameActivity {
 			arplayer.refresh();
 			Arrays.sort(arplayer.ar);
 		}
-		intent.putExtra("command",6);
+		intent.putExtra("command",8);
 		intent.putExtra("next", 1);
+		intent.putExtra("field", field.sov_chose);
 		intent.putExtra("arplayer", arplayer);
 		startService(intent);
 	}
