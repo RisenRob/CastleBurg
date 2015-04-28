@@ -70,7 +70,7 @@ public class Builder extends Fragment {
 
 		for (int i=0;i<4;i++)
 			for (int j=0;j<5;j++){
-				if (sosbutt[i][j]) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
+				if (sosbutt[i][j] && (game.id==-1 ||game.id==player.num)) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
 				image[i][j].setImageResource(idim(i,j,build.po[i][j]));
 			}
 		if (game.time.phase==1 || game.time.phase==3 || game.time.phase==5)pere(game.adapter_player.getItem(game.pos));
@@ -99,7 +99,7 @@ public class Builder extends Fragment {
 
 		for (int i=0;i<4;i++)
 			for (int j=0;j<5;j++){
-				if (sosbutt[i][j]) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
+				if (sosbutt[i][j] && (game.id==-1 ||game.id==player.num)) image[i][j].setOnClickListener(click); else image[i][j].setClickable(false);
 				image[i][j].setImageResource(idim(i,j,build.po[i][j]));
 			}
 	}
@@ -185,8 +185,6 @@ public class Builder extends Fragment {
 				if (build.po[1][1]){
 					image[2][1].setClickable(true);
 					image[1][1].setClickable(false);
-					if (game.arplayer.cur==game.arplayer.ar.length-1) game.next();
-					game.next_player();
 				}
 				break;
 			case R.id.imageView10:
@@ -302,7 +300,6 @@ public class Builder extends Fragment {
 				break; 	   	
 
 			}
-			
 			for (int i=0;i<4;i++)
 				for (int j=0;j<5;j++){
 					sosbutt[i][j]=image[i][j].isClickable();
@@ -316,7 +313,7 @@ public class Builder extends Fragment {
 			refresh();
 			for (int i=0;i<4;i++)
 				for (int j=0;j<5;j++){
-					sosbutt[i][j]=false;
+					image[i][j].setClickable(false);
 				}
 		}
 

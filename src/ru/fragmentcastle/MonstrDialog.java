@@ -1,7 +1,11 @@
 package ru.fragmentcastle;
 
+import ru.fragmentcastle.bluetooth.BLGameActivity;
+import ru.fragmentcastle.bluetooth.BlService;
+import ru.fragmentcastle.logic.Monstr;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,10 +49,28 @@ public class MonstrDialog extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (game.time.phase==7) {
+				if (game.id==-1){
+					if (game.time.phase==7) {
+						game.arplayer.fight(game.monstr);
+						game.next();
+					} else game.field.getres();
+				}
+				if (game.id==0) {
 					game.arplayer.fight(game.monstr);
-					game.next();
-				} else game.field.getres();
+					Intent intent = new Intent(game, BlService.class);
+					intent.putExtra("command",8);
+					intent.putExtra("next", 1);
+					intent.putExtra("field", game.field.sov_chose);
+					intent.putExtra("arplayer", game.arplayer);
+					game.startService(intent);
+
+					Monstr mosntr=new Monstr(game.time.year+1,game);
+					intent.putExtra("command",9);
+					intent = new Intent(game, BlService.class);
+					intent.putExtra("idm", mosntr.id);
+					intent.putExtra("year", game.time.year+1);
+					game.startService(intent);
+				}
 				MonstrDialog.this.getDialog().cancel();
 			}
 		});

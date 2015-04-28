@@ -3,13 +3,16 @@ package ru.fragmentcastle.bluetooth;
 import java.util.Arrays;
 
 import ru.fragmentcastle.GameActivity;
+import ru.fragmentcastle.MonstrDialog;
 import ru.fragmentcastle.PlayerAdapter;
+import ru.fragmentcastle.WinAdapter;
 import ru.fragmentcastle.logic.Monstr;
 import ru.fragmentcastle.logic.Time;
 import ru.fragmentcastle.logic.arPlayer;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -71,42 +74,70 @@ public class BLGameActivity extends GameActivity {
 	}
 	
 	public void bnext(){
-		for (int i=0;i<arplayer.ar.length;i++){
-			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
-			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
-			next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
-			next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
-			next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
-			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
+		//В теории игркои хоть как тут отсортированы
+				for (int i=0;i<arplayer.ar.length;i++){
+					next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
+					next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
+					next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
+					next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
+					next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
+					next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
 
-		}
-		time.next();
-		//if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
-		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,"012");
-		adb.setAdapter(adapter_player, null);
-		adb.setTitle("Результаты фазы");
-		adb.setNeutralButton("Дальше",null);
-		adb.setCancelable(false).create().show();
+				}
+				time.next();
+				//if (time.phase==1) monstr=new Monstr(time.year,this);
+				//if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
 
 
-		next_arplayer=new arPlayer(arplayer.ar.length);
-		next_arplayer.sort(); arplayer.sort();
-		for (int i=0;i<arplayer.ar.length;i++){
-			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
-			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
-			next_arplayer.ar[i].stone=arplayer.ar[i].stone;
-			next_arplayer.ar[i].win=arplayer.ar[i].win;
-			next_arplayer.ar[i].war=arplayer.ar[i].war;
-			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
-			next_arplayer.ar[i].refresh(0);
-		}
-		Arrays.sort(arplayer.ar);
-		if (time.phase==1 || time.phase==3 || time.phase==5){
-			arplayer.sort();
-			arplayer.cur=7;
-		}
-		refresh();
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+				PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,arplayer.oqueue());
+				adb.setAdapter(adapter_player, null);
+				adb.setTitle("Результаты фазы");
+				if (time.phase!=7) adb.setNeutralButton("Дальше",null); else
+					adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
+
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							Toast.makeText(BLGameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
+							MonstrDialog md=new MonstrDialog();
+							md.show(getFragmentManager(), "md");
+
+						}
+
+					});
+				if (time.year==6) {
+					adb.setTitle("Конец игры!");
+					WinAdapter win=new WinAdapter(this,arplayer.ar.clone());
+					adb.setAdapter(win, null);
+					adb.setNeutralButton("Конец",new DialogInterface.OnClickListener(){
+
+						@Override
+						public void onClick(DialogInterface dial, int arg1) {
+							dial.cancel();
+							BLGameActivity.this.finish();
+						}
+
+					});
+				}
+
+
+				adb.setCancelable(false).create().show();
+
+
+				next_arplayer=new arPlayer(arplayer.ar.length);
+				next_arplayer.sort(); arplayer.sort();
+				for (int i=0;i<arplayer.ar.length;i++){
+					next_arplayer.ar[i].gold=arplayer.ar[i].gold;
+					next_arplayer.ar[i].wood=arplayer.ar[i].wood;
+					next_arplayer.ar[i].stone=arplayer.ar[i].stone;
+					next_arplayer.ar[i].win=arplayer.ar[i].win;
+					next_arplayer.ar[i].war=arplayer.ar[i].war;
+					next_arplayer.ar[i].plus=arplayer.ar[i].plus;
+					next_arplayer.ar[i].refresh(0);
+				}
+				Arrays.sort(arplayer.ar);
+				refresh();
 	}
 	
 	private final BroadcastReceiver blinreceiver=new BroadcastReceiver(){
@@ -114,9 +145,10 @@ public class BLGameActivity extends GameActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			arPlayer tarplayer=(arPlayer)intent.getSerializableExtra("arplayer");
-			int next=intent.getIntExtra("next", -1);
+			int next=intent.getIntExtra("next", -1),idm=intent.getIntExtra("idm", -1),
+					year=intent.getIntExtra("year", -1);
 			int[] sov=intent.getIntArrayExtra("field");
-			Toast.makeText(BLGameActivity.this, "След "+next, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(BLGameActivity.this, "След "+next, Toast.LENGTH_SHORT).show();
 			if (sov!=null){
 				field.sov_chose=sov;
 				field.refresh();
@@ -129,7 +161,9 @@ public class BLGameActivity extends GameActivity {
 				arplayer=tarplayer;
 				bnext_player();
 			}
-			
+			if (idm!=-1 && year!=-1){
+				monstr=new Monstr(year, idm, context);
+			}
 		}
 
 	};

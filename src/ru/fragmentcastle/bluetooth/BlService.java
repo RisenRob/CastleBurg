@@ -140,6 +140,22 @@ public class BlService extends Service {
 				}
 			}
 			break;
+		case 9:
+			int idm=intent.getIntExtra("idm", -1),year=intent.getIntExtra("year",-1);
+			if (idm!=-1 && year!=-1){
+				if (client==null){
+					for (int i=0;i<blins.size();i++){
+						blins.get(i).write_idm(idm, year);
+					}
+					mes = new Intent("ru.castleburg.bluetooth");
+					mes.putExtra("idm", idm);
+					mes.putExtra("year", year);
+					sendBroadcast(mes);
+				} else {
+					client.write_idm(idm, year);
+				}
+			}
+			break;
 		}
 
 		return super.onStartCommand(intent, flags, startId);
@@ -303,6 +319,16 @@ public class BlService extends Service {
 			}
 		}
 
+		public void write_idm(int idm,int year){
+			byte[] buf=new byte[]{4,(byte)(idm),(byte)(year)};
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 
 
 	}
@@ -360,6 +386,13 @@ public class BlService extends Service {
 						intent.putExtra("arplayer", arplayer);
 						intent.putExtra("monstr", monstr);
 						intent.putExtra("id", id);
+						sendBroadcast(intent);
+						break;
+					case 4:
+						int idm=in.read(),year=in.read();
+						intent = new Intent("ru.castleburg.bluetooth");
+						intent.putExtra("idm", idm);
+						intent.putExtra("year", year);
 						sendBroadcast(intent);
 						break;
 					case 100:
@@ -542,6 +575,16 @@ public class BlService extends Service {
 			for (int i=bar.length;i<buf.length;i++){
 				buf[i]=(byte) sov[i-bar.length];
 			}
+			try {
+				out.write(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		public void write_idm(int idm,int year){
+			byte[] buf=new byte[]{4,(byte)(idm),(byte)(year)};
 			try {
 				out.write(buf);
 			} catch (IOException e) {

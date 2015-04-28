@@ -141,8 +141,8 @@ public class GameActivity extends Activity {
 
 			});
 		}
-		
-		
+
+
 		adb.setCancelable(false).create().show();
 
 
@@ -176,8 +176,11 @@ public class GameActivity extends Activity {
 			} 
 			else
 				if (time.phase==2 || time.phase==4 || time.phase==6) {
-					next_player();
-					if (arplayer.cur==0) next();
+					if (arplayer.cur==arplayer.ar.length-1)	next();					
+					else{
+						next_player();
+						builder.refresh();
+					}
 				}
 
 	}	
@@ -278,24 +281,24 @@ public class GameActivity extends Activity {
 				arplayer.ar[j].tess.reftess();
 				hbuild[1][j]=false;
 				if (!check_build()) {
-				Arrays.sort(arplayer.ar);
-				arplayer.cur=7;
-				refresh();
+					Arrays.sort(arplayer.ar);
+					arplayer.cur=7;
+					refresh();
 				}
 				return 0;
 			}
 		}
 		return 0;
 	}
-	
+
 	public int plef1n(){
 		for (int j=5;j>=0;j--){
 			if (hbuild[1][j]==true){
 				hbuild[1][j]=false;
 				if (!check_build()) {
-				Arrays.sort(arplayer.ar);
-				arplayer.cur=7;
-				refresh();
+					Arrays.sort(arplayer.ar);
+					arplayer.cur=7;
+					refresh();
 				}
 				return 0;
 			}
@@ -358,7 +361,7 @@ public class GameActivity extends Activity {
 		if (time.phase==2 || time.phase==4 || time.phase==6) ft.replace(R.id.fragment, builder).commit();
 
 	}
-	
+
 	public View getTitle(int num,String mes){
 		LayoutInflater inflater=getLayoutInflater();
 		View v=inflater.inflate(R.layout.title_sov, null);
@@ -368,7 +371,7 @@ public class GameActivity extends Activity {
 		tv.setText(mes);
 		return v;
 	}
-	
+
 	private int getColor(int a){
 		if (a==0) return Color.BLUE;
 		if (a==1) return Color.YELLOW;
