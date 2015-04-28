@@ -314,6 +314,10 @@ public class Builder extends Fragment {
 			
 			
 			refresh();
+			for (int i=0;i<4;i++)
+				for (int j=0;j<5;j++){
+					sosbutt[i][j]=false;
+				}
 		}
 
 	};
