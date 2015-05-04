@@ -1,10 +1,12 @@
 package ru.fragmentcastle.bluetooth;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ru.fragmentcastle.GameActivity;
 import ru.fragmentcastle.MonstrDialog;
 import ru.fragmentcastle.PlayerAdapter;
+import ru.fragmentcastle.R;
 import ru.fragmentcastle.WinAdapter;
 import ru.fragmentcastle.logic.Monstr;
 import ru.fragmentcastle.logic.Time;
@@ -16,9 +18,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class BLGameActivity extends GameActivity {
+	
+	ListView chat;
+	EditText smes;
+	ArrayAdapter<String> adap_chat;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -35,12 +45,24 @@ public class BLGameActivity extends GameActivity {
 	}
 	
 	public void inic(){
+		setContentView(R.layout.activity_bgame);
 		Intent intent=getIntent();
 		int idm=intent.getIntExtra("monstr", -1);
 		id=intent.getIntExtra("id", -1);
 		time=new Time();
 		arplayer=(arPlayer)intent.getSerializableExtra("arplayer");
 		monstr=new Monstr(time.year,idm,this);
+		chat=(ListView)findViewById(R.id.list_chat);
+		smes=(EditText)findViewById(R.id.editText1);
+		adap_chat=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,new ArrayList<String>());
+		chat.setAdapter(adap_chat);
+	}
+	
+	public void send(View v){
+		Intent intent = new Intent(BLGameActivity.this, BlService.class);
+		intent.putExtra("command",3);
+		intent.putExtra("text", smes.getText().toString());
+		startService(intent);
 	}
 	
 	public void next_player(){
@@ -148,6 +170,7 @@ public class BLGameActivity extends GameActivity {
 			int next=intent.getIntExtra("next", -1),idm=intent.getIntExtra("idm", -1),
 					year=intent.getIntExtra("year", -1);
 			int[] sov=intent.getIntArrayExtra("field");
+			String mes=intent.getStringExtra("text");
 			//Toast.makeText(BLGameActivity.this, "След "+next, Toast.LENGTH_SHORT).show();
 			if (sov!=null){
 				field.sov_chose=sov;
@@ -163,6 +186,9 @@ public class BLGameActivity extends GameActivity {
 			}
 			if (idm!=-1 && year!=-1){
 				monstr=new Monstr(year, idm, context);
+			}
+			if (mes!=null){
+				adap_chat.add(mes);
 			}
 		}
 

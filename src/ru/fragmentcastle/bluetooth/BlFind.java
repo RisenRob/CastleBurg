@@ -32,7 +32,7 @@ public class BlFind extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_find);
 		status=(TextView)findViewById(R.id.status);
-		list=(ListView)findViewById(R.id.listView1);
+		list=(ListView)findViewById(R.id.list_chat);
 		btn1=(Button)findViewById(R.id.button1);
 		btn2=(Button)findViewById(R.id.button2);
 		btn3=(Button)findViewById(R.id.button3);

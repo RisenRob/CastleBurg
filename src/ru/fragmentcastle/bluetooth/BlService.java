@@ -68,7 +68,7 @@ public class BlService extends Service {
 			break;
 		case 3:
 			String s=null;
-			s=intent.getStringExtra("message");
+			s=intent.getStringExtra("text");
 			if (client!=null && s!=null) client.write(s); 
 			for (int i=0;i<blins.size();i++){
 				if (client==null && s!=null) blins.get(i).write(s);
@@ -215,18 +215,18 @@ public class BlService extends Service {
 		public void write(String s){
 			try {
 				byte[] sbuf=s.getBytes();
-				byte[] buf=new byte[1+sbuf.length];
+				byte[] buf=new byte[2+sbuf.length];
 				buf[0]=1;
+				buf[1]=(byte) sbuf.length;
 				for (int i=0;i<sbuf.length;i++){
-					buf[i+1]=sbuf[i];
+					buf[i+2]=sbuf[i];
 				}
 				out.write(buf);
 			} catch (IOException e) {
 
 				e.printStackTrace();
 			}
-
-		}
+		}//write
 
 		public void write(Player player){
 			try {
@@ -352,7 +352,7 @@ public class BlService extends Service {
 					bit=in.read();
 					switch (bit){
 					case 1: //Чтение строки
-						size=in.available();
+						size=in.read();
 						buf=new byte[size];
 						in.read(buf);
 						String s=new String(buf);
@@ -506,13 +506,13 @@ public class BlService extends Service {
 		public void write(String s){
 			try {
 				byte[] sbuf=s.getBytes();
-				byte[] buf=new byte[1+sbuf.length];
+				byte[] buf=new byte[2+sbuf.length];
 				buf[0]=1;
+				buf[1]=(byte) sbuf.length;
 				for (int i=0;i<sbuf.length;i++){
-					buf[i+1]=sbuf[i];
+					buf[i+2]=sbuf[i];
 				}
 				out.write(buf);
-				Log.d("LOg",s+"");
 			} catch (IOException e) {
 
 				e.printStackTrace();

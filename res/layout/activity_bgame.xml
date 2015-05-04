@@ -27,6 +27,39 @@
 
         </ListView>
 
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Чат" />
+
+        <ListView
+            android:id="@+id/list_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:transcriptMode="alwaysScroll" >
+
+        </ListView>
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Сообщение" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="send"
+            android:text="Написать" />
+
         <LinearLayout
             android:id="@+id/time"
             android:layout_width="match_parent"

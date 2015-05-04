@@ -1,6 +1,5 @@
 package ru.fragmentcastle;
 
-import ru.fragmentcastle.bluetooth.BLGameActivity;
 import ru.fragmentcastle.bluetooth.BlService;
 import ru.fragmentcastle.logic.Monstr;
 import android.app.Activity;
@@ -39,7 +38,7 @@ public class MonstrDialog extends DialogFragment {
 		name=(TextView)v.findViewById(R.id.textView1);
 		war=(TextView)v.findViewById(R.id.textView2);
 		btn=(Button)v.findViewById(R.id.button1);
-		list1=(ListView)v.findViewById(R.id.listView1);
+		list1=(ListView)v.findViewById(R.id.list_chat);
 		list2=(ListView)v.findViewById(R.id.listView2);
 		MonstrAdapter winadap=new MonstrAdapter(getActivity(),game.monstr,true);
 		MonstrAdapter loseadap=new MonstrAdapter(getActivity(),game.monstr,false);
@@ -56,20 +55,22 @@ public class MonstrDialog extends DialogFragment {
 					} else game.field.getres();
 				}
 				if (game.id==0) {
-					game.arplayer.fight(game.monstr);
-					Intent intent = new Intent(game, BlService.class);
-					intent.putExtra("command",8);
-					intent.putExtra("next", 1);
-					intent.putExtra("field", game.field.sov_chose);
-					intent.putExtra("arplayer", game.arplayer);
-					game.startService(intent);
+					if (game.time.phase==7){
+						game.arplayer.fight(game.monstr);
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("next", 1);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
 
-					Monstr mosntr=new Monstr(game.time.year+1,game);
-					intent.putExtra("command",9);
-					intent = new Intent(game, BlService.class);
-					intent.putExtra("idm", mosntr.id);
-					intent.putExtra("year", game.time.year+1);
-					game.startService(intent);
+						Monstr mosntr=new Monstr(game.time.year+1,game);
+						intent = new Intent(game, BlService.class);
+						intent.putExtra("command",9);
+						intent.putExtra("idm", mosntr.id);
+						intent.putExtra("year", game.time.year+1);
+						game.startService(intent);
+					} else game.field.getres();
 				}
 				MonstrDialog.this.getDialog().cancel();
 			}

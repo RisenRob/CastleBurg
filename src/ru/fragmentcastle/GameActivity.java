@@ -44,13 +44,12 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_game);
+		inic();
 		list_player=(ListView)findViewById(R.id.list_players);
 		ltime=(LinearLayout)findViewById(R.id.time);
 		pas=(ImageView)findViewById(R.id.imageView1);
 		field=new Field();
 		builder=new Builder();
-		inic();
 		next_arplayer=new arPlayer(arplayer.ar.length);
 		next_arplayer.sort(); arplayer.sort();
 		for (int i=0;i<arplayer.ar.length;i++){
@@ -69,6 +68,7 @@ public class GameActivity extends Activity {
 
 	public void inic(){
 		id=-1;
+		setContentView(R.layout.activity_game);
 		arplayer=(arPlayer)getIntent().getSerializableExtra("arplayer");
 		time=new Time();
 		monstr=new Monstr(time.year,this);
