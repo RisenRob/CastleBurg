@@ -7,6 +7,7 @@ import ru.fragmentcastle.GameActivity;
 import ru.fragmentcastle.MonstrDialog;
 import ru.fragmentcastle.PlayerAdapter;
 import ru.fragmentcastle.R;
+import ru.fragmentcastle.ResAdapter;
 import ru.fragmentcastle.WinAdapter;
 import ru.fragmentcastle.logic.Monstr;
 import ru.fragmentcastle.logic.Time;
@@ -25,17 +26,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class BLGameActivity extends GameActivity {
-	
+
 	ListView chat;
 	EditText smes;
 	ArrayAdapter<String> adap_chat;
-	
+
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		IntentFilter blFilt = new IntentFilter("ru.castleburg.bluetooth");
 		registerReceiver(blinreceiver, blFilt);
 	}
-	
+
 	protected void onDestroy(){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
 		stopService(intent);
@@ -43,7 +44,7 @@ public class BLGameActivity extends GameActivity {
 		super.onDestroy();
 
 	}
-	
+
 	public void inic(){
 		setContentView(R.layout.activity_bgame);
 		Intent intent=getIntent();
@@ -57,14 +58,14 @@ public class BLGameActivity extends GameActivity {
 		adap_chat=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,new ArrayList<String>());
 		chat.setAdapter(adap_chat);
 	}
-	
+
 	public void send(View v){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
 		intent.putExtra("command",3);
 		intent.putExtra("text", smes.getText().toString());
 		startService(intent);
 	}
-	
+
 	public void next_player(){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
 		intent.putExtra("command",8);
@@ -73,7 +74,7 @@ public class BLGameActivity extends GameActivity {
 		intent.putExtra("arplayer", arplayer);
 		startService(intent);
 	}
-	
+
 	public void bnext_player(){
 		player=arplayer.next();
 		refresh_players();
@@ -81,7 +82,7 @@ public class BLGameActivity extends GameActivity {
 		if (time.phase==2 || time.phase==4 || time.phase==6) builder.refresh();
 		if (id==player.num) pas.setClickable(true); else pas.setClickable(false);
 	}
-	
+
 	public void next(){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
 		if (time.phase==2 || time.phase==4 || time.phase==6) {
@@ -94,74 +95,95 @@ public class BLGameActivity extends GameActivity {
 		intent.putExtra("arplayer", arplayer);
 		startService(intent);
 	}
-	
+
 	public void bnext(){
 		//В теории игркои хоть как тут отсортированы
-				for (int i=0;i<arplayer.ar.length;i++){
-					next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
-					next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
-					next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
-					next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
-					next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
-					next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone-next_arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win-next_arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war-next_arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus-next_arplayer.ar[i].plus;
+
+		}
+		time.next();
+		//if (time.phase==1) monstr=new Monstr(time.year,this);
+		//if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
+
+
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+
+		PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,arplayer.oqueue());
+		adb.setAdapter(adapter_player, null);
+		adb.setTitle("Результаты фазы");
+		if (time.phase!=7) adb.setNeutralButton("Дальше",null); else
+			adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					Toast.makeText(BLGameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
+					MonstrDialog md=new MonstrDialog();
+					md.show(getFragmentManager(), "md");
 
 				}
-				time.next();
-				//if (time.phase==1) monstr=new Monstr(time.year,this);
-				//if (time.phase==1 || time.phase==3 || time.phase==5)checkplayers();
 
+			});
+		if (time.year==6) {
+			adb.setTitle("Конец игры!");
+			WinAdapter win=new WinAdapter(this,arplayer.ar.clone());
+			adb.setAdapter(win, null);
+			adb.setNeutralButton("Конец",new DialogInterface.OnClickListener(){
 
-				AlertDialog.Builder adb = new AlertDialog.Builder(this);
-
-				PlayerAdapter adapter_player=new PlayerAdapter(this,next_arplayer.ar,arplayer.oqueue());
-				adb.setAdapter(adapter_player, null);
-				adb.setTitle("Результаты фазы");
-				if (time.phase!=7) adb.setNeutralButton("Дальше",null); else
-					adb.setNeutralButton("Дальше",new DialogInterface.OnClickListener(){
-
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							Toast.makeText(BLGameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
-							MonstrDialog md=new MonstrDialog();
-							md.show(getFragmentManager(), "md");
-
-						}
-
-					});
-				if (time.year==6) {
-					adb.setTitle("Конец игры!");
-					WinAdapter win=new WinAdapter(this,arplayer.ar.clone());
-					adb.setAdapter(win, null);
-					adb.setNeutralButton("Конец",new DialogInterface.OnClickListener(){
-
-						@Override
-						public void onClick(DialogInterface dial, int arg1) {
-							dial.cancel();
-							BLGameActivity.this.finish();
-						}
-
-					});
+				@Override
+				public void onClick(DialogInterface dial, int arg1) {
+					dial.cancel();
+					BLGameActivity.this.finish();
 				}
 
+			});
+		}
 
-				adb.setCancelable(false).create().show();
+
+		adb.setCancelable(false).create().show();
 
 
-				next_arplayer=new arPlayer(arplayer.ar.length);
-				next_arplayer.sort(); arplayer.sort();
-				for (int i=0;i<arplayer.ar.length;i++){
-					next_arplayer.ar[i].gold=arplayer.ar[i].gold;
-					next_arplayer.ar[i].wood=arplayer.ar[i].wood;
-					next_arplayer.ar[i].stone=arplayer.ar[i].stone;
-					next_arplayer.ar[i].win=arplayer.ar[i].win;
-					next_arplayer.ar[i].war=arplayer.ar[i].war;
-					next_arplayer.ar[i].plus=arplayer.ar[i].plus;
-					next_arplayer.ar[i].refresh(0);
-				}
-				Arrays.sort(arplayer.ar);
-				refresh();
+		next_arplayer=new arPlayer(arplayer.ar.length);
+		next_arplayer.sort(); arplayer.sort();
+		for (int i=0;i<arplayer.ar.length;i++){
+			next_arplayer.ar[i].gold=arplayer.ar[i].gold;
+			next_arplayer.ar[i].wood=arplayer.ar[i].wood;
+			next_arplayer.ar[i].stone=arplayer.ar[i].stone;
+			next_arplayer.ar[i].win=arplayer.ar[i].win;
+			next_arplayer.ar[i].war=arplayer.ar[i].war;
+			next_arplayer.ar[i].plus=arplayer.ar[i].plus;
+			next_arplayer.ar[i].refresh(0);
+		}
+		Arrays.sort(arplayer.ar);
+		refresh();
 	}
-	
+
+	public int bgetres(){
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		ResAdapter adapter;
+		String s="Выберите желаемые ресурсы";
+		for (int i=1;i<19;i++){
+			if (field.sov_chose[i]!=-1 && id==field.sov_chose[i]){
+				switch(i){
+				case 4:
+					//Дерево или золото
+					field.res=new String[]{"w","g"};
+					adapter=new ResAdapter(field.res,this);
+					adb.setAdapter(adapter, field.resclick);
+					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
+					adb.setCancelable(false).create().show();
+					break;
+				}
+			} else return 0;
+		}
+		return 0;
+	}
+
 	private final BroadcastReceiver blinreceiver=new BroadcastReceiver(){
 
 		@Override
@@ -184,6 +206,14 @@ public class BLGameActivity extends GameActivity {
 				arplayer=tarplayer;
 				bnext_player();
 			}
+			if (tarplayer!=null && next==3){
+				arplayer=tarplayer;
+				bgetres();
+			}
+			if (tarplayer!=null && next==4){
+				arplayer=tarplayer;
+				field.getres();
+			}
 			if (idm!=-1 && year!=-1){
 				monstr=new Monstr(year, idm, context);
 			}
@@ -193,5 +223,5 @@ public class BLGameActivity extends GameActivity {
 		}
 
 	};
-	
+
 }

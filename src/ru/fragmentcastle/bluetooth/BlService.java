@@ -69,14 +69,17 @@ public class BlService extends Service {
 		case 3:
 			String s=null;
 			s=intent.getStringExtra("text");
-			if (client!=null && s!=null) client.write(s); 
-			for (int i=0;i<blins.size();i++){
-				if (client==null && s!=null) blins.get(i).write(s);
-			}
-			if (find!=null){
-				mes = new Intent("ru.castleburg.bluetooth");
-				mes.putExtra("text", s);
-				sendBroadcast(mes);
+			if (s!=null){
+				if (client==null){
+					for (int i=0;i<blins.size();i++){
+						blins.get(i).write(s);
+					}
+					mes = new Intent("ru.castleburg.bluetooth");
+					mes.putExtra("text", s);
+					sendBroadcast(mes);
+				} else {
+					client.write(s); 
+				}
 			}
 			break;
 		case 4:
@@ -356,13 +359,14 @@ public class BlService extends Service {
 						buf=new byte[size];
 						in.read(buf);
 						String s=new String(buf);
-						intent = new Intent("ru.castleburg.bluetooth");
-						if (client==null && find!=null)
+						if (client==null){
 							for (int i=0;i<blins.size();i++){
 								blins.get(i).write(s);
 							}
-						intent.putExtra("text", s);
-						sendBroadcast(intent);
+							intent = new Intent("ru.castleburg.bluetooth");
+							intent.putExtra("text", s);
+							sendBroadcast(intent);
+						}
 						break;
 					case 2:
 						int mnext=in.read();

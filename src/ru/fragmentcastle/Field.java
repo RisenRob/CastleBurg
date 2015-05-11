@@ -3,6 +3,7 @@ package ru.fragmentcastle;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import ru.fragmentcastle.bluetooth.BlService;
 import ru.fragmentcastle.helpdial.dialog01;
 import ru.fragmentcastle.helpdial.dialog02;
 import ru.fragmentcastle.helpdial.dialog03;
@@ -16,6 +17,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,13 +35,13 @@ public class Field extends Fragment {
 	LinearLayout[] lsov=new LinearLayout[19];
 	public int[] sov_chose=new int[19];
 	int num,kol;
-	String[] res;
-	 DialogFragment dlg1;
-	  DialogFragment dlg2;
-	  DialogFragment dlg3;
-	  DialogFragment dlg5;
-	  DialogFragment dlgdp;
-	  boolean so=false;
+	public String[] res;
+	DialogFragment dlg1;
+	DialogFragment dlg2;
+	DialogFragment dlg3;
+	DialogFragment dlg5;
+	DialogFragment dlgdp;
+	boolean so=false;
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
 		game=(GameActivity) activity;
@@ -87,205 +89,219 @@ public class Field extends Fragment {
 		for (int i=1;i<19;i++){
 			if (sov_chose[1]!=-1) for (int j=1;j<19;j++) sov_chose[j]=-1;
 		}
-		
+
 		refresh();
 		if (MainActivity.sta==true && Time.phase==1 && Time.year==1) {
 			dlg1 = new dialog01();
-		    dlg2 = new dialog02();
-		    dlgdp = new dialogdp();
-		    dlg2.show(getFragmentManager(), "dlg2");
-		    dlgdp.show(getFragmentManager(), "dlgdp");
-		    dlg1.show(getFragmentManager(), "dlg1");
+			dlg2 = new dialog02();
+			dlgdp = new dialogdp();
+			dlg2.show(getFragmentManager(), "dlg2");
+			dlgdp.show(getFragmentManager(), "dlgdp");
+			dlg1.show(getFragmentManager(), "dlg1");
 		}
 		if (MainActivity.sta==true && Time.phase==3 && Time.year==1) {
 			dlg5 = new dialog05();			  
-		    dlg5.show(getFragmentManager(), "dlg5");
+			dlg5.show(getFragmentManager(), "dlg5");
 		}
 		return v;
-	
-	}
-	
-	
-	//получение всех ресурсов с советников
-		public int getres(){
-			ResAdapter adapter;
-			AlertDialog.Builder adb;
-			adb = new AlertDialog.Builder(game);
-			String s="Выберите желаемые ресурсы";
 
-			for (int i=1;i<19;i++){
-				int num=sov_chose[i];
-				if (num!=-1)
-					switch (i){
-					case 1 :
-						game.arplayer.ar[num].win++;
-						sov_chose[i]=-1;
-						break;
-					case 2:
-						game.arplayer.ar[num].gold++;
-						sov_chose[i]=-1;
-						break;
-					case 3:
-						game.arplayer.ar[num].wood++;
-						sov_chose[i]=-1;
-						break;
-					case 4:
-						//Дерево или золото
+	}
+
+
+	//получение всех ресурсов с советников
+	public int getres(){
+		ResAdapter adapter;
+		AlertDialog.Builder adb;
+		adb = new AlertDialog.Builder(game);
+		String s="Выберите желаемые ресурсы";
+
+		for (int i=1;i<19;i++){
+			int num=sov_chose[i];
+			if (num!=-1)
+				switch (i){
+				case 1 :
+					game.arplayer.ar[num].win++;
+					sov_chose[i]=-1;
+					break;
+				case 2:
+					game.arplayer.ar[num].gold++;
+					sov_chose[i]=-1;
+					break;
+				case 3:
+					game.arplayer.ar[num].wood++;
+					sov_chose[i]=-1;
+					break;
+				case 4:
+					//Дерево или золото
+					if (game.id==0 || game.id==-1){
 						res=new String[]{"w","g"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
 						adb.setCustomTitle(getTitle(num,s));
 						adb.setCancelable(false).create().show();
-						return 1;
-					case 5:
-						game.arplayer.ar[num].war++;
-						sov_chose[i]=-1;
-						break;
-					case 6:
-						res=new String[]{"dawg","easg","haws"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 7:
-						game.arplayer.ar[num].plus++;
-						res=new String[]{"w","g","s"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 8:
-						game.arplayer.ar[num].gold+=2;
-						sov_chose[i]=-1;
-						break;
-					case 9:
-						res=new String[]{"gw","sw"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 10:
-						game.arplayer.ar[num].war+=2;
-						adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-								MonstrDialog md=new MonstrDialog();
-								md.show(getFragmentManager(), "md");
-								arg0.cancel();
-							}
-
-						});
-						adb.setCustomTitle(getTitle(num,"Вы готовы подсмотреть монстра?"));
-						adb.setCancelable(false).create().show();
-						sov_chose[i]=-1;
-						return 1;
-						//Ещё монстра подглядеть
-					case 11:
-						res=new String[]{"gs","ws"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 12:
-						game.arplayer.ar[num].plus++;
-						res=new String[]{"w","g","s"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 13:
-						game.arplayer.ar[num].stone+=3;
-						sov_chose[i]=-1;
-						break;
-					case 14:
-						res=new String[]{"w","g","s"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-
-					case 15:
-						game.arplayer.ar[num].stone++;
-						game.arplayer.ar[num].wood++;
-						game.arplayer.ar[num].gold++;
-						sov_chose[i]=-1;
-						break;
-					case 16:
-						game.arplayer.ar[num].gold+=4;
-						sov_chose[i]=-1;
-						break;
-					case 17:
-						res=new String[]{"w","g","s"};
-						adapter=new ResAdapter(res,game);
-						adb.setAdapter(adapter, resclick);
-						adb.setCustomTitle(getTitle(num,s));
-						adb.setCancelable(false).create().show();
-						return 1;
-					case 18:
-						game.arplayer.ar[num].stone++;
-						game.arplayer.ar[num].wood++;
-						game.arplayer.ar[num].gold++;
-						game.arplayer.ar[num].stone++;
-						game.arplayer.ar[num].wood++;
-						game.arplayer.ar[num].war++;
-						sov_chose[i]=-1;
-						break;
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
 					}
-			}
-			
-			game.next();
-			return 0;
-		}
-		
-		DialogInterface.OnClickListener resclick=new DialogInterface.OnClickListener(){
+					return 1;
+				case 5:
+					game.arplayer.ar[num].war++;
+					sov_chose[i]=-1;
+					break;
+				case 6:
+					res=new String[]{"dawg","easg","haws"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 7:
+					game.arplayer.ar[num].plus++;
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 8:
+					game.arplayer.ar[num].gold+=2;
+					sov_chose[i]=-1;
+					break;
+				case 9:
+					res=new String[]{"gw","sw"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 10:
+					game.arplayer.ar[num].war+=2;
+					adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							MonstrDialog md=new MonstrDialog();
+							md.show(getFragmentManager(), "md");
+							arg0.cancel();
+						}
 
-			public void onClick(DialogInterface dialog, int position) {
-				for (int i=1;i<19;i++)
-					if (sov_chose[i]!=-1) {num=i;break;}
-				if (num==7 && kol<=0) kol=1;
-				if (num==12 && kol<=0) kol=2;
-				if (num==14 && kol<=0) {kol=3;game.arplayer.ar[sov_chose[num]].win--;}
-				if (num==17 && kol<=0) {kol=2;game.arplayer.ar[sov_chose[num]].win+=3;
-				/*Toast.makeText(game, "Имя монстра:"+monstr.name+" Сила:"+monstr.war, Toast.LENGTH_SHORT).show();*/}
-				for (int i=0;i<res[position].length();i++){
-					switch (res[position].charAt(i)){
-					case 'w':game.arplayer.ar[sov_chose[num]].wood++;
-					kol--;
+					});
+					adb.setCustomTitle(getTitle(num,"Вы готовы подсмотреть монстра?"));
+					adb.setCancelable(false).create().show();
+					sov_chose[i]=-1;
+					return 1;
+					//Ещё монстра подглядеть
+				case 11:
+					res=new String[]{"gs","ws"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 12:
+					game.arplayer.ar[num].plus++;
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 13:
+					game.arplayer.ar[num].stone+=3;
+					sov_chose[i]=-1;
 					break;
-					case 'e':game.arplayer.ar[sov_chose[num]].wood--;
+				case 14:
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+
+				case 15:
+					game.arplayer.ar[num].stone++;
+					game.arplayer.ar[num].wood++;
+					game.arplayer.ar[num].gold++;
+					sov_chose[i]=-1;
 					break;
-					case 'g':game.arplayer.ar[sov_chose[num]].gold++;
-					kol--;
+				case 16:
+					game.arplayer.ar[num].gold+=4;
+					sov_chose[i]=-1;
 					break;
-					case 'h':game.arplayer.ar[sov_chose[num]].gold--;
+				case 17:
+					res=new String[]{"w","g","s"};
+					adapter=new ResAdapter(res,game);
+					adb.setAdapter(adapter, resclick);
+					adb.setCustomTitle(getTitle(num,s));
+					adb.setCancelable(false).create().show();
+					return 1;
+				case 18:
+					game.arplayer.ar[num].stone++;
+					game.arplayer.ar[num].wood++;
+					game.arplayer.ar[num].gold++;
+					game.arplayer.ar[num].stone++;
+					game.arplayer.ar[num].wood++;
+					game.arplayer.ar[num].war++;
+					sov_chose[i]=-1;
 					break;
-					case 's':game.arplayer.ar[sov_chose[num]].stone++;
-					kol--;
-					break;
-					case 'd':game.arplayer.ar[sov_chose[num]].stone--;
-					break;
-					case 'p':game.arplayer.ar[sov_chose[num]].win++;
-					break;
-					case '[':game.arplayer.ar[sov_chose[num]].win--;
-					break;
-					case 'q':game.arplayer.ar[sov_chose[num]].war++;
-					break;
-					case 'z':game.arplayer.ar[sov_chose[num]].war--;
-					break;
-					}
 				}
-				if (kol<=0) {sov_chose[num]=-1;	kol=0;}
-				getres();
+		}
 
+		game.next();
+		return 0;
+	}
+
+	public DialogInterface.OnClickListener resclick=new DialogInterface.OnClickListener(){
+
+		public void onClick(DialogInterface dialog, int position) {
+			for (int i=1;i<19;i++)
+				if (sov_chose[i]!=-1) {num=i;break;}
+			if (num==7 && kol<=0) kol=1;
+			if (num==12 && kol<=0) kol=2;
+			if (num==14 && kol<=0) {kol=3;game.arplayer.ar[sov_chose[num]].win--;}
+			if (num==17 && kol<=0) {kol=2;game.arplayer.ar[sov_chose[num]].win+=3;
+			/*Toast.makeText(game, "Имя монстра:"+monstr.name+" Сила:"+monstr.war, Toast.LENGTH_SHORT).show();*/}
+			for (int i=0;i<res[position].length();i++){
+				switch (res[position].charAt(i)){
+				case 'w':game.arplayer.ar[sov_chose[num]].wood++;
+				break;
+				case 'e':game.arplayer.ar[sov_chose[num]].wood--;
+				break;
+				case 'g':game.arplayer.ar[sov_chose[num]].gold++;
+				break;
+				case 'h':game.arplayer.ar[sov_chose[num]].gold--;
+				break;
+				case 's':game.arplayer.ar[sov_chose[num]].stone++;
+				break;
+				case 'd':game.arplayer.ar[sov_chose[num]].stone--;
+				break;
+				case 'p':game.arplayer.ar[sov_chose[num]].win++;
+				break;
+				case '[':game.arplayer.ar[sov_chose[num]].win--;
+				break;
+				case 'q':game.arplayer.ar[sov_chose[num]].war++;
+				break;
+				case 'z':game.arplayer.ar[sov_chose[num]].war--;
+				break;
+				}
+			}
+			kol--;
+			if (kol<=0) {sov_chose[num]=-1;	kol=0;}
+			if (game.id==-1 || game.id==0) getres(); else {
+				Intent intent = new Intent(game, BlService.class);
+				intent.putExtra("command",8);
+				intent.putExtra("field", game.field.sov_chose);
+				intent.putExtra("next", 4);
+				intent.putExtra("arplayer", game.arplayer);
+				game.startService(intent);
 			}
 
-		};
+		}
+
+	};
 
 	public void refresh(){		
 		for (int i=1;i<19;i++){
@@ -301,7 +317,7 @@ public class Field extends Fragment {
 		}
 		linrefresh(game.arplayer.ar.clone());
 	}
-	
+
 	//Обновляем маркеры над советниками
 	public void linrefresh(Player[] ar){
 		//сортируем игроков впорядка возрастания номера
@@ -354,7 +370,7 @@ public class Field extends Fragment {
 		}
 	};
 
-	
+
 	public View getTitle(int num,String mes){
 		LayoutInflater inflater=getActivity().getLayoutInflater();
 		View v=inflater.inflate(R.layout.title_sov, null);
@@ -365,16 +381,16 @@ public class Field extends Fragment {
 		return v;
 	}
 
-	
+
 	protected Dialog CreateDialog(int num) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(game);
 		adb.setTitle("Выбор комбинации");
 		TessAdapter adapter=new TessAdapter(game,game.player.tess,num);
 		adb.setAdapter(adapter, dialclick);
 		if (so==false && MainActivity.sta==true){
-			   dlg3 = new dialog03();
-			    dlg3.show(getFragmentManager(), "dlg2");
-			    so=true;
+			dlg3 = new dialog03();
+			dlg3.show(getFragmentManager(), "dlg2");
+			so=true;
 		}
 		return adb.create();
 	}
@@ -384,9 +400,20 @@ public class Field extends Fragment {
 		public void onClick(DialogInterface dialog, int position) {
 			game.player.del(num, position);
 			sov_chose[num]=game.player.num;
-			if (!game.arplayer.empty()) {game.arplayer.sort();getres();return;}
+			if (!game.arplayer.empty()) {
+				game.arplayer.sort();
+				if (game.id==0 || game.id==-1) getres(); else{
+					Intent intent = new Intent(game, BlService.class);
+					intent.putExtra("command",8);
+					intent.putExtra("field", game.field.sov_chose);
+					intent.putExtra("next", 4);
+					intent.putExtra("arplayer", game.arplayer);
+					game.startService(intent);
+				}
+				return;
+				}
 			game.next_player();
-			
+
 			refresh();
 		}
 
