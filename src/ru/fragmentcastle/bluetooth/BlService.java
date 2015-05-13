@@ -359,14 +359,13 @@ public class BlService extends Service {
 						buf=new byte[size];
 						in.read(buf);
 						String s=new String(buf);
-						if (client==null){
+						if (client==null)
 							for (int i=0;i<blins.size();i++){
 								blins.get(i).write(s);
 							}
 							intent = new Intent("ru.castleburg.bluetooth");
 							intent.putExtra("text", s);
 							sendBroadcast(intent);
-						}
 						break;
 					case 2:
 						int mnext=in.read();

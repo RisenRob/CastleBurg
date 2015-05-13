@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -177,9 +178,16 @@ public class BLGameActivity extends GameActivity {
 					adb.setAdapter(adapter, field.resclick);
 					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
 					adb.setCancelable(false).create().show();
-					break;
+					return 1;
+				case 6:
+					field.res=new String[]{"dawg","easg","haws"};
+					adapter=new ResAdapter(field.res,this);
+					adb.setAdapter(adapter, field.resclick);
+					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
+					adb.setCancelable(false).create().show();
+					return 1;
 				}
-			} else return 0;
+			}
 		}
 		return 0;
 	}
@@ -193,6 +201,7 @@ public class BLGameActivity extends GameActivity {
 					year=intent.getIntExtra("year", -1);
 			int[] sov=intent.getIntArrayExtra("field");
 			String mes=intent.getStringExtra("text");
+			Log.d("TAG",next+"");
 			//Toast.makeText(BLGameActivity.this, "След "+next, Toast.LENGTH_SHORT).show();
 			if (sov!=null){
 				field.sov_chose=sov;
@@ -209,8 +218,9 @@ public class BLGameActivity extends GameActivity {
 			if (tarplayer!=null && next==3){
 				arplayer=tarplayer;
 				bgetres();
+				
 			}
-			if (tarplayer!=null && next==4){
+			if (tarplayer!=null && next==4 && id==0){
 				arplayer=tarplayer;
 				field.getres();
 			}

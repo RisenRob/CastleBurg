@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +134,7 @@ public class Field extends Fragment {
 					break;
 				case 4:
 					//Дерево или золото
-					if (game.id==0 || game.id==-1){
+					if ((game.id==0  && num==0) || game.id==-1){
 						res=new String[]{"w","g"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
@@ -153,72 +154,135 @@ public class Field extends Fragment {
 					sov_chose[i]=-1;
 					break;
 				case 6:
-					res=new String[]{"dawg","easg","haws"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						res=new String[]{"dawg","easg","haws"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 7:
-					game.arplayer.ar[num].plus++;
-					res=new String[]{"w","g","s"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].plus++;
+						res=new String[]{"w","g","s"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 8:
 					game.arplayer.ar[num].gold+=2;
 					sov_chose[i]=-1;
 					break;
 				case 9:
-					res=new String[]{"gw","sw"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						res=new String[]{"gw","sw"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 10:
-					game.arplayer.ar[num].war+=2;
-					adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							MonstrDialog md=new MonstrDialog();
-							md.show(getFragmentManager(), "md");
-							arg0.cancel();
-						}
+					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].war+=2;
+						adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								MonstrDialog md=new MonstrDialog();
+								md.show(getFragmentManager(), "md");
+								arg0.cancel();
+							}
 
-					});
-					adb.setCustomTitle(getTitle(num,"Вы готовы подсмотреть монстра?"));
-					adb.setCancelable(false).create().show();
-					sov_chose[i]=-1;
+						});
+						adb.setCustomTitle(getTitle(num,"Вы готовы подсмотреть монстра?"));
+						adb.setCancelable(false).create().show();
+						sov_chose[i]=-1;
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 					//Ещё монстра подглядеть
 				case 11:
-					res=new String[]{"gs","ws"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						res=new String[]{"gs","ws"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 12:
-					game.arplayer.ar[num].plus++;
-					res=new String[]{"w","g","s"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].plus++;
+						res=new String[]{"w","g","s"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 13:
 					game.arplayer.ar[num].stone+=3;
 					sov_chose[i]=-1;
 					break;
 				case 14:
-					res=new String[]{"w","g","s"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						res=new String[]{"w","g","s"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 
 				case 15:
@@ -232,11 +296,20 @@ public class Field extends Fragment {
 					sov_chose[i]=-1;
 					break;
 				case 17:
-					res=new String[]{"w","g","s"};
-					adapter=new ResAdapter(res,game);
-					adb.setAdapter(adapter, resclick);
-					adb.setCustomTitle(getTitle(num,s));
-					adb.setCancelable(false).create().show();
+					if ((game.id==0  && num==0) || game.id==-1){
+						res=new String[]{"w","g","s"};
+						adapter=new ResAdapter(res,game);
+						adb.setAdapter(adapter, resclick);
+						adb.setCustomTitle(getTitle(num,s));
+						adb.setCancelable(false).create().show();
+					} else {
+						Intent intent = new Intent(game, BlService.class);
+						intent.putExtra("command",8);
+						intent.putExtra("field", game.field.sov_chose);
+						intent.putExtra("next", 3);
+						intent.putExtra("arplayer", game.arplayer);
+						game.startService(intent);
+					}
 					return 1;
 				case 18:
 					game.arplayer.ar[num].stone++;
@@ -411,7 +484,7 @@ public class Field extends Fragment {
 					game.startService(intent);
 				}
 				return;
-				}
+			}
 			game.next_player();
 
 			refresh();
