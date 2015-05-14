@@ -48,29 +48,38 @@ public class MonstrDialog extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (game.id==-1){
-					if (game.time.phase==7) {
-						game.arplayer.fight(game.monstr);
-						game.next();
-					} else game.field.getres();
-				}
-				if (game.id==0) {
-					if (game.time.phase==7){
-						game.arplayer.fight(game.monstr);
-						Intent intent = new Intent(game, BlService.class);
-						intent.putExtra("command",8);
-						intent.putExtra("next", 1);
-						intent.putExtra("field", game.field.sov_chose);
-						intent.putExtra("arplayer", game.arplayer);
-						game.startService(intent);
+				if (game.id==0|| game.id==-1){
+					if (game.id==-1){
+						if (game.time.phase==7) {
+							game.arplayer.fight(game.monstr);
+							game.next();
+						} else game.field.getres();
+					}
+					if (game.id==0) {
+						if (game.time.phase==7){
+							game.arplayer.fight(game.monstr);
+							Intent intent = new Intent(game, BlService.class);
+							intent.putExtra("command",8);
+							intent.putExtra("next", 1);
+							intent.putExtra("field", game.field.sov_chose);
+							intent.putExtra("arplayer", game.arplayer);
+							game.startService(intent);
 
-						Monstr mosntr=new Monstr(game.time.year+1,game);
-						intent = new Intent(game, BlService.class);
-						intent.putExtra("command",9);
-						intent.putExtra("idm", mosntr.id);
-						intent.putExtra("year", game.time.year+1);
-						game.startService(intent);
-					} else game.field.getres();
+							Monstr mosntr=new Monstr(game.time.year+1,game);
+							intent = new Intent(game, BlService.class);
+							intent.putExtra("command",9);
+							intent.putExtra("idm", mosntr.id);
+							intent.putExtra("year", game.time.year+1);
+							game.startService(intent);
+						} else game.field.getres();
+					}
+				} else {
+					Intent intent = new Intent(game, BlService.class);
+					intent.putExtra("command",8);
+					intent.putExtra("field", game.field.sov_chose);
+					intent.putExtra("next", 3);
+					intent.putExtra("arplayer", game.arplayer);
+					game.startService(intent);
 				}
 				MonstrDialog.this.getDialog().cancel();
 			}
