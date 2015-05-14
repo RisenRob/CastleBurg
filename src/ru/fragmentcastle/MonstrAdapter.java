@@ -47,10 +47,10 @@ public class MonstrAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) convertView = (LinearLayout) inflater.inflate(R.layout.adapter_monstr, parent, false);
 		if (win){
-			((TextView)convertView.findViewById(R.id.textView1)).setText(win_monstr[position].charAt(0)+"");
+			((TextView)convertView.findViewById(R.id.mes)).setText(win_monstr[position].charAt(0)+"");
 			((ImageView)convertView.findViewById(R.id.imageView1)).setImageResource(getImage(win_monstr[position].charAt(1)));
 		} else {
-			((TextView)convertView.findViewById(R.id.textView1)).setText(lose_monstr[position].charAt(0)+"");
+			((TextView)convertView.findViewById(R.id.mes)).setText(lose_monstr[position].charAt(0)+"");
 			((ImageView)convertView.findViewById(R.id.imageView1)).setImageResource(getImage(lose_monstr[position].charAt(1)));
 		}
 		return convertView;

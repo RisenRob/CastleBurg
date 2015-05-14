@@ -35,7 +35,7 @@ public class MonstrDialog extends DialogFragment {
 
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View v=inflater.inflate(R.layout.dialog_monstr,container,false);
-		name=(TextView)v.findViewById(R.id.textView1);
+		name=(TextView)v.findViewById(R.id.mes);
 		war=(TextView)v.findViewById(R.id.textView2);
 		btn=(Button)v.findViewById(R.id.button1);
 		list1=(ListView)v.findViewById(R.id.list_chat);

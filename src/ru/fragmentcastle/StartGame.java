@@ -27,7 +27,7 @@ public class StartGame extends DialogFragment {
 		View v=inflater.inflate(R.layout.dialog_startgame,container,false);
 		Dialog dial=getDialog();
 		dial.setTitle("Количество игроков");
-		tv=(TextView)v.findViewById(R.id.textView1);
+		tv=(TextView)v.findViewById(R.id.mes);
 		next=(Button)v.findViewById(R.id.button1);
 		prev=(Button)v.findViewById(R.id.button2);
 		start=(Button)v.findViewById(R.id.button3);

@@ -447,7 +447,7 @@ public class Field extends Fragment {
 	public View getTitle(int num,String mes){
 		LayoutInflater inflater=getActivity().getLayoutInflater();
 		View v=inflater.inflate(R.layout.title_sov, null);
-		TextView tv=(TextView)v.findViewById(R.id.textView1);
+		TextView tv=(TextView)v.findViewById(R.id.mes);
 		LinearLayout lin=(LinearLayout)v.findViewById(R.id.lin);
 		lin.setBackgroundColor(getColor(num));
 		tv.setText(mes);

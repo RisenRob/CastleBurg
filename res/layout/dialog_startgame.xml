@@ -17,7 +17,7 @@
             android:text="Меньше" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/mes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

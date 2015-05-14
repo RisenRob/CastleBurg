@@ -30,7 +30,7 @@ public class BLGameActivity extends GameActivity {
 
 	ListView chat;
 	EditText smes;
-	ArrayAdapter<String> adap_chat;
+	ChatAdapter adap_chat;
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class BLGameActivity extends GameActivity {
 		monstr=new Monstr(time.year,idm,this);
 		chat=(ListView)findViewById(R.id.list_chat);
 		smes=(EditText)findViewById(R.id.editText1);
-		adap_chat=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,new ArrayList<String>());
+		adap_chat=new ChatAdapter(this);
 		chat.setAdapter(adap_chat);
 	}
 
