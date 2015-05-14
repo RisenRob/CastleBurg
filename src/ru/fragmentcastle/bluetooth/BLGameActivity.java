@@ -98,6 +98,7 @@ public class BLGameActivity extends GameActivity {
 	}
 
 	public void bnext(){
+		//В теории игркои хоть как тут отсортированы
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
@@ -163,74 +164,29 @@ public class BLGameActivity extends GameActivity {
 		refresh();
 	}
 
-	public void sgetres(int n){
+	public int bgetres(){
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		ResAdapter adapter;
-		adapter=new ResAdapter(field.res,this);
-		adb.setAdapter(adapter, field.resclick);
-		adb.setCustomTitle(getTitle(field.sov_chose[n],"Выберите желаемые ресурсы"));
-		adb.setCancelable(false).create().show();
-	}
-	
-	public int bgetres(){
-		
-		
+		String s="Выберите желаемые ресурсы";
 		for (int i=1;i<19;i++){
 			if (field.sov_chose[i]!=-1 && id==field.sov_chose[i]){
 				switch(i){
 				case 4:
 					//Дерево или золото
 					field.res=new String[]{"w","g"};
-					sgetres(i);
+					adapter=new ResAdapter(field.res,this);
+					adb.setAdapter(adapter, field.resclick);
+					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
+					adb.setCancelable(false).create().show();
 					return 1;
 				case 6:
 					field.res=new String[]{"dawg","easg","haws"};
-					sgetres(i);
-					return 1;
-				case 7:
-					field.res=new String[]{"dawg","easg","haws"};
-					sgetres(i);
-					return 1;
-				case 9:
-					field.res=new String[]{"gw","sw"};
-					sgetres(i);
-					return 1;
-				case 10:
-					AlertDialog.Builder adb = new AlertDialog.Builder(this);
-					adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							MonstrDialog md=new MonstrDialog();
-							md.show(getFragmentManager(), "md");
-							arg0.cancel();
-						}
-
-					});
-					adb.setCustomTitle(getTitle(field.sov_chose[i],"Вы готовы подсмотреть монстра?"));
+					adapter=new ResAdapter(field.res,this);
+					adb.setAdapter(adapter, field.resclick);
+					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
 					adb.setCancelable(false).create().show();
-					field.sov_chose[i]=-1;
-					return 1;
-				case 11:
-					field.res=new String[]{"gs","ws"};
-					sgetres(i);
-					return 1;
-				case 12:
-					field.res=new String[]{"w","g","s"};
-					sgetres(i);
-					return 1;
-				case 14:
-					field.res=new String[]{"w","g","s"};
-					sgetres(i);
-					return 1;
-				case 17:
-					field.res=new String[]{"w","g","s"};
-					sgetres(i);
 					return 1;
 				}
-				
-				
-				
-				
 			}
 		}
 		return 0;

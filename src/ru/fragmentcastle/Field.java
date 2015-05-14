@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,8 +170,8 @@ public class Field extends Fragment {
 					}
 					return 1;
 				case 7:
-					game.arplayer.ar[num].plus++;
-					if ((game.id==0  && num==0) || game.id==-1){						
+					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].plus++;
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
@@ -206,8 +207,8 @@ public class Field extends Fragment {
 					}
 					return 1;
 				case 10:
-					game.arplayer.ar[num].war+=2;
 					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].war+=2;
 						adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
 							@Override
 							public void onClick(DialogInterface arg0, int arg1) {
@@ -247,8 +248,8 @@ public class Field extends Fragment {
 					}
 					return 1;
 				case 12:
-					game.arplayer.ar[num].plus++;
 					if ((game.id==0  && num==0) || game.id==-1){
+						game.arplayer.ar[num].plus++;
 						res=new String[]{"w","g","s"};
 						adapter=new ResAdapter(res,game);
 						adb.setAdapter(adapter, resclick);
