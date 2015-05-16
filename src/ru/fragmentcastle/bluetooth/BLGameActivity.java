@@ -63,7 +63,7 @@ public class BLGameActivity extends GameActivity {
 	public void send(View v){
 		Intent intent = new Intent(BLGameActivity.this, BlService.class);
 		intent.putExtra("command",3);
-		intent.putExtra("text", smes.getText().toString());
+		intent.putExtra("text", id+smes.getText().toString());
 		startService(intent);
 	}
 
@@ -98,7 +98,6 @@ public class BLGameActivity extends GameActivity {
 	}
 
 	public void bnext(){
-		//В теории игркои хоть как тут отсортированы
 		for (int i=0;i<arplayer.ar.length;i++){
 			next_arplayer.ar[i].gold=arplayer.ar[i].gold-next_arplayer.ar[i].gold;
 			next_arplayer.ar[i].wood=arplayer.ar[i].wood-next_arplayer.ar[i].wood;
@@ -164,30 +163,76 @@ public class BLGameActivity extends GameActivity {
 		refresh();
 	}
 
-	public int bgetres(){
+	public void sgetres(int n){
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		ResAdapter adapter;
-		String s="Выберите желаемые ресурсы";
+		adapter=new ResAdapter(field.res,this);
+		adb.setAdapter(adapter, field.resclick);
+		adb.setCustomTitle(getTitle(field.sov_chose[n],"Выберите желаемые ресурсы"));
+		adb.setCancelable(false).create().show();
+	}
+
+	public int bgetres(){
+
+
 		for (int i=1;i<19;i++){
-			if (field.sov_chose[i]!=-1 && id==field.sov_chose[i]){
-				switch(i){
-				case 4:
-					//Дерево или золото
-					field.res=new String[]{"w","g"};
-					adapter=new ResAdapter(field.res,this);
-					adb.setAdapter(adapter, field.resclick);
-					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
-					adb.setCancelable(false).create().show();
-					return 1;
-				case 6:
-					field.res=new String[]{"dawg","easg","haws"};
-					adapter=new ResAdapter(field.res,this);
-					adb.setAdapter(adapter, field.resclick);
-					adb.setCustomTitle(getTitle(field.sov_chose[i],s));
-					adb.setCancelable(false).create().show();
-					return 1;
-				}
+			if (field.sov_chose[i]!=-1){
+				if(id==field.sov_chose[i]){
+					switch(i){
+					case 4:
+						//Дерево или золото
+						field.res=new String[]{"w","g"};
+						sgetres(i);
+						return 1;
+					case 6:
+						field.res=new String[]{"dawg","easg","haws"};
+						sgetres(i);
+						return 1;
+					case 7:
+						field.res=new String[]{"dawg","easg","haws"};
+						sgetres(i);
+						return 1;
+					case 9:
+						field.res=new String[]{"gw","sw"};
+						sgetres(i);
+						return 1;
+					case 10:
+						AlertDialog.Builder adb = new AlertDialog.Builder(this);
+						adb.setNeutralButton("Да",new DialogInterface.OnClickListener(){
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								MonstrDialog md=new MonstrDialog();
+								md.show(getFragmentManager(), "md");
+								arg0.cancel();
+							}
+
+						});
+						adb.setCustomTitle(getTitle(field.sov_chose[i],"Вы готовы подсмотреть монстра?"));
+						adb.setCancelable(false).create().show();
+						field.sov_chose[i]=-1;
+						return 1;
+					case 11:
+						field.res=new String[]{"gs","ws"};
+						sgetres(i);
+						return 1;
+					case 12:
+						field.res=new String[]{"w","g","s"};
+						sgetres(i);
+						return 1;
+					case 14:
+						field.res=new String[]{"w","g","s"};
+						sgetres(i);
+						return 1;
+					case 17:
+						field.res=new String[]{"w","g","s"};
+						sgetres(i);
+						return 1;
+					} 
+				} else return 0;
 			}
+
+
+
 		}
 		return 0;
 	}
@@ -215,10 +260,10 @@ public class BLGameActivity extends GameActivity {
 				arplayer=tarplayer;
 				bnext_player();
 			}
-			if (tarplayer!=null && next==3){
+			if (tarplayer!=null && next==3 && id!=0){
 				arplayer=tarplayer;
 				bgetres();
-				
+
 			}
 			if (tarplayer!=null && next==4 && id==0){
 				arplayer=tarplayer;

@@ -42,7 +42,7 @@ public class BLDAdapter extends BaseAdapter {
 		View view = convertView;
 		if (view == null) {
 			view = inflater.inflate(R.layout.bld, parent, false);
-			((TextView)view.findViewById(R.id.mes)).setText(devices.get(position).getName());;
+			((TextView)view.findViewById(R.id.textView1)).setText(devices.get(position).getName());;
 		}
 		return view;
 	}

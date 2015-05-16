@@ -19,7 +19,6 @@ public class ChatAdapter extends BaseAdapter {
 	
 	public ChatAdapter(Context context){
 		mes=new ArrayList<String>();
-		mes.add("1Ghbdtn");
 		inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
@@ -45,13 +44,11 @@ public class ChatAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		if (view == null){
 			view = inflater.inflate(R.layout.list_chat, parent, false);
 			LinearLayout lin;
-			((TextView) view.findViewById(R.id.mes)).setText(mes.get(position));
+			((TextView) view.findViewById(R.id.mes)).setText(mes.get(position).substring(1));
 			lin=(LinearLayout)view.findViewById(R.id.lin);
-			lin.setBackgroundColor(getColor(mes.get(position).charAt(0)));
-		}
+			lin.setBackgroundColor(getColor(mes.get(position).charAt(0)-'0'));
 		return view;
 	}
 
@@ -60,7 +57,7 @@ public class ChatAdapter extends BaseAdapter {
 		if (a==1) return Color.YELLOW;
 		if (a==2) return Color.GREEN;
 		if (a==3) return Color.RED;
-		return Color.CYAN;
+		return Color.BLACK;
 
 	}
 	
