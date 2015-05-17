@@ -1,6 +1,5 @@
 package ru.fragmentcastle.bluetooth;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import ru.fragmentcastle.GameActivity;
@@ -21,7 +20,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -82,6 +80,12 @@ public class BLGameActivity extends GameActivity {
 		if (time.phase==1 || time.phase==3 || time.phase==5) field.refresh();
 		if (time.phase==2 || time.phase==4 || time.phase==6) builder.refresh();
 		if (id==player.num) pas.setClickable(true); else pas.setClickable(false);
+		if (id==player.num){
+			AlertDialog.Builder adb=new AlertDialog.Builder(this);
+			adb.setCustomTitle(getTitle(player.num,"Сейчас ваш ход"));
+			adb.setNeutralButton("Ок", null);
+			adb.setCancelable(false).create().show();
+		}
 	}
 
 	public void next(){

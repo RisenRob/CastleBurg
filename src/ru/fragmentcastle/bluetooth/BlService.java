@@ -20,7 +20,7 @@ import android.util.Log;
 public class BlService extends Service {
 
 	private ArrayList<BluetoothSocket> sockets=new ArrayList<BluetoothSocket>();
-	private ArrayList<BlinStream> blins=new ArrayList<BlinStream>();
+	private ArrayList<Server> blins=new ArrayList<Server>();
 	private BluetoothAdapter bluetooth=BluetoothAdapter.getDefaultAdapter();
 	private String id="a277e372-1ff2-4320-84b3-3f67315455d3";
 	public Finder find=null;
@@ -63,7 +63,7 @@ public class BlService extends Service {
 			break;
 		case 2:
 			for (int i=0;i<sockets.size();i++){
-				blins.add(new BlinStream(sockets.get(i)));
+				blins.add(new Server(sockets.get(i)));
 			}
 			break;
 		case 3:
@@ -186,7 +186,7 @@ public class BlService extends Service {
 				}
 				if (socket!=null) {
 					sockets.add(socket);
-					blins.add(new BlinStream(sockets.get(sockets.size()-1)));
+					blins.add(new Server(sockets.get(sockets.size()-1)));
 					Intent intent = new Intent("ru.castleburg.bluetooth");
 					intent.putExtra("status", "Сервер запущен");
 					intent.putExtra("kol", blins.size());
@@ -199,11 +199,11 @@ public class BlService extends Service {
 
 	}
 
-	class BlinStream {
+	class Server {
 		InputStream in;
 		OutputStream out;
 		Blinput blin;
-		public BlinStream(BluetoothSocket socket){
+		public Server(BluetoothSocket socket){
 			try {
 				in=socket.getInputStream();
 				out=socket.getOutputStream();

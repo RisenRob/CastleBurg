@@ -16,7 +16,7 @@ public class arPlayer implements Serializable {
 	public arPlayer(int n){
 		ar=new Player[n];
 		for(int i=0;i<n;i++) {
-			ar[i]=new Player(100,100,100,100,100,100,i);
+			ar[i]=new Player(0,0,0,0,0,0,i);
 		}
 		//сортировка по возрастанию чисел на кубиках
 		Arrays.sort(ar);

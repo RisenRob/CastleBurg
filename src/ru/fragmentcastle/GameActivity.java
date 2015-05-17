@@ -92,6 +92,10 @@ public class GameActivity extends Activity {
 	public void next_player(){
 		player=arplayer.next();
 		refresh_players();
+		AlertDialog.Builder adb=new AlertDialog.Builder(this);
+		adb.setCustomTitle(getTitle(player.num,"Сейчас ваш ход"));
+		adb.setNeutralButton("Ок", null);
+		adb.setCancelable(false).create().show();
 	}
 
 	public void next(){
@@ -312,6 +316,12 @@ public class GameActivity extends Activity {
 		refresh_fragment();
 		refresh_players();
 		refresh_time();
+		if (id==-1 || id==player.num){
+			AlertDialog.Builder adb=new AlertDialog.Builder(this);
+			adb.setCustomTitle(getTitle(player.num,"Сейчас ваш ход"));
+			adb.setNeutralButton("Ок", null);
+			adb.setCancelable(false).create().show();
+		}
 	}
 
 
