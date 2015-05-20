@@ -20,10 +20,12 @@ public class MonstrDialog extends DialogFragment {
 	TextView name;
 	Button btn;
 	ListView list1,list2;
+	int bphase;
 
 	public void  onAttach(Activity activity){
 		super.onAttach(activity);
 		game=(GameActivity) activity;
+		bphase=game.time.phase;
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public class MonstrDialog extends DialogFragment {
 							game.startService(intent);
 						} else game.field.getres();
 					}
-				} else {
+				} else if (bphase!=7) {
 					Intent intent = new Intent(game, BlService.class);
 					intent.putExtra("command",8);
 					intent.putExtra("field", game.field.sov_chose);

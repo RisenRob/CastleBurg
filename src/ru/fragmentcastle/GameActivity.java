@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -124,8 +123,7 @@ public class GameActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					Toast.makeText(GameActivity.this, monstr.name+" "+monstr.war, Toast.LENGTH_SHORT).show();
-					MonstrDialog md=new MonstrDialog();
+				    MonstrDialog md=new MonstrDialog();
 					md.show(getFragmentManager(), "md");
 
 				}
