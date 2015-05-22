@@ -113,6 +113,8 @@ public class Player implements Serializable,Comparable<Object>{
 		if (war>monstr.war) win(monstr);
 		if (war<monstr.war) lose(monstr);
 		if (build.po[2][3]==true && war==monstr.war) win(monstr); 
+		war=0;
+		war=build.kwar();
 	}
 	//игрок выиграл
 	private void win(Monstr monstr){
@@ -176,10 +178,7 @@ public class Player implements Serializable,Comparable<Object>{
 			if ((phase==1 || phase==3 ||phase== 5) && build.po[3][1]==true) gold++;
 			if ((phase==2 || phase==4 || phase==6)&& build.po[3][3]==true) win++;
 			if (phase==7 && year==5 && build.po[3][0]==true) win+=(gold+wood+stone)/2;
-			if (phase==1) {
-				war=0;
-				war=build.kwar();
-			}
+			
 			
 			
 		}
