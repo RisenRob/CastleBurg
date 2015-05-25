@@ -52,12 +52,14 @@
 
         </EditText>
 
-        <Button
-            android:id="@+id/button1"
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:clickable="true"
             android:onClick="send"
-            android:text="Написать" />
+            android:src="@drawable/napis" />
 
         <LinearLayout
             android:id="@+id/time"

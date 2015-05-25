@@ -78,7 +78,13 @@ public class BLGameActivity extends GameActivity {
 		refresh_players();
 		if (time.phase==1 || time.phase==3 || time.phase==5) field.refresh();
 		if (time.phase==2 || time.phase==4 || time.phase==6) builder.refresh();
-		if (id==player.num) pas.setClickable(true); else pas.setClickable(false);
+		if (id==player.num) {
+			pas.setClickable(true);
+			pas.setImageResource(R.drawable.dalee);
+		} else {
+			pas.setClickable(false);
+			pas.setImageResource(R.drawable.dalee_dis);
+		}
 		if (id==player.num){
 			AlertDialog.Builder adb=new AlertDialog.Builder(this);
 			adb.setCustomTitle(getTitle(player.num,"Сейчас ваш ход"));

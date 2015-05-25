@@ -13,16 +13,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class BlFind extends Activity {
 
 	BluetoothAdapter bluetooth;
-	Button btn1,btn2,btn3;
 	TextView status;
 	ListView list;
+	ImageView start;
 	boolean game=false;
 	BLDAdapter bldadapter;
 	int kol;
@@ -33,9 +33,7 @@ public class BlFind extends Activity {
 		setContentView(R.layout.activity_find);
 		status=(TextView)findViewById(R.id.status);
 		list=(ListView)findViewById(R.id.list_chat);
-		btn1=(Button)findViewById(R.id.button1);
-		btn2=(Button)findViewById(R.id.button2);
-		btn3=(Button)findViewById(R.id.button3);
+		start=(ImageView)findViewById(R.id.imageView3);
 		bldadapter= new BLDAdapter(this);
 		list.setAdapter(bldadapter);
 		list.setOnItemClickListener(list_click);
@@ -62,7 +60,8 @@ public class BlFind extends Activity {
 			Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 			discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
 			startActivity(discoverableIntent);
-			btn3.setEnabled(true);
+			start.setClickable(true);
+			start.setImageResource(R.drawable.play);
 		}else {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivity(enableBtIntent);

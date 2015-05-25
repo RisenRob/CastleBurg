@@ -11,27 +11,29 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/button1"
+        <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:onClick="start_server"
-            android:text="Запустить сервер" />
+            android:src="@drawable/zapyst" />
 
-        <Button
-            android:id="@+id/button2"
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:onClick="start_client"
-            android:text="Найти сервер" />
+            android:src="@drawable/find" />
 
-        <Button
-            android:id="@+id/button3"
+        <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
+            android:clickable="false"
             android:onClick="start_game"
-            android:text="Начать игру" />
+            android:src="@drawable/play_dis" />
 
     </LinearLayout>
 
@@ -58,7 +60,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1" >
         </ListView>
-
     </LinearLayout>
 
 </LinearLayout>
